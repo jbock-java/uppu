@@ -23,6 +23,7 @@ class PermutationViewChecker {
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                     JComponent.WHEN_IN_FOCUSED_WINDOW);
         });
+        view.setLocationRelativeTo(null);
         Thread.sleep(1000);
         invokeLater(() -> {
             view.showPermutation(Permutation.create(0, 1, 2));
