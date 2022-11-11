@@ -1,37 +1,23 @@
 package uppu.view;
 
-import io.parmigiano.Permutation;
+import uppu.model.Quadruple;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-
-import static javax.swing.SwingUtilities.invokeLater;
+import javax.swing.Timer;
 
 class PermutationViewChecker {
 
     public static void main(String[] args) throws InterruptedException {
         PermutationView view = PermutationView.create();
-        invokeLater(() -> {
-            view.pack();
-            view.setVisible(true);
-            view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            view.getRootPane().registerKeyboardAction(
-                    e -> view.dispatchEvent(new WindowEvent(view, WindowEvent.WINDOW_CLOSING)),
-                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                    JComponent.WHEN_IN_FOCUSED_WINDOW);
-        });
         view.setLocationRelativeTo(null);
+        int[] pos = {50, 50};
+        Quadruple quadruple = Quadruple.create();
         Thread.sleep(1000);
-        invokeLater(() -> {
-            view.showPermutation(Permutation.create(0, 1, 2));
+        Timer timer = new Timer(25, __ -> {
+            pos[0]++;
+            pos[1]++;
+            view.show(quadruple, pos[0], pos[1]);
         });
-        Thread.sleep(1000);
-        invokeLater(() -> {
-            view.showPermutation(Permutation.create(0, 1).compose(Permutation.create(2, 3)));
-        });
+        timer.start();
     }
 
 }
