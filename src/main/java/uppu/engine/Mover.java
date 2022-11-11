@@ -6,6 +6,8 @@ import uppu.model.Slot;
 
 public class Mover {
 
+    private static final float stepSize = 1f;
+    
     private final Color color;
     private final Quadruple quadruple;
     private final float target_x; // target
@@ -21,14 +23,14 @@ public class Mover {
     public boolean move() {
         float x = getX();
         boolean moved = false;
-        if (Math.abs(target_x - x) >= 1f) {
-            float newX = x > target_x ? x - 1 : x + 1;
+        if (Math.abs(target_x - x) >= stepSize) {
+            float newX = x > target_x ? x - stepSize : x + stepSize;
             setX(newX);
             moved = true;
         }
         float y = getY();
-        if (Math.abs(target_y - y) >= 1f) {
-            float newY = y > target_y ? y - 1 : y + 1;
+        if (Math.abs(target_y - y) >= stepSize) {
+            float newY = y > target_y ? y - stepSize : y + stepSize;
             setY(newY);
             moved = true;
         }

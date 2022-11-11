@@ -15,6 +15,10 @@ public enum Slot {
         this.y = y;
     }
 
+    static Slot forIndex(int i) {
+        return values()[i];
+    }
+
     public float getX() {
         return x;
     }
