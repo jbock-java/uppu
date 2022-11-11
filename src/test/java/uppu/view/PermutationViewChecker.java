@@ -6,6 +6,7 @@ import uppu.model.Color;
 import uppu.model.Quadruple;
 import uppu.model.Slot;
 
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import java.util.List;
 
@@ -21,12 +22,11 @@ class PermutationViewChecker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Timer init = new Timer(10, __ -> view.show(quadruple, 50, 50));
-        init.setRepeats(false);
-        init.start();
-        Timer start = new Timer(1000, __ -> startAnimation(Slot.SLOT_1));
-        start.setRepeats(false);
-        start.start();
+        SwingUtilities.invokeLater(() -> {
+            view.show(quadruple, 50, 50);
+            view.show(quadruple, 50, 50);
+        });
+        setTimeout(() -> startAnimation(Slot.SLOT_1));
     }
 
     private void startAnimation(Slot slot) {
@@ -38,12 +38,16 @@ class PermutationViewChecker {
         timer = new Timer(25, __ -> {
             if (!movers.move()) {
                 timer.stop();
-                Timer start = new Timer(1000, ___ -> startAnimation(slot.nextSlot()));
-                start.setRepeats(false);
-                start.start();
+                setTimeout(() -> startAnimation(slot.nextSlot()));
             }
             view.show(quadruple, 50, 50);
         });
         timer.start();
+    }
+
+    private void setTimeout(Runnable task) {
+        Timer t = new Timer(1000, ___ -> task.run());
+        t.setRepeats(false);
+        t.start();
     }
 }
