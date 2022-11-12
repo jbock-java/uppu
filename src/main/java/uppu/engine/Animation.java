@@ -14,31 +14,31 @@ public final class Animation {
 
     private Timer timer;
     private final PermutationView view;
-    private final Permutation p;
+    private final State leftState;
+    private final State rightState;
     private final List<State> states;
 
     private Animation(
-            PermutationView view,
-            Permutation p,
-            List<State> states) {
+            PermutationView view) {
         this.view = view;
-        this.p = p;
-        this.states = states;
+        this.leftState = State.create().offset(50, 50);
+        this.rightState = State.create().offset(250, 50);
+        this.states = List.of(leftState, rightState);
     }
 
-    public static Animation create(
-            PermutationView view,
-            Permutation p,
-            List<State> states) {
-        return new Animation(view, p, states);
+    public static Animation create(PermutationView view) {
+        return new Animation(view);
     }
 
-    public void startAnimation() {
+    public void startAnimation(
+            List<Permutation> left,
+            List<Permutation> right) {
         Deque<List<Action>> q = new ArrayDeque<>();
-        List<Action> actionsA = states.get(0).getActions(List.of(p, p.invert()));
-        List<Action> actionsB = states.get(1).getActions(List.of(p.invert(), p));
-        q.addLast(List.of(actionsA.get(0), actionsB.get(0)));
-        q.addLast(List.of(actionsA.get(1), actionsB.get(1)));
+        List<Action> actionsA = leftState.getActions(left);
+        List<Action> actionsB = rightState.getActions(right);
+        for (int i = 0; i < actionsA.size(); i++) {
+            q.addLast(List.of(actionsA.get(i), actionsB.get(i)));
+        }
         timer = new Timer(25, __ -> {
             List<Action> actions = q.peekFirst();
             if (actions == null) {

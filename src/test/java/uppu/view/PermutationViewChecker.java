@@ -26,10 +26,12 @@ class PermutationViewChecker {
                 Permutation.create(0, 1, 2, 3),
                 Permutation.create(0, 1, 3, 2),
                 Permutation.create(0, 2, 1, 3));
-        Animation.create(
-                view, 
-                Permutation.create(0, 1, 3),
-                List.of(State.create().offset(50, 50), State.create().offset(250, 50)))
-                .startAnimation();
+        Permutation c1 = Permutation.create(0, 2, 1).invert();
+        Permutation c2 = Permutation.create(0, 3, 1).invert();
+        Permutation id = Permutation.identity();
+        Animation.create(view)
+                .startAnimation(
+                        List.of(c1, c2, id),
+                        List.of(id, id, c2.compose(c1)));
     }
 }
