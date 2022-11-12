@@ -18,6 +18,8 @@ import java.awt.image.BufferStrategy;
 public class PermutationView extends JFrame {
 
     private static final int BALL_SIZE = 40;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -31,7 +33,7 @@ public class PermutationView extends JFrame {
 
     public static PermutationView create() {
         PermutationView view = new PermutationView();
-        view.setSize(400, 400);
+        view.setSize(WIDTH, HEIGHT);
         view.createElements();
         view.pack();
         view.setVisible(true);
@@ -47,7 +49,7 @@ public class PermutationView extends JFrame {
     public void show(Quadruple quadruple, float x, float y) {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        g.clearRect((int) x, (int) y, quadruple.getWidth(), quadruple.getHeight());
         g.setPaint(Color.RED);
         g.fill(new Ellipse2D.Float(quadruple.getRx() + x, quadruple.getRy() + y, BALL_SIZE, BALL_SIZE));
         g.setPaint(Color.GREEN);
@@ -62,7 +64,7 @@ public class PermutationView extends JFrame {
     }
 
     private void createElements() {
-        canvas.setSize(400, 400);
+        canvas.setSize(WIDTH, HEIGHT);
         canvas.setVisible(true);
         canvas.setFocusable(false);
         canvas.setBackground(Color.DARK_GRAY);

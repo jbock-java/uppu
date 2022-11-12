@@ -141,4 +141,12 @@ public final class Quadruple {
     public float getYy() {
         return state[7];
     }
+
+    public int getWidth() {
+        return 150;
+    }
+
+    public int getHeight() {
+        return 150;
+    }
 }

@@ -16,8 +16,8 @@ public final class State {
         this.colors = colors;
     }
 
-    public static State create(Quadruple quadruple, Color c0, Color c1, Color c2, Color c3) {
-        return new State(quadruple, List.of(c0, c1, c2, c3));
+    public static State create() {
+        return new State(Quadruple.create(), List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW));
     }
 
     public Action permute(Permutation p) {
@@ -33,5 +33,9 @@ public final class State {
             newColors[j] = color;
         }
         return Action.create(new State(quadruple, List.of(newColors)), movers);
+    }
+
+    public Quadruple quadruple() {
+        return quadruple;
     }
 }
