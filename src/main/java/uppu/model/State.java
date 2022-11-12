@@ -24,6 +24,17 @@ public final class State {
         return new State(quadruple.offset(x, y), colors);
     }
 
+    public List<Action> getActions(List<Permutation> permutations) {
+        List<Action> result = new ArrayList<>();
+        State state = this;
+        for (Permutation p : permutations) {
+            Action action = state.getAction(p);
+            result.add(action);
+            state = action.finalState();
+        }
+        return result;
+    }
+
     public Action getAction(Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
@@ -33,7 +44,7 @@ public final class State {
             if (j != i) {
                 Slot targetSlot = Slot.forIndex(j);
                 movers.add(new Mover(color, quadruple, targetSlot));
-            }   
+            }
             newColors[j] = color;
         }
         return Action.create(new State(quadruple, List.of(newColors)), movers);
@@ -41,5 +52,11 @@ public final class State {
 
     public Quadruple quadruple() {
         return quadruple;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(", ", colors.stream().map(Color::toString).toList())
+                + " (" + quadruple.getOffsetX() + " ," + quadruple.getOffsetY() + ")";
     }
 }

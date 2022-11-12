@@ -6,7 +6,8 @@ import uppu.model.State;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 public final class Animation {
@@ -33,20 +34,23 @@ public final class Animation {
     }
 
     public void startAnimation() {
-        List<Action> actions = new ArrayList<>();
-        Permutation permutation = p;
-        for (State state : states) {
-            Action stateAction = state.getAction(permutation);
-            actions.add(stateAction);
-            permutation = permutation.invert();
-        }
+        Deque<List<Action>> q = new ArrayDeque<>();
+        List<Action> actionsA = states.get(0).getActions(List.of(p, p.invert()));
+        List<Action> actionsB = states.get(1).getActions(List.of(p.invert(), p));
+        q.addLast(List.of(actionsA.get(0), actionsB.get(0)));
+        q.addLast(List.of(actionsA.get(1), actionsB.get(1)));
         timer = new Timer(25, __ -> {
+            List<Action> actions = q.peekFirst();
+            if (actions == null) {
+                timer.stop();
+                return;
+            }
             boolean anyMove = false;
             for (Action action : actions) {
                 anyMove |= action.move();
             }
             if (!anyMove) {
-                timer.stop();
+                q.removeFirst();
             }
             view.show(states);
         });
