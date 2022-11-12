@@ -6,57 +6,50 @@ import uppu.model.State;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Animation {
 
     private Timer timer;
     private final PermutationView view;
-    private final Deque<Permutation> queue;
+    private final Permutation p;
+    private final List<State> states;
 
     private Animation(
             PermutationView view,
-            Deque<Permutation> queue) {
+            Permutation p,
+            List<State> states) {
         this.view = view;
-        this.queue = queue;
+        this.p = p;
+        this.states = states;
     }
 
     public static Animation create(
             PermutationView view,
-            List<Permutation> permutations) {
-        Deque<Permutation> queue = new ArrayDeque<>();
-        for (Permutation p : permutations) {
-            int order = p.order();
-            for (int i = 0; i < order; i++) {
-                queue.addLast(p);
-            }
-            for (int i = 0; i < order; i++) {
-                queue.addLast(p.invert());
-            }
-        }
-        return new Animation(view, queue);
+            Permutation p,
+            List<State> states) {
+        return new Animation(view, p, states);
     }
 
-    public void startAnimation(State state) {
-        Action action = state.permute(queue.pollFirst());
-        Movers movers = action.movers();
+    public void startAnimation() {
+        List<Action> actions = new ArrayList<>();
+        Permutation permutation = p;
+        for (State state : states) {
+            Action stateAction = state.getAction(permutation);
+            actions.add(stateAction);
+            permutation = permutation.invert();
+        }
         timer = new Timer(25, __ -> {
-            if (!movers.move()) {
-                timer.stop();
-                if (!queue.isEmpty()) {
-                    setTimeout(1000, () -> startAnimation(action.target()));
-                }
+            boolean anyMove = false;
+            for (Action action : actions) {
+                anyMove |= action.move();
             }
-            view.show(state.quadruple());
+            if (!anyMove) {
+                timer.stop();
+            }
+            view.show(states);
         });
         timer.start();
-    }
-
-    private void setTimeout(int millis, Runnable task) {
-        Timer t = new Timer(millis, ___ -> task.run());
-        t.setRepeats(false);
-        t.start();
     }
 }

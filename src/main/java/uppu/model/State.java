@@ -24,7 +24,7 @@ public final class State {
         return new State(quadruple.offset(x, y), colors);
     }
 
-    public Action permute(Permutation p) {
+    public Action getAction(Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
         for (int i = 0; i < colors.size(); i++) {
@@ -33,7 +33,7 @@ public final class State {
             if (j != i) {
                 Slot targetSlot = Slot.forIndex(j);
                 movers.add(new Mover(color, quadruple, targetSlot));
-            }
+            }   
             newColors[j] = color;
         }
         return Action.create(new State(quadruple, List.of(newColors)), movers);

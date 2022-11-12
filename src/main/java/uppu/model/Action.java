@@ -7,23 +7,23 @@ import java.util.List;
 
 public class Action {
 
-    private final State target;
+    private final State finalState;
     private final Movers movers;
 
-    private Action(State target, Movers movers) {
-        this.target = target;
+    private Action(State finalState, Movers movers) {
+        this.finalState = finalState;
         this.movers = movers;
     }
 
-    static Action create(State target, List<Mover> movers) {
-        return new Action(target, Movers.create(movers));
+    static Action create(State finalState, List<Mover> movers) {
+        return new Action(finalState, Movers.create(movers));
     }
 
-    public State target() {
-        return target;
+    public boolean move() {
+        return movers.move();
     }
 
-    public Movers movers() {
-        return movers;
+    public State finalState() {
+        return finalState;
     }
 }

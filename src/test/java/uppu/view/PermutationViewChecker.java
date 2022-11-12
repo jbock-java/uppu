@@ -26,6 +26,10 @@ class PermutationViewChecker {
                 Permutation.create(0, 1, 2, 3),
                 Permutation.create(0, 1, 3, 2),
                 Permutation.create(0, 2, 1, 3));
-        Animation.create(view, permutations).startAnimation(State.create().offset(50, 50));
+        Animation.create(
+                view, 
+                Permutation.create(0, 1, 3),
+                List.of(State.create().offset(50, 50), State.create().offset(250, 50)))
+                .startAnimation();
     }
 }

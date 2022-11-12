@@ -1,6 +1,7 @@
 package uppu.view;
 
 import uppu.model.Quadruple;
+import uppu.model.State;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
+import java.util.List;
 
 public class PermutationView extends JFrame {
 
@@ -45,10 +47,18 @@ public class PermutationView extends JFrame {
         view.canvas.createBufferStrategy(3);
         return view;
     }
-
-    public void show(Quadruple quadruple) {
+    public void show(List<State> states) {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+        for (State state : states) {
+            show(g, state.quadruple());
+        }
+        bufferStrategy.show();
+        g.dispose();
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    public void show(Graphics2D g, Quadruple quadruple) {
         g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
         g.setPaint(Color.RED);
         g.fill(new Ellipse2D.Float(quadruple.getRx() + quadruple.getOffsetX(), quadruple.getRy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
@@ -58,9 +68,6 @@ public class PermutationView extends JFrame {
         g.fill(new Ellipse2D.Float(quadruple.getBx() + quadruple.getOffsetX(), quadruple.getBy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
         g.setPaint(Color.YELLOW);
         g.fill(new Ellipse2D.Float(quadruple.getYx() + quadruple.getOffsetX(), quadruple.getYy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
-        bufferStrategy.show();
-        g.dispose();
-        Toolkit.getDefaultToolkit().sync();
     }
 
     private void createElements() {
