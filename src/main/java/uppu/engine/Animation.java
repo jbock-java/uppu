@@ -13,24 +13,14 @@ import java.util.List;
 public final class Animation {
 
     private Timer timer;
-    private final int offsetX;
-    private final int offsetY;
     private final PermutationView view;
     private final Deque<Permutation> queue;
 
     private Animation(
-            int offsetX, 
-            int offsetY,
             PermutationView view,
             Deque<Permutation> queue) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
         this.view = view;
         this.queue = queue;
-    }
-
-    public Animation offset(int x, int y) {
-        return new Animation(x, y, view, queue);
     }
 
     public static Animation create(
@@ -46,7 +36,7 @@ public final class Animation {
                 queue.addLast(p.invert());
             }
         }
-        return new Animation(0, 0, view, queue);
+        return new Animation(view, queue);
     }
 
     public void startAnimation(State state) {
@@ -59,7 +49,7 @@ public final class Animation {
                     setTimeout(1000, () -> startAnimation(action.target()));
                 }
             }
-            view.show(state.quadruple(), offsetX, offsetY);
+            view.show(state.quadruple());
         });
         timer.start();
     }

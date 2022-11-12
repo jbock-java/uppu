@@ -2,15 +2,27 @@ package uppu.model;
 
 public final class Quadruple {
 
-    private final float[] state = new float[8];
+    private final int offsetX;
+    private final int offsetY;
+    private final float[] state;
+
+    public Quadruple(int offsetX, int offsetY, float[] state) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.state = state;
+    }
 
     public static Quadruple create() {
-        Quadruple result = new Quadruple();
+        Quadruple result = new Quadruple(0, 0, new float[8]);
         result.setR(Slot.SLOT_0.getX(), Slot.SLOT_0.getY());
         result.setG(Slot.SLOT_1.getX(), Slot.SLOT_1.getY());
         result.setB(Slot.SLOT_2.getX(), Slot.SLOT_2.getY());
         result.setY(Slot.SLOT_3.getX(), Slot.SLOT_3.getY());
         return result;
+    }
+
+    public Quadruple offset(int x, int y) {
+        return new Quadruple(x, y, state);
     }
 
     public void set(Color c, float x, float y) {
@@ -148,5 +160,13 @@ public final class Quadruple {
 
     public int getHeight() {
         return 150;
+    }
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
     }
 }

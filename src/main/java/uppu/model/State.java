@@ -20,6 +20,10 @@ public final class State {
         return new State(Quadruple.create(), List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW));
     }
 
+    public State offset(int x, int y) {
+        return new State(quadruple.offset(x, y), colors);
+    }
+
     public Action permute(Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
