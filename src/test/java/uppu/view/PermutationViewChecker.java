@@ -2,12 +2,12 @@ package uppu.view;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
-import uppu.model.Command;
+import uppu.model.BiCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static uppu.model.Command.command;
+import static uppu.model.BiCommand.command;
 
 class PermutationViewChecker {
 
@@ -24,7 +24,7 @@ class PermutationViewChecker {
         view.setLocationRelativeTo(null);
         Permutation a = Permutation.create(0, 1, 2);
         Permutation b = Permutation.create(0, 1, 3);
-        List<Command> commands = new ArrayList<>();
+        List<BiCommand> commands = new ArrayList<>();
         commands.addAll(commands(a, "a", b, "b"));
         commands.addAll(commands(a.invert(), "a" + INVERT, b, "b"));
         commands.addAll(commands(a, "a", b.invert(), "b" + INVERT));
@@ -32,17 +32,19 @@ class PermutationViewChecker {
         Animation.create(view).startAnimation(commands);
     }
 
-    private List<Command> commands(
+    private List<BiCommand> commands(
             Permutation a, String aLabel,
             Permutation b, String bLabel) {
         return List.of(
-                command(a, id, aLabel),
-                command(b, id, bLabel),
+                BiCommand.wait(bLabel + aLabel),
+                command(a, id, bLabel + aLabel),
+                command(b, id, bLabel + aLabel),
                 command(id, b.compose(a), bLabel + aLabel),
-                command(b.compose(a).invert(), b.compose(a).invert(), ""),
-                command(b, id, bLabel),
-                command(a, id, aLabel),
+                command(b.compose(a).invert(), b.compose(a).invert(), bLabel + aLabel),
+                BiCommand.wait(aLabel + bLabel),
+                command(b, id, aLabel + bLabel),
+                command(a, id, aLabel + bLabel),
                 command(id, a.compose(b), aLabel + bLabel),
-                command(a.compose(b).invert(), a.compose(b).invert(), ""));
+                command(a.compose(b).invert(), a.compose(b).invert(), aLabel + bLabel));
     }
 }

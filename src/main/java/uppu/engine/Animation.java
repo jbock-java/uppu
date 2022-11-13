@@ -1,7 +1,7 @@
 package uppu.engine;
 
 import uppu.model.Action;
-import uppu.model.Command;
+import uppu.model.BiCommand;
 import uppu.model.Phase;
 import uppu.model.State;
 import uppu.view.PermutationView;
@@ -32,10 +32,10 @@ public final class Animation {
         return new Animation(view);
     }
 
-    public void startAnimation(List<Command> commands) {
+    public void startAnimation(List<BiCommand> commands) {
         Deque<Phase> q = new ArrayDeque<>();
-        List<Action> actionsA = leftState.getActions(commands.stream().map(Command::left).toList());
-        List<Action> actionsB = rightState.getActions(commands.stream().map(Command::right).toList());
+        List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
+        List<Action> actionsB = rightState.getActions(commands.stream().map(BiCommand::right).toList());
         for (int i = 0; i < commands.size(); i++) {
             q.addLast(Phase.create(commands.get(i).label(), List.of(actionsA.get(i), actionsB.get(i))));
         }

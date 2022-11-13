@@ -24,18 +24,28 @@ public final class State {
         return new State(quadruple.offset(x, y), colors);
     }
 
-    public List<Action> getActions(List<Permutation> permutations) {
+    public List<Action> getActions(List<Command> permutations) {
         List<Action> result = new ArrayList<>();
         State state = this;
-        for (Permutation p : permutations) {
+        for (Command p : permutations) {
             Action action = state.getAction(p);
             result.add(action);
             state = action.finalState();
         }
         return result;
     }
+    
+    private Action getAction(Command command) {
+        if (command instanceof MoveCommand) {
+            return getAction(((MoveCommand) command).permutation());
+        }
+        if (command instanceof WaitCommand) {
+            return WaitAction.create(this);
+        }
+        throw new IllegalArgumentException();
+    }
 
-    public Action getAction(Permutation p) {
+    private MoveAction getAction(Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
         for (int i = 0; i < colors.size(); i++) {
@@ -47,7 +57,7 @@ public final class State {
             }
             newColors[j] = color;
         }
-        return Action.create(new State(quadruple, List.of(newColors)), movers);
+        return MoveAction.create(new State(quadruple, List.of(newColors)), movers);
     }
 
     public Quadruple quadruple() {
