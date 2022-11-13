@@ -4,7 +4,6 @@ import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
 import uppu.model.Label;
-import uppu.model.ShowStateCommand;
 
 import java.util.ArrayList;
 import java.util.List;
