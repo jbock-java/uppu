@@ -24,13 +24,14 @@ class PermutationViewChecker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Permutation a = Permutation.create(0, 1, 2);
-        Permutation b = Permutation.create(0, 1, 3);
+        Permutation a = Permutation.create(2, 3);
+        Permutation b = Permutation.create(1, 2);
+        Permutation c = Permutation.create(0, 1, 2);
+        Permutation d = Permutation.create(0, 1, 3);
         List<BiCommand> commands = new ArrayList<>();
-        commands.addAll(commands(a, "a", b, "b"));
-        commands.addAll(commands(a.invert(), "a" + INVERT, b, "b"));
-        commands.addAll(commands(a, "a", b.invert(), "b" + INVERT));
-        commands.addAll(commands(a.invert(), "a" + INVERT, b.invert(), "b" + INVERT));
+        commands.addAll(commands(b, "b", a, "a"));
+        commands.addAll(commands(c, "c", a, "a"));
+        commands.addAll(commands(d, "d", c, "c"));
         Animation.create(view).startAnimation(commands);
     }
 
