@@ -12,8 +12,6 @@ import static uppu.model.BiCommand.command;
 
 class PermutationViewChecker {
 
-    private static final String INVERT = "\u207B\u00B9";
-
     private final PermutationView view = PermutationView.create();
     private final Permutation id = Permutation.identity();
 

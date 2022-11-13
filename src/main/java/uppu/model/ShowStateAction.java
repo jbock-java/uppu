@@ -4,14 +4,14 @@ import java.awt.Graphics2D;
 
 public class ShowStateAction extends Action {
 
-    private final State state;
+    private final Quadruple quadruple;
 
-    private ShowStateAction(State state) {
-        this.state = state;
+    private ShowStateAction(Quadruple quadruple) {
+        this.quadruple = quadruple;
     }
 
-    static ShowStateAction create(State state) {
-        return new ShowStateAction(state);
+    static ShowStateAction create(Quadruple quadruple) {
+        return new ShowStateAction(quadruple);
     }
 
     @Override
@@ -20,13 +20,8 @@ public class ShowStateAction extends Action {
     }
 
     @Override
-    public State finalState() {
-        return state;
-    }
-
-    @Override
     public void show(Graphics2D g, Label label) {
-        show(g, state.quadruple());
+        show(g, quadruple);
         showLabel(g, label);
     }
 }

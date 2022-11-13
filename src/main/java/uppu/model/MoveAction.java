@@ -3,24 +3,21 @@ package uppu.model;
 import uppu.engine.Mover;
 import uppu.engine.Movers;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
 import java.util.List;
 
 public class MoveAction extends Action {
 
-    private final State finalState;
+    private final Quadruple quadruple;
     private final Movers movers;
-
-
-    private MoveAction(State finalState, Movers movers) {
-        this.finalState = finalState;
+    
+    private MoveAction(Quadruple quadruple, Movers movers) {
+        this.quadruple = quadruple;
         this.movers = movers;
     }
 
-    static MoveAction create(State finalState, List<Mover> movers) {
-        return new MoveAction(finalState, Movers.create(movers));
+    static MoveAction create(Quadruple quadruple, List<Mover> movers) {
+        return new MoveAction(quadruple, Movers.create(movers));
     }
 
     @Override
@@ -29,13 +26,8 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public State finalState() {
-        return finalState;
-    }
-
-    @Override
     public void show(Graphics2D g, Label label) {
-        show(g, finalState.quadruple());
+        show(g, quadruple);
         showLabel(g, label);
     }
 }

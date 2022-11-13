@@ -28,27 +28,38 @@ public final class State {
         List<Action> result = new ArrayList<>();
         State state = this;
         for (Command p : permutations) {
-            Action action = state.getAction(p);
-            result.add(action);
-            state = action.finalState();
+            ActionWithState action = state.getAction(p);
+            result.add(action.action);
+            state = new State(quadruple, action.finalState);
         }
         return result;
     }
     
-    private Action getAction(Command command) {
+    private static final class ActionWithState {
+        
+        final Action action;
+        final List<Color> finalState;
+
+        ActionWithState(Action action, List<Color> finalState) {
+            this.action = action;
+            this.finalState = finalState;
+        }
+    }
+    
+    private ActionWithState getAction(Command command) {
         if (command instanceof MoveCommand) {
             return getAction(((MoveCommand) command).permutation());
         }
         if (command instanceof WaitCommand) {
-            return WaitAction.create(((WaitCommand) command).cycles(), this);
+            return new ActionWithState(WaitAction.create(((WaitCommand) command).cycles()), colors);
         }
         if (command instanceof ShowStateCommand) {
-            return ShowStateAction.create(this);
+            return new ActionWithState(ShowStateAction.create(quadruple), colors);
         }
         throw new IllegalArgumentException();
     }
 
-    private MoveAction getAction(Permutation p) {
+    private ActionWithState getAction(Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
         for (int i = 0; i < colors.size(); i++) {
@@ -60,11 +71,7 @@ public final class State {
             }
             newColors[j] = color;
         }
-        return MoveAction.create(new State(quadruple, List.of(newColors)), movers);
-    }
-
-    public Quadruple quadruple() {
-        return quadruple;
+        return new ActionWithState(MoveAction.create(quadruple, movers), List.of(newColors));
     }
 
     @Override

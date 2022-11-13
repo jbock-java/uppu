@@ -20,8 +20,6 @@ public abstract class Action {
 
     public abstract boolean move();
 
-    public abstract State finalState();
-
     public abstract void show(Graphics2D g, Label label);
 
     final void showLabel(Graphics2D g, Label label) {
