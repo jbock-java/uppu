@@ -33,10 +33,7 @@ public class PermutationView extends JFrame {
         }
     };
 
-    private final Ellipse2D.Float floatRed = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
-    private final Ellipse2D.Float floatGreen = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
-    private final Ellipse2D.Float floatBlue = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
-    private final Ellipse2D.Float floatYellow = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
+    private final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 
     private PermutationView() {
         super("uppu");
@@ -70,21 +67,21 @@ public class PermutationView extends JFrame {
     public void show(Graphics2D g, Quadruple quadruple) {
         g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
         g.setPaint(WILD_WATERMELON);
-        floatRed.x = quadruple.getRx() + quadruple.getOffsetX();
-        floatRed.y = quadruple.getRy() + quadruple.getOffsetY();
-        g.fill(floatRed);
+        ellipse.x = quadruple.getRx() + quadruple.getOffsetX();
+        ellipse.y = quadruple.getRy() + quadruple.getOffsetY();
+        g.fill(ellipse);
         g.setPaint(PANTONE_GREEN);
-        floatGreen.x = quadruple.getGx() + quadruple.getOffsetX();
-        floatGreen.y = quadruple.getGy() + quadruple.getOffsetY();
-        g.fill(floatGreen);
+        ellipse.x = quadruple.getGx() + quadruple.getOffsetX();
+        ellipse.y = quadruple.getGy() + quadruple.getOffsetY();
+        g.fill(ellipse);
         g.setPaint(ROBIN_EGG_BLUE);
-        floatBlue.x = quadruple.getBx() + quadruple.getOffsetX();
-        floatBlue.y = quadruple.getBy() + quadruple.getOffsetY();
-        g.fill(floatBlue);
+        ellipse.x = quadruple.getBx() + quadruple.getOffsetX();
+        ellipse.y = quadruple.getBy() + quadruple.getOffsetY();
+        g.fill(ellipse);
         g.setPaint(NCS_YELLOW);
-        floatYellow.x = quadruple.getYx() + quadruple.getOffsetX();
-        floatYellow.y = quadruple.getYy() + quadruple.getOffsetY();
-        g.fill(floatYellow);
+        ellipse.x = quadruple.getYx() + quadruple.getOffsetX();
+        ellipse.y = quadruple.getYy() + quadruple.getOffsetY();
+        g.fill(ellipse);
     }
 
     private void createElements() {
