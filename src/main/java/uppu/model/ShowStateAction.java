@@ -2,24 +2,21 @@ package uppu.model;
 
 import java.awt.Graphics2D;
 
-public final class WaitAction extends Action {
-    
-    private int cycles;
+public class ShowStateAction extends Action {
+
     private final State state;
 
-    private WaitAction(int cycles, State state) {
-        this.cycles = cycles;
+    private ShowStateAction(State state) {
         this.state = state;
     }
 
-    static WaitAction create(int cycles, State state) {
-        return new WaitAction(cycles, state);
+    static ShowStateAction create(State state) {
+        return new ShowStateAction(state);
     }
 
     @Override
     public boolean move() {
-        cycles--;
-        return cycles >= 0;
+        return false;
     }
 
     @Override
@@ -29,5 +26,7 @@ public final class WaitAction extends Action {
 
     @Override
     public void show(Graphics2D g, Label label) {
+        show(g, state.quadruple());
+        showLabel(g, label);
     }
 }

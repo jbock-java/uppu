@@ -40,7 +40,10 @@ public final class State {
             return getAction(((MoveCommand) command).permutation());
         }
         if (command instanceof WaitCommand) {
-            return WaitAction.create(this);
+            return WaitAction.create(((WaitCommand) command).cycles(), this);
+        }
+        if (command instanceof ShowStateCommand) {
+            return ShowStateAction.create(this);
         }
         throw new IllegalArgumentException();
     }

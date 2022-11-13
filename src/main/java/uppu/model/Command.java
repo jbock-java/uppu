@@ -1,4 +1,4 @@
 package uppu.model;
 
-public sealed interface Command permits MoveCommand, WaitCommand {
+public sealed interface Command permits MoveCommand, WaitCommand, ShowStateCommand {
 }

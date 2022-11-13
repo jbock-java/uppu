@@ -4,6 +4,7 @@ import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
 import uppu.model.Label;
+import uppu.model.ShowStateCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +40,23 @@ class PermutationViewChecker {
         Label label1 = Label.create(bLabel + aLabel);
         Label label2 = Label.create(aLabel + bLabel);
         return List.of(
-                BiCommand.wait(label1),
+                BiCommand.showState(label1),
+                BiCommand.wait(50),
                 command(a, id, label1.highlight(bLabel.length())),
+                BiCommand.wait(20),
                 command(b, id, label1.highlight(0, bLabel.length())),
+                BiCommand.wait(20),
                 command(id, b.compose(a), label1.highlight()),
+                BiCommand.wait(20),
                 command(b.compose(a).invert(), b.compose(a).invert(), Label.create("")),
-                BiCommand.wait(label2),
+                BiCommand.showState(label2),
+                BiCommand.wait(50),
                 command(b, id, label2.highlight(aLabel.length())),
+                BiCommand.wait(20),
                 command(a, id, label2.highlight(0, aLabel.length())),
+                BiCommand.wait(20),
                 command(id, a.compose(b), label2.highlight()),
+                BiCommand.wait(20),
                 command(a.compose(b).invert(), a.compose(b).invert(), Label.create("")));
     }
 }

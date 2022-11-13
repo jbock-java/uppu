@@ -24,8 +24,12 @@ public class BiCommand {
         return new BiCommand(new MoveCommand(left), new MoveCommand(right), label);
     }
 
-    public static BiCommand wait(Label label) {
-        return new BiCommand(new WaitCommand(), new WaitCommand(), label);
+    public static BiCommand wait(int cycles) {
+        return new BiCommand(new WaitCommand(cycles), new WaitCommand(cycles), Label.create(""));
+    }
+
+    public static BiCommand showState(Label label) {
+        return new BiCommand(new ShowStateCommand(), new ShowStateCommand(), label);
     }
 
     public Command left() {
