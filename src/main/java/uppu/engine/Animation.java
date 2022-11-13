@@ -2,6 +2,7 @@ package uppu.engine;
 
 import uppu.model.Action;
 import uppu.model.Command;
+import uppu.model.Phase;
 import uppu.model.State;
 import uppu.view.PermutationView;
 
@@ -31,26 +32,26 @@ public final class Animation {
     }
 
     public void startAnimation(List<Command> commands) {
-        Deque<List<Action>> q = new ArrayDeque<>();
+        Deque<Phase> q = new ArrayDeque<>();
         List<Action> actionsA = leftState.getActions(commands.stream().map(Command::left).toList());
         List<Action> actionsB = rightState.getActions(commands.stream().map(Command::right).toList());
         for (int i = 0; i < commands.size(); i++) {
-            q.addLast(List.of(actionsA.get(i), actionsB.get(i)));
+            q.addLast(Phase.create(commands.get(i).label(), List.of(actionsA.get(i), actionsB.get(i))));
         }
         timer = new Timer(25, __ -> {
-            List<Action> actions = q.peekFirst();
-            if (actions == null) {
+            Phase phase = q.peekFirst();
+            if (phase == null) {
                 timer.stop();
                 return;
             }
             boolean anyMove = false;
-            for (Action action : actions) {
+            for (Action action : phase.actions()) {
                 anyMove |= action.move();
             }
             if (!anyMove) {
                 q.removeFirst();
             }
-            view.show(states);
+            view.show(phase.label(), states);
         });
         timer.start();
     }

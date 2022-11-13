@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -22,10 +24,12 @@ public class PermutationView extends JFrame {
     private static final int BALL_SIZE = 40;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
-    private static final Color WILD_WATERMELON = new Color(252, 108, 133);
+    private static final Color WILD_WATERMELON = new Color(252, 108, 133).brighter();
     private static final Color PANTONE_GREEN = new Color(152, 251, 152);
     private static final Color NCS_YELLOW = new Color(255, 211, 0);
-    private static final Color ROBIN_EGG_BLUE = new Color(0, 204, 204);
+    private static final Color ROBIN_EGG_BLUE = new Color(0, 204, 204).brighter();
+    private static final int FONT_SIZE = 36;
+    private static final Font MONOSPACED = new Font("Monospaced", Font.BOLD, FONT_SIZE);
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -53,11 +57,20 @@ public class PermutationView extends JFrame {
         view.canvas.createBufferStrategy(3);
         return view;
     }
-    public void show(List<State> states) {
+
+    public void show(String label, List<State> states) {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         for (State state : states) {
             show(g, state.quadruple());
+        }
+        g.clearRect(100, 260 - FONT_SIZE + 5, FONT_SIZE * 6, FONT_SIZE);
+        if (!label.isEmpty()) {
+            g.setFont(MONOSPACED);
+            g.setColor(Color.RED);
+            FontMetrics fm = g.getFontMetrics();
+            int w = fm.stringWidth(label);
+            g.drawString(label, 220 - (w / 2), 260);
         }
         bufferStrategy.show();
         g.dispose();
