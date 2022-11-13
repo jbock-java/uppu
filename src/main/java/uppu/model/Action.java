@@ -14,16 +14,22 @@ public abstract class Action {
 
     public abstract State finalState();
 
-    public abstract void show(Graphics2D g, String label);
+    public abstract void show(Graphics2D g, Label label);
 
-    void showLabel(Graphics2D g, String label) {
+    void showLabel(Graphics2D g, Label label) {
         g.clearRect(100, 260 - FONT_SIZE + 5, FONT_SIZE * 6, FONT_SIZE);
-        if (!label.isEmpty()) {
+        if (!label.text().isEmpty()) {
             g.setFont(MONOSPACED);
-            g.setColor(Color.RED);
             FontMetrics fm = g.getFontMetrics();
-            int w = fm.stringWidth(label);
-            g.drawString(label, 220 - (w / 2), 260);
+            int w = fm.stringWidth(label.text());
+            int x = 220 - (w / 2);
+            String text = label.text();
+            for (int i = 0; i < text.length(); i++) {
+                String charString = Character.toString(text.charAt(i));
+                g.setColor(label.isHighlight(i) ? Color.WHITE : Color.RED);
+                g.drawString(charString, x, 260);
+                x += fm.stringWidth(charString);
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ public final class WaitAction extends Action {
     }
 
     @Override
-    public void show(Graphics2D g, String label) {
+    public void show(Graphics2D g, Label label) {
         showLabel(g, label);
     }
 }
