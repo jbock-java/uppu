@@ -1,43 +1,25 @@
 package uppu.view;
 
-import uppu.model.Quadruple;
-import uppu.model.State;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
-import java.util.List;
 
 public class PermutationView extends JFrame {
 
-    private static final int BALL_SIZE = 40;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
-    private static final Color WILD_WATERMELON = new Color(252, 108, 133).brighter();
-    private static final Color PANTONE_GREEN = new Color(152, 251, 152);
-    private static final Color NCS_YELLOW = new Color(255, 211, 0);
-    private static final Color ROBIN_EGG_BLUE = new Color(0, 204, 204).brighter();
-    private static final int FONT_SIZE = 36;
-    private static final Font MONOSPACED = new Font("Monospaced", Font.BOLD, FONT_SIZE);
 
     private final Canvas canvas = new Canvas() {
         @Override
         public void paint(Graphics g) {
         }
     };
-
-    private final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 
     private PermutationView() {
         super("uppu");
@@ -58,43 +40,8 @@ public class PermutationView extends JFrame {
         return view;
     }
 
-    public void show(String label, List<State> states) {
-        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        for (State state : states) {
-            show(g, state.quadruple());
-        }
-        g.clearRect(100, 260 - FONT_SIZE + 5, FONT_SIZE * 6, FONT_SIZE);
-        if (!label.isEmpty()) {
-            g.setFont(MONOSPACED);
-            g.setColor(Color.RED);
-            FontMetrics fm = g.getFontMetrics();
-            int w = fm.stringWidth(label);
-            g.drawString(label, 220 - (w / 2), 260);
-        }
-        bufferStrategy.show();
-        g.dispose();
-        Toolkit.getDefaultToolkit().sync();
-    }
-
-    public void show(Graphics2D g, Quadruple quadruple) {
-        g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
-        g.setPaint(WILD_WATERMELON);
-        ellipse.x = quadruple.getRx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getRy() + quadruple.getOffsetY();
-        g.fill(ellipse);
-        g.setPaint(PANTONE_GREEN);
-        ellipse.x = quadruple.getGx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getGy() + quadruple.getOffsetY();
-        g.fill(ellipse);
-        g.setPaint(ROBIN_EGG_BLUE);
-        ellipse.x = quadruple.getBx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getBy() + quadruple.getOffsetY();
-        g.fill(ellipse);
-        g.setPaint(NCS_YELLOW);
-        ellipse.x = quadruple.getYx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getYy() + quadruple.getOffsetY();
-        g.fill(ellipse);
+    public BufferStrategy getBufferStrategy() {
+        return canvas.getBufferStrategy();
     }
 
     private void createElements() {
