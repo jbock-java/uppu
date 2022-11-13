@@ -1,7 +1,7 @@
 package uppu.engine;
 
-import io.parmigiano.Permutation;
 import uppu.model.Action;
+import uppu.model.Command;
 import uppu.model.State;
 import uppu.view.PermutationView;
 
@@ -30,13 +30,11 @@ public final class Animation {
         return new Animation(view);
     }
 
-    public void startAnimation(
-            List<Permutation> left,
-            List<Permutation> right) {
+    public void startAnimation(List<Command> commands) {
         Deque<List<Action>> q = new ArrayDeque<>();
-        List<Action> actionsA = leftState.getActions(left);
-        List<Action> actionsB = rightState.getActions(right);
-        for (int i = 0; i < actionsA.size(); i++) {
+        List<Action> actionsA = leftState.getActions(commands.stream().map(Command::left).toList());
+        List<Action> actionsB = rightState.getActions(commands.stream().map(Command::right).toList());
+        for (int i = 0; i < commands.size(); i++) {
             q.addLast(List.of(actionsA.get(i), actionsB.get(i)));
         }
         timer = new Timer(25, __ -> {

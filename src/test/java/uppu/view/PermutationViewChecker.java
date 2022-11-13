@@ -2,9 +2,10 @@ package uppu.view;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
-import uppu.model.State;
 
 import java.util.List;
+
+import static uppu.model.Command.command;
 
 class PermutationViewChecker {
 
@@ -16,22 +17,13 @@ class PermutationViewChecker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        List<Permutation> permutations = List.of(Permutation.create(0, 1, 2),
-                Permutation.create(0, 1, 3),
-                Permutation.create(0, 2, 3),
-                Permutation.create(1, 2, 3),
-                Permutation.create(0, 1).compose(2, 3),
-                Permutation.create(0, 2).compose(1, 3),
-                Permutation.create(0, 3).compose(1, 2),
-                Permutation.create(0, 1, 2, 3),
-                Permutation.create(0, 1, 3, 2),
-                Permutation.create(0, 2, 1, 3));
-        Permutation c1 = Permutation.create(0, 2, 1).invert();
-        Permutation c2 = Permutation.create(0, 3, 1).invert();
+        Permutation a = Permutation.create(0, 1, 2);
+        Permutation b = Permutation.create(0, 1, 3);
         Permutation id = Permutation.identity();
-        Animation.create(view)
-                .startAnimation(
-                        List.of(c1, c2, id),
-                        List.of(id, id, c2.compose(c1)));
+        Animation.create(view).startAnimation(List.of(
+                command(a, id),
+                command(b, id),
+                command(id, b.compose(a)),
+                command(b.compose(a).invert(), b.compose(a).invert())));
     }
 }

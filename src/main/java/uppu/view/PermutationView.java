@@ -22,12 +22,21 @@ public class PermutationView extends JFrame {
     private static final int BALL_SIZE = 40;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
+    private static final Color WILD_WATERMELON = new Color(252, 108, 133);
+    private static final Color PANTONE_GREEN = new Color(152, 251, 152);
+    private static final Color NCS_YELLOW = new Color(255, 211, 0);
+    private static final Color ROBIN_EGG_BLUE = new Color(0, 204, 204);
 
     private final Canvas canvas = new Canvas() {
         @Override
         public void paint(Graphics g) {
         }
     };
+
+    private final Ellipse2D.Float floatRed = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
+    private final Ellipse2D.Float floatGreen = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
+    private final Ellipse2D.Float floatBlue = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
+    private final Ellipse2D.Float floatYellow = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 
     private PermutationView() {
         super("uppu");
@@ -60,14 +69,22 @@ public class PermutationView extends JFrame {
 
     public void show(Graphics2D g, Quadruple quadruple) {
         g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
-        g.setPaint(Color.RED);
-        g.fill(new Ellipse2D.Float(quadruple.getRx() + quadruple.getOffsetX(), quadruple.getRy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
-        g.setPaint(Color.GREEN);
-        g.fill(new Ellipse2D.Float(quadruple.getGx() + quadruple.getOffsetX(), quadruple.getGy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
-        g.setPaint(Color.BLUE);
-        g.fill(new Ellipse2D.Float(quadruple.getBx() + quadruple.getOffsetX(), quadruple.getBy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
-        g.setPaint(Color.YELLOW);
-        g.fill(new Ellipse2D.Float(quadruple.getYx() + quadruple.getOffsetX(), quadruple.getYy() + quadruple.getOffsetY(), BALL_SIZE, BALL_SIZE));
+        g.setPaint(WILD_WATERMELON);
+        floatRed.x = quadruple.getRx() + quadruple.getOffsetX();
+        floatRed.y = quadruple.getRy() + quadruple.getOffsetY();
+        g.fill(floatRed);
+        g.setPaint(PANTONE_GREEN);
+        floatGreen.x = quadruple.getGx() + quadruple.getOffsetX();
+        floatGreen.y = quadruple.getGy() + quadruple.getOffsetY();
+        g.fill(floatGreen);
+        g.setPaint(ROBIN_EGG_BLUE);
+        floatBlue.x = quadruple.getBx() + quadruple.getOffsetX();
+        floatBlue.y = quadruple.getBy() + quadruple.getOffsetY();
+        g.fill(floatBlue);
+        g.setPaint(NCS_YELLOW);
+        floatYellow.x = quadruple.getYx() + quadruple.getOffsetX();
+        floatYellow.y = quadruple.getYy() + quadruple.getOffsetY();
+        g.fill(floatYellow);
     }
 
     private void createElements() {
