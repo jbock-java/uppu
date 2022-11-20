@@ -9,28 +9,26 @@ import java.util.List;
 public final class State {
 
     private final Quadruple quadruple;
-    private final List<Color> colors;
 
-    private State(Quadruple quadruple, List<Color> colors) {
+    private State(Quadruple quadruple) {
         this.quadruple = quadruple;
-        this.colors = colors;
     }
 
     public static State create() {
-        return new State(Quadruple.create(), List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW));
+        return new State(Quadruple.create());
     }
 
     public State offset(int x, int y) {
-        return new State(quadruple.offset(x, y), colors);
+        return new State(quadruple.offset(x, y));
     }
 
-    public List<Action> getActions(List<Command> permutations) {
-        List<Action> result = new ArrayList<>();
-        State state = this;
-        for (Command p : permutations) {
-            ActionWithState action = state.getAction(p);
+    public List<Action> getActions(List<Command> commands) {
+        List<Color> state = List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        List<Action> result = new ArrayList<>(commands.size());
+        for (Command command : commands) {
+            ActionWithState action = getAction(state, command);
             result.add(action.action);
-            state = new State(quadruple, action.finalState);
+            state = action.finalState;
         }
         return result;
     }
@@ -46,24 +44,24 @@ public final class State {
         }
     }
     
-    private ActionWithState getAction(Command command) {
+    private ActionWithState getAction(List<Color> state, Command command) {
         if (command instanceof MoveCommand) {
-            return getAction(((MoveCommand) command).permutation());
+            return getAction(state, ((MoveCommand) command).permutation());
         }
         if (command instanceof WaitCommand) {
-            return new ActionWithState(WaitAction.create(((WaitCommand) command).cycles()), colors);
+            return new ActionWithState(WaitAction.create(((WaitCommand) command).cycles()), state);
         }
         if (command instanceof ShowStateCommand) {
-            return new ActionWithState(ShowStateAction.create(quadruple), colors);
+            return new ActionWithState(ShowStateAction.create(quadruple), state);
         }
         throw new IllegalArgumentException();
     }
 
-    private ActionWithState getAction(Permutation p) {
+    private ActionWithState getAction(List<Color> state, Permutation p) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[4];
-        for (int i = 0; i < colors.size(); i++) {
-            Color color = colors.get(i);
+        for (int i = 0; i < state.size(); i++) {
+            Color color = state.get(i);
             int j = p.apply(i);
             if (j != i) {
                 Slot targetSlot = Slot.forIndex(j);
@@ -72,11 +70,5 @@ public final class State {
             newColors[j] = color;
         }
         return new ActionWithState(MoveAction.create(quadruple, movers), List.of(newColors));
-    }
-
-    @Override
-    public String toString() {
-        return String.join(", ", colors.stream().map(Color::toString).toList())
-                + " (" + quadruple.getOffsetX() + " ," + quadruple.getOffsetY() + ")";
     }
 }

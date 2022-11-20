@@ -16,6 +16,7 @@ public abstract class Action {
     private static final Color PANTONE_GREEN = new Color(152, 251, 152);
     private static final Color NCS_YELLOW = new Color(255, 211, 0);
     private static final Color ROBIN_EGG_BLUE = new Color(0, 204, 204).brighter();
+    public static final Color CARMINE = new Color(150, 0, 24);
     private final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 
     public abstract boolean move();
@@ -32,7 +33,7 @@ public abstract class Action {
             String text = label.text();
             for (int i = 0; i < text.length(); i++) {
                 String charString = Character.toString(text.charAt(i));
-                g.setColor(label.isHighlight(i) ? Color.WHITE : Color.RED);
+                g.setColor(label.isHighlight(i) ? Color.WHITE : CARMINE);
                 g.drawString(charString, x, 260);
                 x += fm.stringWidth(charString);
             }

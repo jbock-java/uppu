@@ -26,6 +26,8 @@ class PermutationViewChecker {
         Permutation c = Permutation.create(0, 1, 2);
         Permutation d = Permutation.create(0, 1, 3);
         List<BiCommand> commands = new ArrayList<>();
+        commands.add(BiCommand.showState(Label.create("ab")));
+        commands.add(BiCommand.wait(600));
         commands.addAll(commands(b, "b", a, "a"));
         commands.addAll(commands(c, "c", a, "a"));
         commands.addAll(commands(d, "d", c, "c"));
