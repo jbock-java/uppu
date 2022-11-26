@@ -3,9 +3,11 @@ package uppu.model;
 public enum Slot {
 
     SLOT_0(0, 0),
-    SLOT_1(100, 0),
-    SLOT_2(100, 100),
-    SLOT_3(0, 100);
+    SLOT_1(150, 0),
+    SLOT_2(150, 150),
+    SLOT_3(0, 150);
+
+    public static final int MAX = 150;
 
     private final float x;
     private final float y;

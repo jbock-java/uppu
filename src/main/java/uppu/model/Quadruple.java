@@ -78,11 +78,11 @@ public final class Quadruple {
     }
 
     public int getWidth() {
-        return 150;
+        return Slot.MAX + Action.BALL_SIZE;
     }
 
     public int getHeight() {
-        return 150;
+        return Slot.MAX + Action.BALL_SIZE;
     }
 
     public int getOffsetX() {

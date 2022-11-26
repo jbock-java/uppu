@@ -20,8 +20,7 @@ public class ShowStateAction extends Action {
     }
 
     @Override
-    public void show(Graphics2D g, Label label) {
+    public void show(Graphics2D g) {
         show(g, quadruple);
-        showLabel(g, label);
     }
 }

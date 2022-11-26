@@ -19,13 +19,12 @@ public final class Animation {
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
-    private final State rightState;
 
     private Animation(
             PermutationView view) {
         this.view = view;
         this.leftState = State.create().offset(50, 50);
-        this.rightState = State.create().offset(250, 50);
+//        this.rightState = State.create().offset(250, 50);
     }
 
     public static Animation create(PermutationView view) {
@@ -35,9 +34,8 @@ public final class Animation {
     public void startAnimation(List<BiCommand> commands) {
         Deque<Phase> q = new ArrayDeque<>();
         List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
-        List<Action> actionsB = rightState.getActions(commands.stream().map(BiCommand::right).toList());
         for (int i = 0; i < commands.size(); i++) {
-            q.addLast(Phase.create(commands.get(i).label(), List.of(actionsA.get(i), actionsB.get(i))));
+            q.addLast(Phase.create(commands.get(i).label(), List.of(actionsA.get(i))));
         }
         timer = new Timer(25, __ -> {
             Phase phase = q.peekFirst();
@@ -50,7 +48,7 @@ public final class Animation {
             boolean anyMove = false;
             for (Action action : phase.actions()) {
                 anyMove |= action.move();
-                action.show(g, phase.label());
+                action.show(g);
             }
             if (!anyMove) {
                 q.removeFirst();
