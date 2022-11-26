@@ -26,12 +26,4 @@ public enum Slot {
     public float getY() {
         return y;
     }
-
-    public Slot nextSlot() {
-        return add(1);
-    }
-
-    public Slot add(int n) {
-        return values()[(ordinal() + n) % 4];
-    }
 }

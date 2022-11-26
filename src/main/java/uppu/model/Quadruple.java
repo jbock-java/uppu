@@ -54,18 +54,18 @@ public final class Quadruple {
 
     public float getX(Color c) {
         return switch (c) {
-            case RED -> getRx();
+            case RED -> state[0];
             case BLUE -> getBx();
-            case GREEN -> getGx();
+            case GREEN -> state[2];
             case YELLOW -> getYx();
         };
     }
 
     public float getY(Color c) {
         return switch (c) {
-            case RED -> getRy();
+            case RED -> state[1];
             case BLUE -> getBy();
-            case GREEN -> getGy();
+            case GREEN -> state[3];
             case YELLOW -> getYy();
         };
     }
@@ -75,82 +75,66 @@ public final class Quadruple {
         state[1] = y;
     }
 
-    public void setRx(float x) {
+    private void setRx(float x) {
         state[0] = x;
     }
 
-    public void setRy(float y) {
+    private void setRy(float y) {
         state[1] = y;
     }
 
-    public void setGx(float x) {
+    void setGx(float x) {
         state[2] = x;
     }
 
-    public void setGy(float y) {
+    void setGy(float y) {
         state[3] = y;
     }
 
-    public void setBx(float x) {
+    private void setBx(float x) {
         state[4] = x;
     }
 
-    public void setBy(float y) {
+    private void setBy(float y) {
         state[5] = y;
     }
 
-    public void setYx(float x) {
+    private void setYx(float x) {
         state[6] = x;
     }
 
-    public void setYy(float y) {
+    private void setYy(float y) {
         state[7] = y;
     }
 
-    public void setG(float x, float y) {
+    private void setG(float x, float y) {
         state[2] = x;
         state[3] = y;
     }
 
-    public void setB(float x, float y) {
+    private void setB(float x, float y) {
         state[4] = x;
         state[5] = y;
     }
 
-    public void setY(float x, float y) {
+    private void setY(float x, float y) {
         state[6] = x;
         state[7] = y;
     }
 
-    public float getRx() {
-        return state[0];
-    }
-
-    public float getRy() {
-        return state[1];
-    }
-
-    public float getGx() {
-        return state[2];
-    }
-
-    public float getGy() {
-        return state[3];
-    }
-
-    public float getBx() {
+    private float getBx() {
         return state[4];
     }
 
-    public float getBy() {
+    private float getBy() {
         return state[5];
     }
 
-    public float getYx() {
+    private float getYx() {
         return state[6];
     }
 
-    public float getYy() {
+    private float getYy() {
         return state[7];
     }
 

@@ -43,20 +43,20 @@ public abstract class Action {
     final void show(Graphics2D g, Quadruple quadruple) {
         g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
         g.setPaint(WILD_WATERMELON);
-        ellipse.x = quadruple.getRx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getRy() + quadruple.getOffsetY();
+        ellipse.x = quadruple.getX(uppu.model.Color.RED) + quadruple.getOffsetX();
+        ellipse.y = quadruple.getY(uppu.model.Color.RED) + quadruple.getOffsetY();
         g.fill(ellipse);
         g.setPaint(PANTONE_GREEN);
-        ellipse.x = quadruple.getGx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getGy() + quadruple.getOffsetY();
+        ellipse.x = quadruple.getX(uppu.model.Color.GREEN) + quadruple.getOffsetX();
+        ellipse.y = quadruple.getY(uppu.model.Color.GREEN) + quadruple.getOffsetY();
         g.fill(ellipse);
         g.setPaint(ROBIN_EGG_BLUE);
-        ellipse.x = quadruple.getBx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getBy() + quadruple.getOffsetY();
+        ellipse.x = quadruple.getX(uppu.model.Color.BLUE) + quadruple.getOffsetX();
+        ellipse.y = quadruple.getY(uppu.model.Color.BLUE) + quadruple.getOffsetY();
         g.fill(ellipse);
         g.setPaint(NCS_YELLOW);
-        ellipse.x = quadruple.getYx() + quadruple.getOffsetX();
-        ellipse.y = quadruple.getYy() + quadruple.getOffsetY();
+        ellipse.x = quadruple.getX(uppu.model.Color.YELLOW) + quadruple.getOffsetX();
+        ellipse.y = quadruple.getY(uppu.model.Color.YELLOW) + quadruple.getOffsetY();
         g.fill(ellipse);
     }
 }
