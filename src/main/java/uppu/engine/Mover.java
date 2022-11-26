@@ -6,35 +6,53 @@ import uppu.model.Slot;
 
 public class Mover {
 
-    private static final float stepSize = 1f;
-    
     private final Color color;
     private final Quadruple quadruple;
     private final float target_x; // target
     private final float target_y; // target
+    private final float dx;
+    private final float dy;
 
-    public Mover(Color color, Quadruple quadruple, Slot slot) {
+    private Mover(Color color, Quadruple quadruple, Slot slot, float dx, float dy) {
         this.color = color;
         this.quadruple = quadruple;
         this.target_x = slot.getX();
         this.target_y = slot.getY();
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    public static Mover create(Color color, Quadruple quadruple, Slot sourceSlot, Slot targetSlot) {
+        float start_x = sourceSlot.getX();
+        float start_y = sourceSlot.getY();
+        float target_x = targetSlot.getX();
+        float target_y = targetSlot.getY();
+        double delta_x = target_x - start_x;
+        double delta_y = target_y - start_y;
+        double dx = delta_x / 100;
+        double dy = delta_y / 100;
+        return new Mover(color, quadruple, targetSlot, (float) dx, (float) dy);
     }
 
     public boolean move() {
         float x = getX();
-        boolean moved = false;
-        if (Math.abs(target_x - x) >= stepSize) {
-            float newX = x > target_x ? x - stepSize : x + stepSize;
-            setX(newX);
-            moved = true;
-        }
         float y = getY();
-        if (Math.abs(target_y - y) >= stepSize) {
-            float newY = y > target_y ? y - stepSize : y + stepSize;
-            setY(newY);
-            moved = true;
+        double dist1 = dist(x, y, target_x, target_y);
+        float x2 = x + dx;
+        float y2 = y + dy;
+        double dist2 = dist(x2, y2, target_x, target_y);
+        if (dist2 > dist1) {
+            return false;
         }
-        return moved;
+        setX(x2);
+        setY(y2);
+        return true;
+    }
+
+    static double dist(float x1, float y1, float x2, float y2) {
+        double delta_x = x1 - x2;
+        double delta_y = y1 - y2;
+        return Math.sqrt(delta_x * delta_x + delta_y * delta_y);
     }
 
     private float getX() {

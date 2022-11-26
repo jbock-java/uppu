@@ -24,6 +24,9 @@ public final class State {
 
     public List<Action> getActions(List<Command> commands) {
         List<Color> state = List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        for (int i = 0; i < state.size(); i++) {
+            quadruple.set(state.get(i), Slot.forIndex(i).getX(), Slot.forIndex(i).getY());
+        }
         List<Action> result = new ArrayList<>(commands.size());
         for (Command command : commands) {
             ActionWithState action = getAction(state, command);
@@ -64,8 +67,9 @@ public final class State {
             Color color = state.get(i);
             int j = p.apply(i);
             if (j != i) {
+                Slot sourceSlot = Slot.forIndex(i);
                 Slot targetSlot = Slot.forIndex(j);
-                movers.add(new Mover(color, quadruple, targetSlot));
+                movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             }
             newColors[j] = color;
         }
