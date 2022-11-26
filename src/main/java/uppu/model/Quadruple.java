@@ -13,7 +13,7 @@ public final class Quadruple {
     }
 
     public static Quadruple create() {
-        return new Quadruple(0, 0, new float[8]);
+        return new Quadruple(0, 0, new float[10]);
     }
 
     public Quadruple offset(int x, int y) {
@@ -38,6 +38,10 @@ public final class Quadruple {
                 state[6] = x;
                 state[7] = y;
             }
+            case WHITE -> {
+                state[8] = x;
+                state[9] = y;
+            }
         }
     }
 
@@ -47,6 +51,7 @@ public final class Quadruple {
             case GREEN -> state[2] = x;
             case BLUE -> state[4] = x;
             case YELLOW -> state[6] = x;
+            case WHITE -> state[8] = x;
         }
     }
 
@@ -56,6 +61,7 @@ public final class Quadruple {
             case GREEN -> state[3] = y;
             case BLUE -> state[5] = y;
             case YELLOW -> state[7] = y;
+            case WHITE -> state[9] = y;
         }
     }
 
@@ -65,6 +71,7 @@ public final class Quadruple {
             case GREEN -> state[2];
             case BLUE -> state[4];
             case YELLOW -> state[6];
+            case WHITE -> state[8];
         };
     }
 
@@ -74,6 +81,7 @@ public final class Quadruple {
             case GREEN -> state[3];
             case BLUE -> state[5];
             case YELLOW -> state[7];
+            case WHITE -> state[9];
         };
     }
 

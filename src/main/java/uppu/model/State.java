@@ -23,7 +23,7 @@ public final class State {
     }
 
     public List<Action> getActions(List<Command> commands) {
-        List<Color> state = List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        List<Color> state = List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE);
         for (int i = 0; i < state.size(); i++) {
             quadruple.set(state.get(i), Slot.forIndex(i).getX(), Slot.forIndex(i).getY());
         }
@@ -62,7 +62,7 @@ public final class State {
 
     private ActionWithState getAction(List<Color> state, Permutation p) {
         List<Mover> movers = new ArrayList<>();
-        Color[] newColors = new Color[4];
+        Color[] newColors = new Color[state.size()];
         for (int i = 0; i < state.size(); i++) {
             Color color = state.get(i);
             int j = p.apply(i);

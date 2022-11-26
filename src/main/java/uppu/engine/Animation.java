@@ -35,7 +35,7 @@ public final class Animation {
         Deque<Phase> q = new ArrayDeque<>();
         List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
         for (int i = 0; i < commands.size(); i++) {
-            q.addLast(Phase.create(commands.get(i).label(), List.of(actionsA.get(i))));
+            q.addLast(Phase.create(List.of(actionsA.get(i))));
         }
         timer = new Timer(25, __ -> {
             Phase phase = q.peekFirst();

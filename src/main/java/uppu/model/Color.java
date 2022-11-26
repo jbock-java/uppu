@@ -1,5 +1,5 @@
 package uppu.model;
 
 public enum Color {
-    RED, GREEN, BLUE, YELLOW;
+    RED, GREEN, BLUE, YELLOW, WHITE;
 }
