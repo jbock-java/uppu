@@ -19,23 +19,62 @@ class S4Checker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        List<Permutation> permutations = Permutation.symmetricGroup(4).stream()
-                .filter(p -> p.order() == 3)
-                .toList();
+        List<Product> products = new ArrayList<>();
+
+        // T
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3)));
+        products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 2, 1)));
+
+        // R
+        products.add(product(Permutation.create(0, 3, 1), Permutation.create(1, 2, 3)));
+        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 1, 3)));
+
+        // B
+        products.add(product(Permutation.create(0, 2, 3), Permutation.create(1, 2, 3)));
+        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 3, 2)));
+
+        // L
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2)));
+        products.add(product(Permutation.create(0, 2, 3), Permutation.create(0, 2, 1)));
+
+        // /
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2, 3)));
+        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 2, 1)));
+
+        // \
+        products.add(product(Permutation.create(0, 2, 3), Permutation.create(0, 1, 3)));
+        products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 3, 2)));
+
         List<BiCommand> commands = new ArrayList<>();
         commands.add(BiCommand.showState());
         commands.add(BiCommand.wait(20));
-        for (Permutation p : permutations) {
-            commands.addAll(commands(p));
+        for (Product p : products) {
+            commands.addAll(p.commands());
         }
         Animation.create(view, 4, 66).startAnimation(commands);
     }
 
-    private List<BiCommand> commands(
-            Permutation a) {
-        return List.of(
-                BiCommand.showState(),
-                BiCommand.wait(20),
-                command(a));
+    static Product product(Permutation a, Permutation b) {
+        return new Product(a, b);
+    }
+
+    private record Product(Permutation a, Permutation b) {
+
+        List<BiCommand> commands() {
+            return List.of(
+                    BiCommand.showState(),
+                    BiCommand.wait(28),
+                    command(a),
+                    BiCommand.wait(1),
+                    command(b),
+                    BiCommand.wait(16),
+                    command(b.compose(a).invert()),
+                    BiCommand.wait(28),
+                    command(b),
+                    BiCommand.wait(1),
+                    command(a),
+                    BiCommand.wait(16),
+                    command(a.compose(b).invert()));
+        }
     }
 }
