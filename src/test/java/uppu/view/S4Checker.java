@@ -28,7 +28,7 @@ class S4Checker {
         for (Permutation p : permutations) {
             commands.addAll(commands(p));
         }
-        Animation.create(view, 4).startAnimation(commands);
+        Animation.create(view, 4, 66).startAnimation(commands);
     }
 
     private List<BiCommand> commands(

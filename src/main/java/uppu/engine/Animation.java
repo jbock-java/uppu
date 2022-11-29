@@ -27,8 +27,11 @@ public final class Animation {
         this.leftState = leftState;
     }
 
-    public static Animation create(PermutationView view, int n) {
-        return new Animation(view, State.create(n).offset(50, 50));
+    public static Animation create(
+            PermutationView view,
+            int n,
+            int offset) {
+        return new Animation(view, State.create(n).offset(offset, offset));
     }
 
     public void startAnimation(List<BiCommand> commands) {

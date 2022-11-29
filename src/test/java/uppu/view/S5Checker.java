@@ -12,12 +12,12 @@ import java.util.Set;
 
 import static uppu.model.BiCommand.command;
 
-class PermutationViewChecker {
+class S5Checker {
 
     private final PermutationView view = PermutationView.create();
 
     public static void main(String[] args) {
-        new PermutationViewChecker().run();
+        new S5Checker().run();
     }
 
     private void run() {
@@ -36,7 +36,7 @@ class PermutationViewChecker {
         for (Permutation p : values) {
             commands.addAll(commands(p));
         }
-        Animation.create(view, 5).startAnimation(commands);
+        Animation.create(view, 5, 50).startAnimation(commands);
     }
 
     private List<BiCommand> commands(

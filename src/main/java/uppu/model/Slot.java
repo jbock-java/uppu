@@ -56,9 +56,9 @@ public final class Slot {
     enum Slot4 implements AbstractSlot {
 
         SLOT_0(0f, 0f),
-        SLOT_1(100f, 0f),
-        SLOT_2(0f, 100f),
-        SLOT_3(100f, 100f);
+        SLOT_1(126f, 0f),
+        SLOT_2(0f, 126f),
+        SLOT_3(126f, 126f);
 
         private final float x;
         private final float y;
