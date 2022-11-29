@@ -13,7 +13,12 @@ public class Mover {
     private final float dx;
     private final float dy;
 
-    private Mover(Color color, Quadruple quadruple, Slot slot, float dx, float dy) {
+    private Mover(
+            Color color,
+            Quadruple quadruple,
+            Slot.AbstractSlot slot, 
+            float dx,
+            float dy) {
         this.color = color;
         this.quadruple = quadruple;
         this.target_x = slot.getX();
@@ -22,15 +27,19 @@ public class Mover {
         this.dy = dy;
     }
 
-    public static Mover create(Color color, Quadruple quadruple, Slot sourceSlot, Slot targetSlot) {
+    public static Mover create(
+            Color color, 
+            Quadruple quadruple, 
+            Slot.AbstractSlot sourceSlot,
+            Slot.AbstractSlot targetSlot) {
         float start_x = sourceSlot.getX();
         float start_y = sourceSlot.getY();
         float target_x = targetSlot.getX();
         float target_y = targetSlot.getY();
         double delta_x = target_x - start_x;
         double delta_y = target_y - start_y;
-        double dx = delta_x / 100;
-        double dy = delta_y / 100;
+        double dx = delta_x / 50;
+        double dy = delta_y / 50;
         return new Mover(color, quadruple, targetSlot, (float) dx, (float) dy);
     }
 

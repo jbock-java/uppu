@@ -9,23 +9,27 @@ import java.util.List;
 public final class State {
 
     private final Quadruple quadruple;
+    private final Slot slot;
+    private final int n;
 
-    private State(Quadruple quadruple) {
+    private State(Quadruple quadruple, Slot slot, int n) {
         this.quadruple = quadruple;
+        this.slot = slot;
+        this.n = n;
     }
 
-    public static State create() {
-        return new State(Quadruple.create());
+    public static State create(int n) {
+        return new State(Quadruple.create(n), Slot.slots(n), n);
     }
 
     public State offset(int x, int y) {
-        return new State(quadruple.offset(x, y));
+        return new State(quadruple.offset(x, y), slot, n);
     }
 
     public List<Action> getActions(List<Command> commands) {
-        List<Color> state = List.of(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE);
+        List<Color> state = Color.colors(n);
         for (int i = 0; i < state.size(); i++) {
-            quadruple.set(state.get(i), Slot.forIndex(i).getX(), Slot.forIndex(i).getY());
+            quadruple.set(state.get(i), slot.forIndex(i).getX(), slot.forIndex(i).getY());
         }
         List<Action> result = new ArrayList<>(commands.size());
         for (Command command : commands) {
@@ -67,8 +71,8 @@ public final class State {
             Color color = state.get(i);
             int j = p.apply(i);
             if (j != i) {
-                Slot sourceSlot = Slot.forIndex(i);
-                Slot targetSlot = Slot.forIndex(j);
+                Slot.AbstractSlot sourceSlot = slot.forIndex(i);
+                Slot.AbstractSlot targetSlot = slot.forIndex(j);
                 movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             }
             newColors[j] = color;

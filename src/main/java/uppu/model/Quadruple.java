@@ -1,23 +1,32 @@
 package uppu.model;
 
+import java.util.Arrays;
+
 public final class Quadruple {
 
     private final int offsetX;
     private final int offsetY;
     private final float[] state;
+    private final Color[] colors;
 
-    private Quadruple(int offsetX, int offsetY, float[] state) {
+    private Quadruple(
+            int offsetX,
+            int offsetY,
+            float[] state,
+            Color[] colors) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.state = state;
+        this.colors = colors;
     }
 
-    public static Quadruple create() {
-        return new Quadruple(0, 0, new float[10]);
+    public static Quadruple create(int n) {
+        Color[] colors = Arrays.stream(Color.values()).limit(n).toArray(Color[]::new);
+        return new Quadruple(0, 0, new float[2 * n], colors);
     }
 
     public Quadruple offset(int x, int y) {
-        return new Quadruple(x, y, state);
+        return new Quadruple(x, y, state, colors);
     }
 
     public void set(Color c, float x, float y) {
@@ -99,5 +108,9 @@ public final class Quadruple {
 
     public int getOffsetY() {
         return offsetY;
+    }
+
+    public Color[] colors() {
+        return colors;
     }
 }

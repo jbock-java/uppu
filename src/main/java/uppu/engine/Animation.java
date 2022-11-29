@@ -21,14 +21,14 @@ public final class Animation {
     private final State leftState;
 
     private Animation(
-            PermutationView view) {
+            PermutationView view,
+            State leftState) {
         this.view = view;
-        this.leftState = State.create().offset(50, 50);
-//        this.rightState = State.create().offset(250, 50);
+        this.leftState = leftState;
     }
 
-    public static Animation create(PermutationView view) {
-        return new Animation(view);
+    public static Animation create(PermutationView view, int n) {
+        return new Animation(view, State.create(n).offset(50, 50));
     }
 
     public void startAnimation(List<BiCommand> commands) {
