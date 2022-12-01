@@ -20,6 +20,20 @@ class S4Checker {
     private void run() {
         view.setLocationRelativeTo(null);
         List<Product> products = new ArrayList<>();
+        products.addAll(selfProducts());
+        products.addAll(selfProducts().stream().map(Product::halfInvert).toList());
+
+        List<BiCommand> commands = new ArrayList<>();
+        commands.add(BiCommand.showState());
+        commands.add(BiCommand.wait(10));
+        for (Product p : products) {
+            commands.addAll(p.commands());
+        }
+        Animation.create(view, 4, 66).startAnimation(commands);
+    }
+
+    static List<Product> selfProducts() {
+        List<Product> products = new ArrayList<>();
 
         // T
         products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3)));
@@ -45,13 +59,7 @@ class S4Checker {
         products.add(product(Permutation.create(0, 2, 3), Permutation.create(0, 1, 3)));
         products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 3, 2)));
 
-        List<BiCommand> commands = new ArrayList<>();
-        commands.add(BiCommand.showState());
-        commands.add(BiCommand.wait(20));
-        for (Product p : products) {
-            commands.addAll(p.commands());
-        }
-        Animation.create(view, 4, 66).startAnimation(commands);
+        return products;
     }
 
     static Product product(Permutation a, Permutation b) {
@@ -59,6 +67,10 @@ class S4Checker {
     }
 
     private record Product(Permutation a, Permutation b) {
+
+        Product halfInvert() {
+            return new Product(a, b.invert());
+        }
 
         List<BiCommand> commands() {
             return List.of(

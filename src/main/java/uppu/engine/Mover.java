@@ -8,21 +8,24 @@ public class Mover {
 
     private final Color color;
     private final Quadruple quadruple;
-    private final float target_x; // target
-    private final float target_y; // target
+    private final Slot.AbstractSlot source;
+    private final Slot.AbstractSlot target;
     private final float dx;
     private final float dy;
+    
+    private boolean started;
 
     private Mover(
             Color color,
             Quadruple quadruple,
-            Slot.AbstractSlot slot, 
+            Slot.AbstractSlot source, 
+            Slot.AbstractSlot target, 
             float dx,
             float dy) {
         this.color = color;
         this.quadruple = quadruple;
-        this.target_x = slot.getX();
-        this.target_y = slot.getY();
+        this.source = source;
+        this.target = target;
         this.dx = dx;
         this.dy = dy;
     }
@@ -40,16 +43,22 @@ public class Mover {
         double delta_y = target_y - start_y;
         double dx = delta_x / 50;
         double dy = delta_y / 50;
-        return new Mover(color, quadruple, targetSlot, (float) dx, (float) dy);
+        return new Mover(color, quadruple, sourceSlot, targetSlot, (float) dx, (float) dy);
     }
 
     public boolean move() {
+        if (!started) {
+            setX(source.getX());
+            setY(source.getY());
+            started = true;
+            return true;
+        }
         float x = getX();
         float y = getY();
-        double dist1 = dist(x, y, target_x, target_y);
+        double dist1 = dist(x, y, target);
         float x2 = x + dx;
         float y2 = y + dy;
-        double dist2 = dist(x2, y2, target_x, target_y);
+        double dist2 = dist(x2, y2, target);
         if (dist2 > dist1) {
             return false;
         }
@@ -58,9 +67,9 @@ public class Mover {
         return true;
     }
 
-    static double dist(float x1, float y1, float x2, float y2) {
-        double delta_x = x1 - x2;
-        double delta_y = y1 - y2;
+    static double dist(float x1, float y1, Slot.AbstractSlot slot) {
+        double delta_x = x1 - slot.getX();
+        double delta_y = y1 - slot.getY();
         return Math.sqrt(delta_x * delta_x + delta_y * delta_y);
     }
 
