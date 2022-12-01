@@ -29,7 +29,9 @@ class S4Checker {
         for (Product p : products) {
             commands.addAll(p.commands());
         }
-        Animation.create(view, 4, 66).startAnimation(commands);
+        Animation animation = Animation.create(view, 4, 66);
+        view.setOnSkip(animation::skip);
+        animation.startAnimation(commands);
     }
 
     static List<Product> selfProducts() {

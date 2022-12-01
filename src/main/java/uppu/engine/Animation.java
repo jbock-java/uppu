@@ -62,4 +62,8 @@ public final class Animation {
         });
         timer.start();
     }
+
+    public void skip() {
+        q.pop();
+    }
 }
