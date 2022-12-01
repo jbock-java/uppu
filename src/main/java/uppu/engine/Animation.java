@@ -19,6 +19,7 @@ public final class Animation {
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
+    private final Deque<Phase> q = new ArrayDeque<>();
 
     private Animation(
             PermutationView view,
@@ -35,7 +36,6 @@ public final class Animation {
     }
 
     public void startAnimation(List<BiCommand> commands) {
-        Deque<Phase> q = new ArrayDeque<>();
         List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
         for (int i = 0; i < commands.size(); i++) {
             q.addLast(Phase.create(List.of(actionsA.get(i))));
