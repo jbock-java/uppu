@@ -39,9 +39,9 @@ public final class State {
         }
         return result;
     }
-    
+
     private static final class ActionWithState {
-        
+
         final Action action;
         final List<Color> finalState;
 
@@ -50,7 +50,7 @@ public final class State {
             this.finalState = finalState;
         }
     }
-    
+
     private ActionWithState getAction(List<Color> state, Command command) {
         if (command instanceof MoveCommand) {
             return getAction(state, ((MoveCommand) command).permutation());
@@ -70,11 +70,9 @@ public final class State {
         for (int i = 0; i < state.size(); i++) {
             Color color = state.get(i);
             int j = p.apply(i);
-            if (j != i) {
-                Slot.AbstractSlot sourceSlot = slot.forIndex(i);
-                Slot.AbstractSlot targetSlot = slot.forIndex(j);
-                movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
-            }
+            Slot.AbstractSlot sourceSlot = slot.forIndex(i);
+            Slot.AbstractSlot targetSlot = slot.forIndex(j);
+            movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             newColors[j] = color;
         }
         return new ActionWithState(MoveAction.create(quadruple, movers), List.of(newColors));

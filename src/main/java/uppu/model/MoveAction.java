@@ -29,4 +29,9 @@ public class MoveAction extends Action {
     public void show(Graphics2D g) {
         show(g, quadruple);
     }
+
+    @Override
+    public void init() {
+        movers.init();
+    }
 }

@@ -10,8 +10,7 @@ import javax.swing.Timer;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Animation {
@@ -19,7 +18,8 @@ public final class Animation {
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
-    private final Deque<Phase> q = new ArrayDeque<>();
+    private final List<Phase> q = new ArrayList<>();
+    private int current;
 
     private Animation(
             PermutationView view,
@@ -38,10 +38,10 @@ public final class Animation {
     public void startAnimation(List<BiCommand> commands) {
         List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
         for (int i = 0; i < commands.size(); i++) {
-            q.addLast(Phase.create(List.of(actionsA.get(i))));
+            q.add(Phase.create(List.of(actionsA.get(i))));
         }
         timer = new Timer(25, __ -> {
-            Phase phase = q.peekFirst();
+            Phase phase = peekFirst();
             if (phase == null) {
                 timer.stop();
                 return;
@@ -54,7 +54,7 @@ public final class Animation {
                 action.show(g);
             }
             if (!anyMove) {
-                q.removeFirst();
+                increaseCurrent();
             }
             bufferStrategy.show();
             g.dispose();
@@ -63,7 +63,47 @@ public final class Animation {
         timer.start();
     }
 
-    public void skip() {
-        q.pop();
+    private void increaseCurrent() {
+        current++;
+        cleanCurrent();
+    }
+
+    private void decreaseCurrent() {
+        current -= 2;
+        if (current < 0) {
+            current = 0;
+        }
+        cleanCurrent();
+        if (!timer.isRunning()) {
+            timer.start();
+        }
+    }
+
+    private void cleanCurrent() {
+        Phase phase = peekFirst();
+        if (phase == null) {
+            return;
+        }
+        if (current == 0) {
+            return;
+        }
+        for (Action action : phase.actions()) {
+            action.init();
+        }
+    }
+
+    private Phase peekFirst() {
+        if (current >= q.size()) {
+            return null;
+        }
+        return q.get(current);
+    }
+
+    public void ff() {
+        increaseCurrent();
+    }
+
+    public void rewind() {
+        decreaseCurrent();
     }
 }

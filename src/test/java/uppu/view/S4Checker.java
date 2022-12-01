@@ -30,7 +30,8 @@ class S4Checker {
             commands.addAll(p.commands());
         }
         Animation animation = Animation.create(view, 4, 66);
-        view.setOnSkip(animation::skip);
+        view.setOnRightArrow(animation::ff);
+        view.setOnLeftArrow(animation::rewind);
         animation.startAnimation(commands);
     }
 

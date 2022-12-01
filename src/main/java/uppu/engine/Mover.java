@@ -59,7 +59,7 @@ public class Mover {
         float x2 = x + dx;
         float y2 = y + dy;
         double dist2 = dist(x2, y2, target);
-        if (dist2 > dist1) {
+        if (dist2 >= dist1) {
             return false;
         }
         setX(x2);
@@ -87,5 +87,11 @@ public class Mover {
 
     private void setY(float y) {
         quadruple.setY(color, y);
+    }
+
+    public void init() {
+        setX(source.getX());
+        setY(source.getY());
+        started = false;
     }
 }

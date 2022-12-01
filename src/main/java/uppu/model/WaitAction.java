@@ -3,10 +3,12 @@ package uppu.model;
 import java.awt.Graphics2D;
 
 public final class WaitAction extends Action {
-    
+
+    private final int cyclesInit;
     private int cycles;
 
     private WaitAction(int cycles) {
+        this.cyclesInit = cycles;
         this.cycles = cycles;
     }
 
@@ -22,5 +24,10 @@ public final class WaitAction extends Action {
 
     @Override
     public void show(Graphics2D g) {
+    }
+
+    @Override
+    public void init() {
+        this.cycles = cyclesInit;
     }
 }

@@ -23,4 +23,6 @@ public abstract class Action {
             g.fill(ellipse);
         }
     }
+
+    public abstract void init();
 }

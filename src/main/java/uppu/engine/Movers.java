@@ -21,4 +21,10 @@ public class Movers {
         }
         return result;
     }
+
+    public void init() {
+        for (Mover m : movers) {
+            m.init();
+        }
+    }
 }

@@ -51,4 +51,18 @@ public class PermutationView extends JFrame {
         canvas.setBackground(Color.DARK_GRAY);
         getContentPane().add(canvas);
     }
+
+    public void setOnRightArrow(Runnable onRight) {
+        getRootPane().registerKeyboardAction(
+                e -> onRight.run(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    public void setOnLeftArrow(Runnable onLeft) {
+        getRootPane().registerKeyboardAction(
+                e -> onLeft.run(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
 }
