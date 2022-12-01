@@ -15,6 +15,8 @@ import java.util.List;
 
 public final class Animation {
 
+    private static final int SKIP_SIZE = 12;
+
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
@@ -54,7 +56,7 @@ public final class Animation {
                 action.show(g);
             }
             if (!anyMove) {
-                increaseCurrent();
+                increaseCurrent(1);
             }
             bufferStrategy.show();
             g.dispose();
@@ -63,13 +65,13 @@ public final class Animation {
         timer.start();
     }
 
-    private void increaseCurrent() {
-        current++;
+    private void increaseCurrent(int n) {
+        current += n;
         cleanCurrent();
     }
 
     private void decreaseCurrent() {
-        current -= 2;
+        current -= SKIP_SIZE;
         if (current < 0) {
             current = 0;
         }
@@ -100,7 +102,7 @@ public final class Animation {
     }
 
     public void ff() {
-        increaseCurrent();
+        increaseCurrent(SKIP_SIZE);
     }
 
     public void rewind() {
