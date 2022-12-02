@@ -1,7 +1,7 @@
 package uppu.model;
 
 public final class WaitCommand implements Command {
-    
+
     private final int cycles;
 
     public WaitCommand(int cycles) {
@@ -10,5 +10,10 @@ public final class WaitCommand implements Command {
 
     public int cycles() {
         return cycles;
+    }
+
+    @Override
+    public String toString() {
+        return "WAIT " + cycles;
     }
 }

@@ -13,4 +13,9 @@ public final class MoveCommand implements Command {
     Permutation permutation() {
         return p;
     }
+
+    @Override
+    public String toString() {
+        return "MOVE " + p;
+    }
 }

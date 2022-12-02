@@ -10,14 +10,15 @@ public class MoveAction extends Action {
 
     private final Quadruple quadruple;
     private final Movers movers;
-    
-    private MoveAction(Quadruple quadruple, Movers movers) {
+
+    private MoveAction(String title, Quadruple quadruple, Movers movers) {
+        super(title);
         this.quadruple = quadruple;
         this.movers = movers;
     }
 
-    static MoveAction create(Quadruple quadruple, List<Mover> movers) {
-        return new MoveAction(quadruple, Movers.create(movers));
+    static MoveAction create(String title, Quadruple quadruple, List<Mover> movers) {
+        return new MoveAction(title, quadruple, Movers.create(movers));
     }
 
     @Override
@@ -28,6 +29,11 @@ public class MoveAction extends Action {
     @Override
     public void show(Graphics2D g) {
         show(g, quadruple);
+    }
+
+    @Override
+    String type() {
+        return "MOVE";
     }
 
     @Override

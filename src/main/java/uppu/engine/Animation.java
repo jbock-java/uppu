@@ -2,8 +2,8 @@ package uppu.engine;
 
 import uppu.model.Action;
 import uppu.model.BiCommand;
-import uppu.model.Phase;
 import uppu.model.State;
+import uppu.model.WaitAction;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
@@ -15,12 +15,12 @@ import java.util.List;
 
 public final class Animation {
 
-    private static final int SKIP_SIZE = 12;
+    private static final int SKIP_SIZE = 2;
 
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
-    private final List<Phase> q = new ArrayList<>();
+    private final List<Action> q = new ArrayList<>();
     private int current;
 
     private Animation(
@@ -38,26 +38,20 @@ public final class Animation {
     }
 
     public void startAnimation(List<BiCommand> commands) {
-        List<Action> actionsA = leftState.getActions(commands.stream()
-                .map(BiCommand::left)
-                .flatMap(List::stream)
-                .toList());
-        for (int i = 0; i < commands.size(); i++) {
-            q.add(Phase.create(List.of(actionsA.get(i))));
-        }
+        List<Action> actionsA = leftState.getActions(commands);
+        q.addAll(actionsA);
+        view.setTitle(actionsA.get(0).title());
         timer = new Timer(25, __ -> {
-            Phase phase = peekFirst();
-            if (phase == null) {
+            Action action = peekFirst();
+            if (action == null) {
+                view.setTitle("");
                 timer.stop();
                 return;
             }
             BufferStrategy bufferStrategy = view.getBufferStrategy();
             Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-            boolean anyMove = false;
-            for (Action action : phase.actions()) {
-                anyMove |= action.move();
-                action.show(g);
-            }
+            boolean anyMove = action.move();
+            action.show(g);
             if (!anyMove) {
                 increaseCurrent(1);
             }
@@ -82,19 +76,22 @@ public final class Animation {
     }
 
     private void cleanCurrent() {
-        Phase phase = peekFirst();
-        if (phase == null) {
+        Action action = peekFirst();
+        if (action == null) {
+            view.setTitle("");
             return;
         }
+        view.setTitle(action.title());
         if (current == 0) {
             return;
         }
-        for (Action action : phase.actions()) {
-            action.init();
+        if (action instanceof WaitAction) {
+            ((WaitAction) action).skipWait();
         }
+        action.init();
     }
 
-    private Phase peekFirst() {
+    private Action peekFirst() {
         if (current >= q.size()) {
             return null;
         }
@@ -107,6 +104,9 @@ public final class Animation {
 
     public void rewind() {
         decreaseCurrent();
+        if (!timer.isRunning()) {
+            timer.start();
+        }
     }
 
     public void pause() {

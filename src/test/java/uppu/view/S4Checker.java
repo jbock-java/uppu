@@ -28,8 +28,8 @@ class S4Checker {
         products.addAll(selfProducts().stream().map(Product::halfInvert).toList());
 
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand(List.of(BiCommand.showState())));
-        commands.add(new BiCommand(List.of(BiCommand.wait(10))));
+        commands.add(new BiCommand("", List.of(BiCommand.showState())));
+        commands.add(new BiCommand("", List.of(BiCommand.wait(10))));
         for (Product p : products) {
             commands.add(p.commands());
         }
@@ -121,18 +121,12 @@ class S4Checker {
             List<Command> commands = List.of(
                     BiCommand.showState(),
                     BiCommand.wait(28),
-                    command(a),
-                    BiCommand.wait(1),
-                    command(b),
-                    BiCommand.wait(16),
-                    command(b.compose(a).invert()),
-                    BiCommand.wait(28),
                     command(b),
                     BiCommand.wait(1),
                     command(a),
                     BiCommand.wait(16),
                     command(a.compose(b).invert()));
-            return new BiCommand(commands);
+            return new BiCommand(a + " " + b, commands);
         }
     }
 }

@@ -28,8 +28,8 @@ class S5Checker {
                 .toList();
         Map<Set<Permutation>, Permutation> m = new LinkedHashMap<>();
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand(List.of(BiCommand.showState())));
-        commands.add(new BiCommand(List.of(BiCommand.wait(20))));
+        commands.add(new BiCommand("", List.of(BiCommand.showState())));
+        commands.add(new BiCommand("", List.of(BiCommand.wait(20))));
         for (Permutation p : permutations) {
             m.putIfAbsent(Set.of(p, p.invert()), p);
         }
@@ -46,6 +46,6 @@ class S5Checker {
                 BiCommand.showState(),
                 BiCommand.wait(20),
                 command(a));
-        return new BiCommand(commands);
+        return new BiCommand(a.toString(), commands);
     }
 }
