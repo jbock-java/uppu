@@ -3,6 +3,7 @@ package uppu.view;
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
+import uppu.model.Command;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,23 +28,24 @@ class S5Checker {
                 .toList();
         Map<Set<Permutation>, Permutation> m = new LinkedHashMap<>();
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(BiCommand.showState());
-        commands.add(BiCommand.wait(20));
+        commands.add(new BiCommand(List.of(BiCommand.showState())));
+        commands.add(new BiCommand(List.of(BiCommand.wait(20))));
         for (Permutation p : permutations) {
             m.putIfAbsent(Set.of(p, p.invert()), p);
         }
         List<Permutation> values = List.copyOf(m.values());
         for (Permutation p : values) {
-            commands.addAll(commands(p));
+            commands.add(commands(p));
         }
         Animation.create(view, 5, 50).startAnimation(commands);
     }
 
-    private List<BiCommand> commands(
+    private BiCommand commands(
             Permutation a) {
-        return List.of(
+        List<Command> commands = List.of(
                 BiCommand.showState(),
                 BiCommand.wait(20),
                 command(a));
+        return new BiCommand(commands);
     }
 }

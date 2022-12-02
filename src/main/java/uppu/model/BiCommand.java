@@ -2,27 +2,29 @@ package uppu.model;
 
 import io.parmigiano.Permutation;
 
-public class BiCommand {
-    
-    private final Command left;
+import java.util.List;
 
-    private BiCommand(Command left) {
+public class BiCommand {
+
+    private final List<Command> left;
+
+    public BiCommand(List<Command> left) {
         this.left = left;
     }
 
-    public static BiCommand command(Permutation left) {
-        return new BiCommand(new MoveCommand(left));
+    public static Command command(Permutation left) {
+        return new MoveCommand(left);
     }
 
-    public static BiCommand wait(int cycles) {
-        return new BiCommand(new WaitCommand(cycles));
+    public static Command wait(int cycles) {
+        return new WaitCommand(cycles);
     }
 
-    public static BiCommand showState() {
-        return new BiCommand(new ShowStateCommand());
+    public static Command showState() {
+        return new ShowStateCommand();
     }
 
-    public Command left() {
+    public List<Command> left() {
         return left;
     }
 }

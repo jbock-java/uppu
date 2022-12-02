@@ -3,6 +3,7 @@ package uppu.view;
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
+import uppu.model.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,10 @@ class S4Checker {
         products.addAll(selfProducts().stream().map(Product::halfInvert).toList());
 
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(BiCommand.showState());
-        commands.add(BiCommand.wait(10));
+        commands.add(new BiCommand(List.of(BiCommand.showState())));
+        commands.add(new BiCommand(List.of(BiCommand.wait(10))));
         for (Product p : products) {
-            commands.addAll(p.commands());
+            commands.add(p.commands());
         }
         Animation animation = Animation.create(view, 4, 66);
         view.setOnRightArrow(animation::ff);
@@ -116,8 +117,8 @@ class S4Checker {
             return new Product(a, b.invert());
         }
 
-        List<BiCommand> commands() {
-            return List.of(
+        BiCommand commands() {
+            List<Command> commands = List.of(
                     BiCommand.showState(),
                     BiCommand.wait(28),
                     command(a),
@@ -131,6 +132,7 @@ class S4Checker {
                     command(a),
                     BiCommand.wait(16),
                     command(a.compose(b).invert()));
+            return new BiCommand(commands);
         }
     }
 }

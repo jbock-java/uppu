@@ -38,7 +38,10 @@ public final class Animation {
     }
 
     public void startAnimation(List<BiCommand> commands) {
-        List<Action> actionsA = leftState.getActions(commands.stream().map(BiCommand::left).toList());
+        List<Action> actionsA = leftState.getActions(commands.stream()
+                .map(BiCommand::left)
+                .flatMap(List::stream)
+                .toList());
         for (int i = 0; i < commands.size(); i++) {
             q.add(Phase.create(List.of(actionsA.get(i))));
         }
