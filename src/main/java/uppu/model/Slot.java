@@ -4,7 +4,8 @@ import java.util.List;
 
 public final class Slot {
 
-    public static final int MAX = 200;
+    public static final float SCALE = 1.8f;
+    public static final int MAX = (int) (200 * SCALE);
 
     private final List<AbstractSlot> slots;
 
@@ -34,8 +35,8 @@ public final class Slot {
         private final float y;
 
         Slot5(float x, float y) {
-            this.x = x;
-            this.y = y;
+            this.x = x * SCALE;
+            this.y = y * SCALE;
         }
 
         static List<AbstractSlot> getValues() {
@@ -64,8 +65,8 @@ public final class Slot {
         private final float y;
 
         Slot4(float x, float y) {
-            this.x = x;
-            this.y = y;
+            this.x = x * SCALE;
+            this.y = y * SCALE;
         }
 
         static List<AbstractSlot> getValues() {

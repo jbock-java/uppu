@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 public abstract class Action {
 
-    public static final int BALL_SIZE = 40;
+    public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
 
     private static final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 

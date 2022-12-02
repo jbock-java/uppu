@@ -4,6 +4,7 @@ import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
 import uppu.model.Command;
+import uppu.model.Slot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ class S4Checker {
         for (Product p : products) {
             commands.add(p.commands());
         }
-        Animation animation = Animation.create(view, 4, 66);
+        Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
         view.setOnRightArrow(animation::ff);
         view.setOnLeftArrow(animation::rewind);
         view.setOnSpace(animation::pause);

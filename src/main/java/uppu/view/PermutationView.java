@@ -1,5 +1,7 @@
 package uppu.view;
 
+import uppu.model.Slot;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
@@ -12,8 +14,8 @@ import java.awt.image.BufferStrategy;
 
 public class PermutationView extends JFrame {
 
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 400;
+    private static final int WIDTH = (int) (300 * Slot.SCALE);
+    private static final int HEIGHT = (int) (300 * Slot.SCALE);
 
     private final Canvas canvas = new Canvas() {
         @Override

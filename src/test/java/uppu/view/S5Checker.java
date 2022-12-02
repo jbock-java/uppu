@@ -4,6 +4,7 @@ import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiCommand;
 import uppu.model.Command;
+import uppu.model.Slot;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -37,7 +38,7 @@ class S5Checker {
         for (Permutation p : values) {
             commands.add(commands(p));
         }
-        Animation.create(view, 5, 50).startAnimation(commands);
+        Animation.create(view, 5, (int) (50 * Slot.SCALE)).startAnimation(commands);
     }
 
     private BiCommand commands(
