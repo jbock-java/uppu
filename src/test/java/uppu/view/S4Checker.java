@@ -22,11 +22,11 @@ class S4Checker {
     private void run() {
         view.setLocationRelativeTo(null);
         List<Product> products = new ArrayList<>();
-        products.addAll(oddSelfInverse());
-        products.addAll(oddOther());
-        products.addAll(mixed());
-        products.addAll(selfProducts());
-        products.addAll(selfProducts().stream().map(Product::halfInvert).toList());
+        products.addAll(oddTimesEven());
+        products.addAll(oddTimesSelf());
+        products.addAll(oddTimesOdd());
+        products.addAll(evenTimesSelf());
+        products.addAll(evenTimesEven());
 
         List<BiCommand> commands = new ArrayList<>();
         commands.add(new BiCommand("", List.of(BiCommand.showState())));
@@ -41,14 +41,14 @@ class S4Checker {
         animation.startAnimation(commands);
     }
 
-    static List<Product> oddSelfInverse() {
+    static List<Product> oddTimesSelf() {
         List<Product> products = new ArrayList<>();
         products.add(product(Permutation.create(0, 1), Permutation.create(0, 2, 1, 3)));
         products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 1, 2)));
         return products;
     }
 
-    static List<Product> oddOther() {
+    static List<Product> oddTimesOdd() {
         List<Product> products = new ArrayList<>();
         products.add(product(Permutation.create(0, 1), Permutation.create(0, 1, 2, 3)));
         products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 2, 1)));
@@ -61,24 +61,24 @@ class S4Checker {
         return products;
     }
 
-    static List<Product> mixed() {
+    static List<Product> oddTimesEven() {
         List<Product> products = new ArrayList<>();
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 1, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 1, 2)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 2, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2, 1)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3, 2)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 3, 1)));
         products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(2, 3)));
         products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 3, 1)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2, 1)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 1, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(2, 3)));
         products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 3)));
         products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 1, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 2, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3, 2)));
         return products;
     }
 
-    static List<Product> selfProducts() {
+    static List<Product> evenTimesSelf() {
         List<Product> products = new ArrayList<>();
 
         // T
@@ -106,6 +106,10 @@ class S4Checker {
         products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 3, 2)));
 
         return products;
+    }
+
+    private static List<Product> evenTimesEven() {
+        return evenTimesSelf().stream().map(Product::halfInvert).toList();
     }
 
     static Product product(Permutation a, Permutation b) {
