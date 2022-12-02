@@ -76,9 +76,6 @@ public final class Animation {
             current = 0;
         }
         cleanCurrent();
-        if (!timer.isRunning()) {
-            timer.start();
-        }
     }
 
     private void cleanCurrent() {
@@ -107,5 +104,13 @@ public final class Animation {
 
     public void rewind() {
         decreaseCurrent();
+    }
+
+    public void pause() {
+        if (timer.isRunning()) {
+            timer.stop();
+        } else {
+            timer.start();
+        }
     }
 }

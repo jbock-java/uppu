@@ -20,6 +20,9 @@ class S4Checker {
     private void run() {
         view.setLocationRelativeTo(null);
         List<Product> products = new ArrayList<>();
+        products.addAll(oddSelfInverse());
+        products.addAll(oddOther());
+        products.addAll(mixed());
         products.addAll(selfProducts());
         products.addAll(selfProducts().stream().map(Product::halfInvert).toList());
 
@@ -32,7 +35,45 @@ class S4Checker {
         Animation animation = Animation.create(view, 4, 66);
         view.setOnRightArrow(animation::ff);
         view.setOnLeftArrow(animation::rewind);
+        view.setOnSpace(animation::pause);
         animation.startAnimation(commands);
+    }
+
+    static List<Product> oddSelfInverse() {
+        List<Product> products = new ArrayList<>();
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 2, 1, 3)));
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 1, 2)));
+        return products;
+    }
+
+    static List<Product> oddOther() {
+        List<Product> products = new ArrayList<>();
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 1, 2, 3)));
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 2, 1)));
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 1, 3, 2)));
+        products.add(product(Permutation.create(0, 1), Permutation.create(0, 2, 3, 1)));
+        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 1, 2, 3)));
+        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 3, 2, 1)));
+        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 1, 3, 2)));
+        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 2, 3, 1)));
+        return products;
+    }
+
+    static List<Product> mixed() {
+        List<Product> products = new ArrayList<>();
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 1, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 1, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 2, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2, 1)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 3, 1)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(2, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3)));
+        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2)));
+        return products;
     }
 
     static List<Product> selfProducts() {

@@ -65,4 +65,11 @@ public class PermutationView extends JFrame {
                 KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
+
+    public void setOnSpace(Runnable onSpace) {
+        getRootPane().registerKeyboardAction(
+                e -> onSpace.run(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
 }
