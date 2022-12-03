@@ -40,4 +40,9 @@ public class MoveAction extends Action {
     public void init() {
         movers.init();
     }
+
+    @Override
+    public boolean isShowState() {
+        return false;
+    }
 }

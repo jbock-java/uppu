@@ -15,8 +15,6 @@ import java.util.List;
 
 public final class Animation {
 
-    private static final int SKIP_SIZE = 2;
-
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
@@ -53,26 +51,16 @@ public final class Animation {
             boolean anyMove = action.move();
             action.show(g);
             if (!anyMove) {
-                increaseCurrent(1);
+                if (timer.isRunning()) {
+                    current++;
+                    cleanCurrent();
+                }
             }
             bufferStrategy.show();
             g.dispose();
             Toolkit.getDefaultToolkit().sync();
         });
         timer.start();
-    }
-
-    private void increaseCurrent(int n) {
-        current += n;
-        cleanCurrent();
-    }
-
-    private void decreaseCurrent() {
-        current -= SKIP_SIZE;
-        if (current < 0) {
-            current = 0;
-        }
-        cleanCurrent();
     }
 
     private void cleanCurrent() {
@@ -92,21 +80,48 @@ public final class Animation {
     }
 
     private Action peekFirst() {
-        if (current >= q.size()) {
+        return get(current);
+    }
+
+    private Action get(int n) {
+        if (n >= q.size()) {
             return null;
         }
-        return q.get(current);
+        return q.get(n);
     }
 
     public void ff() {
-        increaseCurrent(SKIP_SIZE);
+        timer.stop();
+        if (isShowState(current)) {
+            current++;
+        }
+        while (current < q.size() && !isShowState(current)) {
+            current++;
+        }
+        cleanCurrent();
+        timer.start();
+    }
+
+    private boolean isShowState(int n) {
+        Action action = get(n);
+        if (action == null) {
+            return false;
+        }
+        return action.isShowState();
     }
 
     public void rewind() {
-        decreaseCurrent();
-        if (!timer.isRunning()) {
-            timer.start();
+        timer.stop();
+        for (int i = 0; i < 2; i++) {
+            if (isShowState(current)) {
+                current--;
+            }
+            while (current >= 0 && !isShowState(current)) {
+                current--;
+            }
         }
+        cleanCurrent();
+        timer.start();
     }
 
     public void pause() {

@@ -40,4 +40,9 @@ public final class WaitAction extends Action {
     public void init() {
         this.cycles = cyclesInit;
     }
+
+    @Override
+    public boolean isShowState() {
+        return false;
+    }
 }

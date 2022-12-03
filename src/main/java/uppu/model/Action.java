@@ -38,6 +38,8 @@ public abstract class Action {
         return title;
     }
 
+    public abstract boolean isShowState();
+
     @Override
     public final String toString() {
         return type() + ' ' + title();

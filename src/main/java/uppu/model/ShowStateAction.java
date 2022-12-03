@@ -33,4 +33,9 @@ public class ShowStateAction extends Action {
     @Override
     public void init() {
     }
+
+    @Override
+    public boolean isShowState() {
+        return true;
+    }
 }
