@@ -26,20 +26,22 @@ public final class State {
         return new State(quadruple.offset(x, y), slot, n);
     }
 
-    public List<Action> getActions(List<BiCommand> biCommands) {
+    public List<BiAction> getActions(List<BiCommand> biCommands) {
         List<Color> state = Color.colors(n);
         for (int i = 0; i < state.size(); i++) {
             quadruple.set(state.get(i), slot.forIndex(i).getX(), slot.forIndex(i).getY());
         }
-        List<Action> result = new ArrayList<>();
+        List<BiAction> biActions = new ArrayList<>();
         for (BiCommand biCommand : biCommands) {
+            List<Action> result = new ArrayList<>(biCommand.left().size());
             for (Command command : biCommand.left()) {
-                ActionWithState action = getAction(biCommand.title(), state, command);
+                ActionWithState action = getAction(state, command);
                 result.add(action.action);
                 state = action.finalState;
             }
+            biActions.add(new BiAction(result, biCommand.title()));
         }
-        return result;
+        return biActions;
     }
 
     private record ActionWithState(
@@ -48,23 +50,18 @@ public final class State {
     }
 
     private ActionWithState getAction(
-            String title,
             List<Color> state,
             Command command) {
         if (command instanceof MoveCommand) {
-            return getMoveAction(title, state, ((MoveCommand) command).permutation());
+            return getMoveAction(state, ((MoveCommand) command).permutation());
         }
         if (command instanceof WaitCommand) {
-            return new ActionWithState(WaitAction.create(title, ((WaitCommand) command).cycles()), state);
-        }
-        if (command instanceof ShowStateCommand) {
-            return new ActionWithState(ShowStateAction.create(title, quadruple), state);
+            return new ActionWithState(WaitAction.create(((WaitCommand) command).cycles()), state);
         }
         throw new IllegalArgumentException();
     }
 
     private ActionWithState getMoveAction(
-            String title,
             List<Color> state,
             Permutation p) {
         List<Mover> movers = new ArrayList<>();
@@ -77,6 +74,6 @@ public final class State {
             movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             newColors[j] = color;
         }
-        return new ActionWithState(MoveAction.create(title, quadruple, movers), List.of(newColors));
+        return new ActionWithState(MoveAction.create(quadruple, movers), List.of(newColors));
     }
 }

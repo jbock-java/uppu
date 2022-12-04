@@ -9,12 +9,6 @@ public abstract class Action {
 
     private static final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
 
-    private final String title;
-
-    Action(String title) {
-        this.title = title;
-    }
-
     public abstract boolean move();
 
     public abstract void show(Graphics2D g);
@@ -34,14 +28,8 @@ public abstract class Action {
 
     public abstract void init();
 
-    public final String title() {
-        return title;
-    }
-
-    public abstract boolean isShowState();
-
     @Override
     public final String toString() {
-        return type() + ' ' + title();
+        return type();
     }
 }

@@ -6,13 +6,12 @@ public class ShowStateAction extends Action {
 
     private final Quadruple quadruple;
 
-    private ShowStateAction(String title, Quadruple quadruple) {
-        super(title);
+    private ShowStateAction(Quadruple quadruple) {
         this.quadruple = quadruple;
     }
 
-    static ShowStateAction create(String title, Quadruple quadruple) {
-        return new ShowStateAction(title, quadruple);
+    static ShowStateAction create(Quadruple quadruple) {
+        return new ShowStateAction(quadruple);
     }
 
     @Override
@@ -32,10 +31,5 @@ public class ShowStateAction extends Action {
 
     @Override
     public void init() {
-    }
-
-    @Override
-    public boolean isShowState() {
-        return true;
     }
 }

@@ -1,9 +1,9 @@
 package uppu.engine;
 
 import uppu.model.Action;
+import uppu.model.BiAction;
 import uppu.model.BiCommand;
 import uppu.model.State;
-import uppu.model.WaitAction;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
@@ -18,7 +18,7 @@ public final class Animation {
     private Timer timer;
     private final PermutationView view;
     private final State leftState;
-    private final List<Action> q = new ArrayList<>();
+    private final List<BiAction> q = new ArrayList<>();
     private int current;
 
     private Animation(
@@ -35,55 +35,62 @@ public final class Animation {
         return new Animation(view, State.create(n).offset(offset, offset));
     }
 
-    public void startAnimation(List<BiCommand> commands) {
-        List<Action> actionsA = leftState.getActions(commands);
-        q.addAll(actionsA);
-        view.setTitle(actionsA.get(0).title());
-        timer = new Timer(25, __ -> {
-            Action action = peekFirst();
-            if (action == null) {
-                view.setTitle("");
-                timer.stop();
-                return;
-            }
-            BufferStrategy bufferStrategy = view.getBufferStrategy();
-            Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-            boolean anyMove = action.move();
-            action.show(g);
-            if (!anyMove) {
-                if (timer.isRunning()) {
-                    current++;
-                    cleanCurrent();
-                }
-            }
-            bufferStrategy.show();
-            g.dispose();
-            Toolkit.getDefaultToolkit().sync();
-        });
+    public List<BiAction> startAnimation(List<BiCommand> commands) {
+        List<BiAction> actions = leftState.getActions(commands);
+        q.addAll(actions);
+        view.setTitle(actions.get(0).title());
+        timer = new Timer(25, __ -> onTick());
         timer.start();
+        return actions;
+    }
+
+    private void onTick() {
+        BiAction biAction = peekFirst();
+        if (biAction == null) {
+            view.setTitle("");
+            timer.stop();
+            return;
+        }
+        BufferStrategy bufferStrategy = view.getBufferStrategy();
+        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+        Action action = biAction.peekFirst();
+        if (action == null) {
+            if (timer.isRunning()) {
+                current++;
+                cleanCurrent();
+            }
+            return;
+        }
+        boolean anyMove = action.move();
+        action.show(g);
+        if (!anyMove) {
+            if (timer.isRunning()) {
+                biAction.increment();
+            }
+        }
+        bufferStrategy.show();
+        g.dispose();
+        Toolkit.getDefaultToolkit().sync();
     }
 
     private void cleanCurrent() {
-        Action action = peekFirst();
-        if (action == null) {
+        BiAction biAction = peekFirst();
+        if (biAction == null) {
             view.setTitle("");
             return;
         }
-        view.setTitle(action.title());
+        view.setTitle(biAction.title());
         if (current == 0) {
             return;
         }
-        if (action instanceof WaitAction) {
-            ((WaitAction) action).skipWait();
-        }
-        action.init();
+        biAction.init();
     }
 
-    private Action peekFirst() {
+    private BiAction peekFirst() {
         return get(current);
     }
 
-    private Action get(int n) {
+    private BiAction get(int n) {
         if (n >= q.size()) {
             return null;
         }
@@ -92,31 +99,17 @@ public final class Animation {
 
     public void ff() {
         timer.stop();
-        if (isShowState(current)) {
-            current++;
-        }
-        while (current < q.size() && !isShowState(current)) {
+        if (current < q.size()) {
             current++;
         }
         cleanCurrent();
         timer.start();
     }
 
-    private boolean isShowState(int n) {
-        Action action = get(n);
-        if (action == null) {
-            return false;
-        }
-        return action.isShowState();
-    }
-
     public void rewind() {
         timer.stop();
         for (int i = 0; i < 2; i++) {
-            if (isShowState(current)) {
-                current--;
-            }
-            while (current >= 0 && !isShowState(current)) {
+            if (current >= 0) {
                 current--;
             }
         }
@@ -130,5 +123,17 @@ public final class Animation {
         } else {
             timer.start();
         }
+    }
+
+    public void select(BiAction action) {
+        timer.stop();
+        for (int i = 0; i < q.size(); i++) {
+            BiAction qs = q.get(i);
+            if (action == qs) {
+                current = i;
+                cleanCurrent();
+            }
+        }
+        timer.start();
     }
 }

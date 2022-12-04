@@ -2,14 +2,13 @@ package uppu.view;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
+import uppu.model.BiAction;
 import uppu.model.BiCommand;
-import uppu.model.Command;
 import uppu.model.Slot;
+import uppu.products.Product;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static uppu.model.BiCommand.command;
 
 class S4Checker {
 
@@ -29,7 +28,7 @@ class S4Checker {
         products.addAll(evenTimesEven());
 
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand("", List.of(BiCommand.showState())));
+        commands.add(new BiCommand("", List.of(BiCommand.command(Permutation.identity()))));
         commands.add(new BiCommand("", List.of(BiCommand.wait(10))));
         for (Product p : products) {
             commands.add(p.commands());
@@ -38,7 +37,9 @@ class S4Checker {
         view.setOnRightArrow(animation::ff);
         view.setOnLeftArrow(animation::rewind);
         view.setOnSpace(animation::pause);
-        animation.startAnimation(commands);
+        List<BiAction> actions = animation.startAnimation(commands);
+        view.setActions(actions);
+        view.setOnActionSelected(animation::select);
     }
 
     static List<Product> oddTimesSelf() {
@@ -116,22 +117,4 @@ class S4Checker {
         return new Product(a, b);
     }
 
-    private record Product(Permutation a, Permutation b) {
-
-        Product halfInvert() {
-            return new Product(a, b.invert());
-        }
-
-        BiCommand commands() {
-            List<Command> commands = List.of(
-                    BiCommand.showState(),
-                    BiCommand.wait(28),
-                    command(b),
-                    BiCommand.wait(1),
-                    command(a),
-                    BiCommand.wait(16),
-                    command(a.compose(b).invert()));
-            return new BiCommand(a + " " + b, commands);
-        }
-    }
 }

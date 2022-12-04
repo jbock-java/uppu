@@ -22,10 +22,6 @@ public class BiCommand {
         return new WaitCommand(cycles);
     }
 
-    public static Command showState() {
-        return new ShowStateCommand();
-    }
-
     public List<Command> left() {
         return left;
     }
