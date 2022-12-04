@@ -11,8 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -94,8 +92,14 @@ public class PermutationView extends JFrame {
 
     public void setOnActionSelected(Consumer<BiAction> consumer) {
         panel.addListSelectionListener(e -> {
-            int firstIndex = e.getFirstIndex();
-            consumer.accept(panel.getModel().getElementAt(firstIndex));
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            if (panel.getSelectionModel().isSelectedIndex(e.getFirstIndex())) {
+                consumer.accept(panel.getModel().getElementAt(e.getFirstIndex()));
+            } else {
+                consumer.accept(panel.getModel().getElementAt(e.getLastIndex()));
+            } 
         });
     }
 
