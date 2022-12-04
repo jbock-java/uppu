@@ -41,8 +41,8 @@ public class Mover {
         float target_y = targetSlot.getY();
         double delta_x = target_x - start_x;
         double delta_y = target_y - start_y;
-        double dx = delta_x / 60;
-        double dy = delta_y / 60;
+        double dx = delta_x / 66;
+        double dy = delta_y / 66;
         return new Mover(color, quadruple, sourceSlot, targetSlot, (float) dx, (float) dy);
     }
 

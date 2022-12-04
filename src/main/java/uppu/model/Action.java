@@ -30,8 +30,19 @@ public abstract class Action {
             Color color = colors[i];
             g.setPaint(color.awtColor());
             Slot.AbstractSlot slot = Slot.Slot4.getValues().get(i);
-            home.x = slot.getX() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
-            home.y = slot.getY() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
+            float centerX = slot.getX() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
+            float centerY = slot.getY() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
+            home.x = centerX - 10;
+            home.y = centerY - 10;
+            g.fill(home);
+            home.x = centerX - 10;
+            home.y = centerY + 10;
+            g.fill(home);
+            home.x = centerX + 10;
+            home.y = centerY - 10;
+            g.fill(home);
+            home.x = centerX + 10;
+            home.y = centerY + 10;
             g.fill(home);
         }
     }
