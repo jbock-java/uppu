@@ -26,7 +26,7 @@ public class PermutationView extends JFrame {
 
     private static final int WIDTH_CANVAS = (int) (300 * Slot.SCALE);
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
-    public static final int WIDTH_PANEL = 120;
+    public static final int WIDTH_PANEL = 140;
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -108,20 +108,6 @@ public class PermutationView extends JFrame {
 
     public void setSelectedAction(BiAction action) {
         actions.setSelectedValue(action, true);
-    }
-
-    public void setOnRightArrow(Runnable onRight) {
-        getRootPane().registerKeyboardAction(
-                e -> onRight.run(),
-                KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-    }
-
-    public void setOnLeftArrow(Runnable onLeft) {
-        getRootPane().registerKeyboardAction(
-                e -> onLeft.run(),
-                KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     public void setOnSpace(Runnable onSpace) {

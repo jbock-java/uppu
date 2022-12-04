@@ -38,7 +38,7 @@ class S5Checker {
         for (Permutation p : values) {
             commands.add(commands(p));
         }
-        Animation.create(view, 5, (int) (50 * Slot.SCALE)).startAnimation(commands);
+        Animation.create(view, 5, (int) (25 * Slot.SCALE)).startAnimation(commands);
     }
 
     private BiCommand commands(

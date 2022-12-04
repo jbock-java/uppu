@@ -17,7 +17,8 @@ public abstract class Action {
 
     abstract String type();
 
-    final void show(Graphics2D g, Quadruple quadruple) {
+    final void show(Graphics2D g, State state) {
+        Quadruple quadruple = state.quadruple();
         g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
         uppu.model.Color[] colors = quadruple.colors();
         for (uppu.model.Color color : colors) {
@@ -29,9 +30,9 @@ public abstract class Action {
         for (int i = 0; i < colors.length; i++) {
             Color color = colors[i];
             g.setPaint(color.awtColor());
-            Slot.AbstractSlot slot = Slot.Slot4.getValues().get(i);
-            float centerX = slot.getX() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
-            float centerY = slot.getY() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
+            Slot.Point slot = state.slot().forIndex(i);
+            float centerX = slot.x() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
+            float centerY = slot.y() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
             home.x = centerX - 10;
             home.y = centerY - 10;
             g.fill(home);

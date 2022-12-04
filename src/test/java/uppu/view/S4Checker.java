@@ -34,8 +34,6 @@ class S4Checker {
             commands.add(p.commands());
         }
         Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
-        view.setOnRightArrow(animation::ff);
-        view.setOnLeftArrow(animation::rewind);
         view.setOnSpace(animation::pause);
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);

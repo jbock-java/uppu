@@ -8,16 +8,16 @@ import java.util.List;
 
 public class MoveAction extends Action {
 
-    private final Quadruple quadruple;
+    private final State state;
     private final Movers movers;
 
-    private MoveAction(Quadruple quadruple, Movers movers) {
-        this.quadruple = quadruple;
+    private MoveAction(State state, Movers movers) {
+        this.state = state;
         this.movers = movers;
     }
 
-    static MoveAction create(Quadruple quadruple, List<Mover> movers) {
-        return new MoveAction(quadruple, Movers.create(movers));
+    static MoveAction create(State state, List<Mover> movers) {
+        return new MoveAction(state, Movers.create(movers));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class MoveAction extends Action {
 
     @Override
     public void show(Graphics2D g) {
-        show(g, quadruple);
+        show(g, state);
     }
 
     @Override

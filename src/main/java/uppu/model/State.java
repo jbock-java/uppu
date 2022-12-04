@@ -10,26 +10,24 @@ public final class State {
 
     private final Quadruple quadruple;
     private final Slot slot;
-    private final int n;
 
-    private State(Quadruple quadruple, Slot slot, int n) {
+    private State(Quadruple quadruple, Slot slot) {
         this.quadruple = quadruple;
         this.slot = slot;
-        this.n = n;
     }
 
     public static State create(int n) {
-        return new State(Quadruple.create(n), Slot.slots(n), n);
+        return new State(Quadruple.create(n), Slot.slots(n));
     }
 
     public State offset(int x, int y) {
-        return new State(quadruple.offset(x, y), slot, n);
+        return new State(quadruple.offset(x, y), slot);
     }
 
     public List<BiAction> getActions(List<BiCommand> biCommands) {
-        List<Color> state = Color.colors(n);
+        List<Color> state = Color.colors(slot.getNumSlots());
         for (int i = 0; i < state.size(); i++) {
-            quadruple.set(state.get(i), slot.forIndex(i).getX(), slot.forIndex(i).getY());
+            quadruple.set(state.get(i), slot.forIndex(i).x(), slot.forIndex(i).y());
         }
         List<BiAction> biActions = new ArrayList<>();
         for (BiCommand biCommand : biCommands) {
@@ -69,11 +67,19 @@ public final class State {
         for (int i = 0; i < state.size(); i++) {
             Color color = state.get(i);
             int j = p.apply(i);
-            Slot.AbstractSlot sourceSlot = slot.forIndex(i);
-            Slot.AbstractSlot targetSlot = slot.forIndex(j);
+            Slot.Point sourceSlot = slot.forIndex(i);
+            Slot.Point targetSlot = slot.forIndex(j);
             movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             newColors[j] = color;
         }
-        return new ActionWithState(MoveAction.create(quadruple, movers), List.of(newColors));
+        return new ActionWithState(MoveAction.create(this, movers), List.of(newColors));
+    }
+
+    public Quadruple quadruple() {
+        return quadruple;
+    }
+
+    public Slot slot() {
+        return slot;
     }
 }

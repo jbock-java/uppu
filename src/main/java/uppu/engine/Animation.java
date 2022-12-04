@@ -42,12 +42,12 @@ public final class Animation {
         List<BiAction> actions = leftState.getActions(commands);
         q.addAll(actions);
         view.setTitle(actions.get(0).title());
-        timer = new Timer(25, __ -> onTick());
+        timer = new Timer(25, __ -> onTimerTick());
         timer.start();
         return actions;
     }
 
-    private void onTick() {
+    private void onTimerTick() {
         BiAction biAction = peekFirst();
         if (biAction == null) {
             view.setTitle("");
@@ -55,25 +55,27 @@ public final class Animation {
             return;
         }
         BufferStrategy bufferStrategy = view.getBufferStrategy();
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         Action action = biAction.peekFirst();
         if (action == null) {
-            if (timer.isRunning()) {
-                current++;
-                cleanCurrent();
-                BiAction next = peekFirst();
-                if (next != null) {
-                    onNext.accept(next);
-                }
+            if (!timer.isRunning()) {
+                return;
+            }
+            current++;
+            cleanCurrent();
+            BiAction next = peekFirst();
+            if (next != null) {
+                onNext.accept(next);
             }
             return;
         }
         boolean anyMove = action.move();
+        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         action.show(g);
         if (!anyMove) {
-            if (timer.isRunning()) {
-                biAction.increment();
+            if (!timer.isRunning()) {
+                return;
             }
+            biAction.increment();
         }
         bufferStrategy.show();
         g.dispose();
@@ -104,26 +106,6 @@ public final class Animation {
         return q.get(n);
     }
 
-    public void ff() {
-        timer.stop();
-        if (current < q.size()) {
-            current++;
-        }
-        cleanCurrent();
-        timer.start();
-    }
-
-    public void rewind() {
-        timer.stop();
-        for (int i = 0; i < 2; i++) {
-            if (current >= 0) {
-                current--;
-            }
-        }
-        cleanCurrent();
-        timer.start();
-    }
-
     public void pause() {
         if (timer.isRunning()) {
             timer.stop();
@@ -143,7 +125,7 @@ public final class Animation {
         }
         timer.start();
     }
-    
+
     public void setOnNext(Consumer<BiAction> onNext) {
         this.onNext = onNext;
     }
