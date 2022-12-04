@@ -12,6 +12,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class Animation {
 
@@ -19,6 +20,8 @@ public final class Animation {
     private final PermutationView view;
     private final State leftState;
     private final List<BiAction> q = new ArrayList<>();
+    private Consumer<BiAction> onNext = action -> {
+    };
     private int current;
 
     private Animation(
@@ -58,6 +61,10 @@ public final class Animation {
             if (timer.isRunning()) {
                 current++;
                 cleanCurrent();
+                BiAction next = peekFirst();
+                if (next != null) {
+                    onNext.accept(next);
+                }
             }
             return;
         }
@@ -135,5 +142,9 @@ public final class Animation {
             }
         }
         timer.start();
+    }
+    
+    public void setOnNext(Consumer<BiAction> onNext) {
+        this.onNext = onNext;
     }
 }

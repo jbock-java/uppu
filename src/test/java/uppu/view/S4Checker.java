@@ -40,6 +40,7 @@ class S4Checker {
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);
         view.setOnActionSelected(animation::select);
+        animation.setOnNext(view::setSelectedAction);
     }
 
     static List<Product> oddTimesSelf() {

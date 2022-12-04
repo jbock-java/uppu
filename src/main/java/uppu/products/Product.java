@@ -17,11 +17,11 @@ public record Product(Permutation a, Permutation b) {
     public BiCommand commands() {
         List<Command> commands = List.of(
                 command(Permutation.identity()),
-                BiCommand.wait(28),
+                BiCommand.wait(32),
                 command(b),
                 BiCommand.wait(1),
                 command(a),
-                BiCommand.wait(16),
+                BiCommand.wait(40),
                 command(a.compose(b).invert()));
         return new BiCommand(a + " " + b, commands);
     }

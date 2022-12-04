@@ -4,7 +4,7 @@ import java.util.List;
 
 public final class Slot {
 
-    public static final float SCALE = 1.8f;
+    public static final float SCALE = 2.2f;
     public static final int MAX = (int) (200 * SCALE);
 
     private final List<AbstractSlot> slots;
