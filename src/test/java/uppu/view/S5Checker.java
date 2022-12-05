@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static uppu.model.BiCommand.command;
+import static uppu.model.Command.command;
 
 class S5Checker {
 
@@ -29,8 +29,8 @@ class S5Checker {
                 .toList();
         Map<Set<Permutation>, Permutation> m = new LinkedHashMap<>();
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand("", List.of(BiCommand.command(Permutation.identity()))));
-        commands.add(new BiCommand("", List.of(BiCommand.wait(20))));
+        commands.add(new BiCommand("", List.of(Command.showState())));
+        commands.add(new BiCommand("", List.of(Command.wait(20))));
         for (Permutation p : permutations) {
             m.putIfAbsent(Set.of(p, p.invert()), p);
         }
@@ -44,8 +44,8 @@ class S5Checker {
     private BiCommand commands(
             Permutation a) {
         List<Command> commands = List.of(
-                command(Permutation.identity()),
-                BiCommand.wait(20),
+                Command.showState(),
+                Command.wait(20),
                 command(a));
         return new BiCommand(a.toString(), commands);
     }

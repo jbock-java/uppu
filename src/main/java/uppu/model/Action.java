@@ -13,6 +13,8 @@ public abstract class Action {
     private static final Ellipse2D.Float glow = new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE);
     private static final Ellipse2D.Float home = new Ellipse2D.Float(0, 0, HOME_SIZE, 12);
 
+    private static final int HOME_RADIUS = 12;
+
     public abstract boolean move();
 
     public abstract void show(Graphics2D g);
@@ -39,17 +41,17 @@ public abstract class Action {
             Slot.Point slot = state.slot().forIndex(i);
             float centerX = slot.x() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
             float centerY = slot.y() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
-            home.x = centerX - 10;
-            home.y = centerY - 10;
+            home.x = centerX - HOME_RADIUS;
+            home.y = centerY - HOME_RADIUS;
             g.fill(home);
-            home.x = centerX - 10;
-            home.y = centerY + 10;
+            home.x = centerX - HOME_RADIUS;
+            home.y = centerY + HOME_RADIUS;
             g.fill(home);
-            home.x = centerX + 10;
-            home.y = centerY - 10;
+            home.x = centerX + HOME_RADIUS;
+            home.y = centerY - HOME_RADIUS;
             g.fill(home);
-            home.x = centerX + 10;
-            home.y = centerY + 10;
+            home.x = centerX + HOME_RADIUS;
+            home.y = centerY + HOME_RADIUS;
             g.fill(home);
         }
     }

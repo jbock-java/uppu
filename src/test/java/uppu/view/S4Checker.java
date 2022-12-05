@@ -2,10 +2,11 @@ package uppu.view;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
+import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
+import uppu.model.Command;
 import uppu.model.Slot;
-import uppu.products.Product;
 
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
@@ -29,10 +30,10 @@ class S4Checker {
         products.addAll(evenTimesEven());
 
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand("", List.of(BiCommand.command(Permutation.identity()))));
-        commands.add(new BiCommand("", List.of(BiCommand.wait(10))));
+        commands.add(new BiCommand("", List.of(Command.showState())));
+        commands.add(new BiCommand("", List.of(Command.wait(10))));
         for (Product p : products) {
-            commands.add(p.commands());
+            commands.addAll(p.commands());
         }
         Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
         List<BiAction> actions = animation.startAnimation(commands);
@@ -118,6 +119,17 @@ class S4Checker {
 
     private static List<Product> evenTimesEven() {
         return evenTimesSelf().stream().map(Product::halfInvert).toList();
+    }
+
+    private record Product(Permutation a, Permutation b) {
+
+        Product halfInvert() {
+            return new Product(a, b.invert());
+        }
+
+        List<BiCommand> commands() {
+            return Input.commands(a, b);
+        }
     }
 
     static Product product(Permutation a, Permutation b) {
