@@ -85,7 +85,7 @@ public class PermutationView extends JFrame {
         actions.setModel(createListModel(List.of()));
         actions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPanel = new JScrollPane(actions);
-        scrollPanel.setSize(100, HEIGHT - 10);
+        scrollPanel.setSize(WIDTH_PANEL, HEIGHT - 10);
         JPanel sidePanel = new JPanel();
         sidePanel.setLayout(new BorderLayout());
         sidePanel.add(scrollPanel, BorderLayout.CENTER);
@@ -95,7 +95,7 @@ public class PermutationView extends JFrame {
         buttonPanel.add(pauseButton);
         buttonPanel.add(editButton);
         sidePanel.add(buttonPanel, BorderLayout.SOUTH);
-        sidePanel.setSize(100, HEIGHT);
+        sidePanel.setSize(WIDTH_PANEL, HEIGHT);
         sidePanel.setBackground(Color.DARK_GRAY);
         getContentPane().add(sidePanel, BorderLayout.EAST);
     }
@@ -148,5 +148,9 @@ public class PermutationView extends JFrame {
 
     public void setOnPauseButtonClicked(Runnable onClick) {
         pauseButton.addActionListener(e -> onClick.run());
+    }
+
+    public void setRunning(boolean running) {
+        pauseButton.setText(running ? "Pause" : "Resume");
     }
 }

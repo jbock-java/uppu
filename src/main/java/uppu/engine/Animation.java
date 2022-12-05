@@ -41,13 +41,12 @@ public final class Animation {
     public List<BiAction> startAnimation(List<BiCommand> commands) {
         List<BiAction> actions = leftState.getActions(commands);
         q.addAll(actions);
-        view.setTitle(actions.get(0).title());
+        actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
         timer = new Timer(25, __ -> {
             if (onTimerTick()) {
                 showState();
             }
         });
-        timer.start();
         return actions;
     }
 
@@ -117,11 +116,13 @@ public final class Animation {
         return q.get(n);
     }
 
-    public void pause() {
+    public boolean togglePause() {
         if (timer.isRunning()) {
             timer.stop();
+            return false;
         } else {
             timer.start();
+            return true;
         }
     }
 

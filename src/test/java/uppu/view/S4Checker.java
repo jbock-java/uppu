@@ -5,10 +5,8 @@ import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
-import uppu.model.Command;
 import uppu.model.Slot;
 
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +28,6 @@ class S4Checker {
         products.addAll(evenTimesEven());
 
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand("", List.of(Command.showState())));
-        commands.add(new BiCommand("", List.of(Command.wait(10))));
         for (Product p : products) {
             commands.addAll(p.commands());
         }
@@ -42,12 +38,19 @@ class S4Checker {
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         view.setOnEditButtonClicked(() -> {
             if (animation.isRunning()) {
-                animation.pause();
+                view.setRunning(animation.togglePause());
             }
-            JOptionPane.showMessageDialog(view, "Eggs are not supposed to be green.");
+            InputView inputView = InputView.create(view);
+            inputView.setContent(actions);
+            inputView.setOnSave(lines -> {
+                System.out.println(lines);
+                inputView.dispose();
+            });
         });
-        view.setOnPauseButtonClicked(animation::pause);
+        view.setOnPauseButtonClicked(() -> view.setRunning(animation.togglePause()));
+        actions.stream().findFirst().ifPresent(view::setSelectedAction);
         animation.setOnNext(view::setSelectedAction);
+        view.setRunning(animation.togglePause());
     }
 
     static List<Product> oddTimesSelf() {
