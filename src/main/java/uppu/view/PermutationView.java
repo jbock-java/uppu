@@ -151,6 +151,6 @@ public class PermutationView extends JFrame {
     }
 
     public void setRunning(boolean running) {
-        pauseButton.setText(running ? "Pause" : "Resume");
+        pauseButton.setForeground(running ? Color.BLACK : Color.MAGENTA);
     }
 }
