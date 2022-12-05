@@ -38,6 +38,7 @@ class S4Checker {
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);
         view.setOnActionSelected(animation::select);
+        view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         animation.setOnNext(view::setSelectedAction);
     }
 

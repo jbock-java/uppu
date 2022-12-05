@@ -113,4 +113,5 @@ public final class Quadruple {
     public Color[] colors() {
         return colors;
     }
+
 }

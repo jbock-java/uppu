@@ -8,9 +8,11 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -21,12 +23,14 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 public class PermutationView extends JFrame {
 
     private static final int WIDTH_CANVAS = (int) (300 * Slot.SCALE);
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
     public static final int WIDTH_PANEL = 140;
+    public static final int HEIGHT_SLIDER = 12;
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -35,6 +39,7 @@ public class PermutationView extends JFrame {
     };
 
     private final JList<BiAction> actions = new JList<>();
+    private final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 32, 12);
 
     private PermutationView() {
         super("");
@@ -42,7 +47,7 @@ public class PermutationView extends JFrame {
 
     public static PermutationView create() {
         PermutationView view = new PermutationView();
-        view.setSize(WIDTH_CANVAS + WIDTH_PANEL, HEIGHT);
+        view.setSize(WIDTH_CANVAS + WIDTH_PANEL, HEIGHT + HEIGHT_SLIDER);
         view.createElements();
         view.pack();
         view.setVisible(true);
@@ -64,8 +69,10 @@ public class PermutationView extends JFrame {
         canvas.setVisible(true);
         canvas.setFocusable(false);
         canvas.setBackground(Color.DARK_GRAY);
+        slider.setBackground(Color.DARK_GRAY);
         getContentPane().setBackground(Color.DARK_GRAY);
         getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(slider, BorderLayout.SOUTH);
         getContentPane().add(canvas, BorderLayout.WEST);
         actions.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
         actions.setBackground(Color.DARK_GRAY);
@@ -115,5 +122,14 @@ public class PermutationView extends JFrame {
                 e -> onSpace.run(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    public void setOnSliderMoved(IntConsumer onMoved) {
+        slider.addChangeListener(e -> {
+            if (slider.getValueIsAdjusting()) {
+                return;
+            }
+            onMoved.accept(slider.getValue());
+        });
     }
 }

@@ -42,41 +42,52 @@ public final class Animation {
         List<BiAction> actions = leftState.getActions(commands);
         q.addAll(actions);
         view.setTitle(actions.get(0).title());
-        timer = new Timer(25, __ -> onTimerTick());
+        timer = new Timer(25, __ -> {
+            if (onTimerTick()) {
+                showState();
+            }
+        });
         timer.start();
         return actions;
     }
 
-    private void onTimerTick() {
+    private boolean onTimerTick() {
         BiAction biAction = peekFirst();
         if (biAction == null) {
             view.setTitle("");
             timer.stop();
-            return;
+            return false;
         }
-        BufferStrategy bufferStrategy = view.getBufferStrategy();
         Action action = biAction.peekFirst();
         if (action == null) {
-            if (!timer.isRunning()) {
-                return;
-            }
             current++;
             cleanCurrent();
             BiAction next = peekFirst();
             if (next != null) {
                 onNext.accept(next);
             }
-            return;
+            return false;
         }
         boolean anyMove = action.move();
+        if (!anyMove) {
+            biAction.increment();
+            return false;
+        }
+        return true;
+    }
+
+    private void showState() {
+        BiAction biAction = peekFirst();
+        if (biAction == null) {
+            return;
+        }
+        Action action = biAction.peekFirst();
+        if (action == null) {
+            return;
+        }
+        BufferStrategy bufferStrategy = view.getBufferStrategy();
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         action.show(g);
-        if (!anyMove) {
-            if (!timer.isRunning()) {
-                return;
-            }
-            biAction.increment();
-        }
         bufferStrategy.show();
         g.dispose();
         Toolkit.getDefaultToolkit().sync();
@@ -114,8 +125,16 @@ public final class Animation {
         }
     }
 
-    public void select(BiAction action) {
+    public void setSpeed(float speed) {
         timer.stop();
+        timer = new Timer((int) (25 / speed), __ -> {
+            onTimerTick();
+            showState();
+        });
+        timer.start();
+    }
+
+    public void select(BiAction action) {
         for (int i = 0; i < q.size(); i++) {
             BiAction qs = q.get(i);
             if (action == qs) {
@@ -123,7 +142,6 @@ public final class Animation {
                 cleanCurrent();
             }
         }
-        timer.start();
     }
 
     public void setOnNext(Consumer<BiAction> onNext) {
