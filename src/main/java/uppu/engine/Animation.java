@@ -125,6 +125,10 @@ public final class Animation {
         }
     }
 
+    public boolean isRunning() {
+        return timer.isRunning();
+    }
+
     public void setSpeed(float speed) {
         timer.stop();
         timer = new Timer((int) (25 / speed), __ -> {

@@ -4,9 +4,11 @@ import uppu.model.BiAction;
 import uppu.model.Slot;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.KeyStroke;
@@ -16,6 +18,7 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -40,6 +43,8 @@ public class PermutationView extends JFrame {
 
     private final JList<BiAction> actions = new JList<>();
     private final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 32, 12);
+    private final JButton pauseButton = new JButton("Pause");
+    private final JButton editButton = new JButton("Edit");
 
     private PermutationView() {
         super("");
@@ -79,9 +84,24 @@ public class PermutationView extends JFrame {
         actions.setForeground(Color.WHITE);
         actions.setModel(createListModel(List.of()));
         actions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        editButton.setBackground(Color.DARK_GRAY);
+        editButton.setForeground(Color.WHITE);
+        pauseButton.setBackground(Color.DARK_GRAY);
+        pauseButton.setForeground(Color.WHITE);
         JScrollPane scrollPanel = new JScrollPane(actions);
-        scrollPanel.setSize(100, HEIGHT);
-        getContentPane().add(scrollPanel, BorderLayout.EAST);
+        scrollPanel.setSize(100, HEIGHT - 10);
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(new BorderLayout());
+        sidePanel.add(scrollPanel, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(pauseButton);
+        buttonPanel.add(editButton);
+        sidePanel.add(buttonPanel, BorderLayout.SOUTH);
+        sidePanel.setSize(100, HEIGHT);
+        sidePanel.setBackground(Color.DARK_GRAY);
+        getContentPane().add(sidePanel, BorderLayout.EAST);
     }
 
     private static ListModel<BiAction> createListModel(List<BiAction> actions) {
@@ -117,13 +137,6 @@ public class PermutationView extends JFrame {
         actions.setSelectedValue(action, true);
     }
 
-    public void setOnSpace(Runnable onSpace) {
-        getRootPane().registerKeyboardAction(
-                e -> onSpace.run(),
-                KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-    }
-
     public void setOnSliderMoved(IntConsumer onMoved) {
         slider.addChangeListener(e -> {
             if (slider.getValueIsAdjusting()) {
@@ -131,5 +144,13 @@ public class PermutationView extends JFrame {
             }
             onMoved.accept(slider.getValue());
         });
+    }
+
+    public void setOnEditButtonClicked(Runnable onClick) {
+        editButton.addActionListener(e -> onClick.run());
+    }
+
+    public void setOnPauseButtonClicked(Runnable onClick) {
+        pauseButton.addActionListener(e -> onClick.run());
     }
 }

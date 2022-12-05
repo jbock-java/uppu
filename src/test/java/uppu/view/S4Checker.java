@@ -7,6 +7,7 @@ import uppu.model.BiCommand;
 import uppu.model.Slot;
 import uppu.products.Product;
 
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +35,17 @@ class S4Checker {
             commands.add(p.commands());
         }
         Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
-        view.setOnSpace(animation::pause);
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
+        view.setOnEditButtonClicked(() -> {
+            if (animation.isRunning()) {
+                animation.pause();
+            }
+            JOptionPane.showMessageDialog(view, "Eggs are not supposed to be green.");
+        });
+        view.setOnPauseButtonClicked(animation::pause);
         animation.setOnNext(view::setSelectedAction);
     }
 
