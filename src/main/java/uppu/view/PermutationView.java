@@ -84,10 +84,6 @@ public class PermutationView extends JFrame {
         actions.setForeground(Color.WHITE);
         actions.setModel(createListModel(List.of()));
         actions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        editButton.setBackground(Color.DARK_GRAY);
-        editButton.setForeground(Color.WHITE);
-        pauseButton.setBackground(Color.DARK_GRAY);
-        pauseButton.setForeground(Color.WHITE);
         JScrollPane scrollPanel = new JScrollPane(actions);
         scrollPanel.setSize(100, HEIGHT - 10);
         JPanel sidePanel = new JPanel();

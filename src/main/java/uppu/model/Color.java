@@ -21,13 +21,19 @@ public enum Color {
     WHITE(new java.awt.Color(178, 190, 181).brighter());
 
     private final java.awt.Color awtColor;
+    private final java.awt.Color glowColor;
 
     Color(java.awt.Color awtColor) {
         this.awtColor = awtColor;
+        this.glowColor = awtColor.darker();
     }
 
     public java.awt.Color awtColor() {
         return awtColor;
+    }
+
+    public java.awt.Color glowColor() {
+        return glowColor;
     }
 
     public static List<Color> colors(int n) {

@@ -6,9 +6,11 @@ import java.awt.geom.Ellipse2D;
 public abstract class Action {
 
     public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
+    public static final int GLOW_SIZE = 3;
     private static final int HOME_SIZE = 12;
 
     private static final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
+    private static final Ellipse2D.Float glow = new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE);
     private static final Ellipse2D.Float home = new Ellipse2D.Float(0, 0, HOME_SIZE, 12);
 
     public abstract boolean move();
@@ -19,12 +21,16 @@ public abstract class Action {
 
     final void show(Graphics2D g, State state) {
         Quadruple quadruple = state.quadruple();
-        g.clearRect(quadruple.getOffsetX(), quadruple.getOffsetY(), quadruple.getWidth(), quadruple.getHeight());
+        quadruple.clearRect(g);
         uppu.model.Color[] colors = quadruple.colors();
         for (uppu.model.Color color : colors) {
-            g.setPaint(color.awtColor());
             ellipse.x = quadruple.getX(color) + quadruple.getOffsetX();
             ellipse.y = quadruple.getY(color) + quadruple.getOffsetY();
+            glow.x = ellipse.x - GLOW_SIZE;
+            glow.y = ellipse.y - GLOW_SIZE;
+            g.setPaint(color.glowColor());
+            g.fill(glow);
+            g.setPaint(color.awtColor());
             g.fill(ellipse);
         }
         for (int i = 0; i < colors.length; i++) {

@@ -1,5 +1,6 @@
 package uppu.model;
 
+import java.awt.Graphics2D;
 import java.util.Arrays;
 
 public final class Quadruple {
@@ -8,6 +9,11 @@ public final class Quadruple {
     private final int offsetY;
     private final float[] state;
     private final Color[] colors;
+
+    private final int clear_offsetX;
+    private final int clear_offsetY;
+    private final int clear_width;
+    private final int clear_height;
 
     private Quadruple(
             int offsetX,
@@ -18,6 +24,10 @@ public final class Quadruple {
         this.offsetY = offsetY;
         this.state = state;
         this.colors = colors;
+         clear_offsetX = offsetX - Action.GLOW_SIZE;
+         clear_offsetY = offsetY - Action.GLOW_SIZE;
+         clear_width = getWidth() + 2 * Action.GLOW_SIZE;
+         clear_height = getHeight() + 2 * Action.GLOW_SIZE;
     }
 
     public static Quadruple create(int n) {
@@ -114,4 +124,7 @@ public final class Quadruple {
         return colors;
     }
 
+    public void clearRect(Graphics2D g) {
+        g.clearRect(clear_offsetX, clear_offsetY, clear_width, clear_height);
+    }
 }
