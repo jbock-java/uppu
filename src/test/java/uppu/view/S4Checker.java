@@ -21,11 +21,11 @@ class S4Checker {
     private void run() {
         view.setLocationRelativeTo(null);
         List<Product> products = new ArrayList<>();
+        products.addAll(evenTimesSelf());
+        products.addAll(evenTimesEven());
         products.addAll(oddTimesEven());
         products.addAll(oddTimesSelf());
         products.addAll(oddTimesOdd());
-        products.addAll(evenTimesSelf());
-        products.addAll(evenTimesEven());
 
         List<BiCommand> commands = new ArrayList<>();
         for (Product p : products) {
@@ -51,6 +51,7 @@ class S4Checker {
         actions.stream().findFirst().ifPresent(view::setSelectedAction);
         animation.setOnNext(view::setSelectedAction);
         view.setRunning(animation.togglePause());
+        view.validate();
     }
 
     static List<Product> oddTimesSelf() {
@@ -131,7 +132,7 @@ class S4Checker {
         }
 
         List<BiCommand> commands() {
-            return Input.commands(a, b);
+            return Input.commands(a.invert(), b.invert(), a, b);
         }
     }
 

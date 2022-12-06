@@ -12,8 +12,8 @@ import static uppu.model.Command.command;
 
 public class Input {
 
-    public static List<BiCommand> commands(Permutation a, Permutation b) {
-        return commands(List.of(a, b));
+    public static List<BiCommand> commands(Permutation... permutations) {
+        return commands(List.of(permutations));
     }
 
     public static List<BiCommand> commands(List<Permutation> input) {

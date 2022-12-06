@@ -44,12 +44,12 @@ public class InputView extends JFrame {
 
     private void createElements() {
         JScrollPane pane = new JScrollPane(textArea);
-        pane.setSize(PermutationView.WIDTH_PANEL * 3, HEIGHT_TEXTAREA);
+        pane.setSize(PermutationView.WIDTH_PANEL * 2, HEIGHT_TEXTAREA);
         getContentPane().add(pane, BorderLayout.CENTER);
         textArea.setBackground(Color.DARK_GRAY);
         textArea.setForeground(Color.WHITE);
         textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
-        setSize(PermutationView.WIDTH_PANEL * 3, HEIGHT_TEXTAREA + 12);
+        setSize(PermutationView.WIDTH_PANEL * 2, HEIGHT_TEXTAREA + 12);
         getContentPane().setBackground(Color.DARK_GRAY);
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.DARK_GRAY);

@@ -30,9 +30,9 @@ import java.util.function.IntConsumer;
 
 public class PermutationView extends JFrame {
 
-    private static final int WIDTH_CANVAS = (int) (300 * Slot.SCALE);
+    private static final int WIDTH_CANVAS = (int) (280 * Slot.SCALE);
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
-    public static final int WIDTH_PANEL = 140;
+    public static final int WIDTH_PANEL = 440;
     public static final int HEIGHT_SLIDER = 12;
 
     private final Canvas canvas = new Canvas() {
@@ -54,7 +54,6 @@ public class PermutationView extends JFrame {
         PermutationView view = new PermutationView();
         view.setSize(WIDTH_CANVAS + WIDTH_PANEL, HEIGHT + HEIGHT_SLIDER);
         view.createElements();
-        view.pack();
         view.setVisible(true);
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         view.getRootPane().registerKeyboardAction(
@@ -85,11 +84,13 @@ public class PermutationView extends JFrame {
         actions.setModel(createListModel(List.of()));
         actions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPanel = new JScrollPane(actions);
-        scrollPanel.setSize(WIDTH_PANEL, HEIGHT - 10);
+        int heightButtonPane = 20;
+        scrollPanel.setSize(WIDTH_PANEL, HEIGHT - heightButtonPane);
         JPanel sidePanel = new JPanel();
         sidePanel.setLayout(new BorderLayout());
         sidePanel.add(scrollPanel, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setSize(WIDTH_PANEL, heightButtonPane);
         buttonPanel.setBackground(Color.DARK_GRAY);
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(pauseButton);
