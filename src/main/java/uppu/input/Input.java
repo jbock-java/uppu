@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import static uppu.model.Command.command;
 
 public class Input {
-    
+
     public static List<BiCommand> commands(Permutation a, Permutation b) {
-        return commands(List.of(a, b));    
+        return commands(List.of(a, b));
     }
 
     public static List<BiCommand> commands(List<Permutation> input) {
@@ -33,7 +33,7 @@ public class Input {
                 command(undo));
         return List.of(
                 new BiCommand(
-                        input.stream().map(Permutation::toString).collect(Collectors.joining(" ")), 
+                        input.stream().map(Permutation::toString).collect(Collectors.joining(".")),
                         abCommands),
                 new BiCommand(
                         undo.toString(),
