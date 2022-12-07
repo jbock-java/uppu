@@ -5,32 +5,29 @@ import io.parmigiano.Permutation;
 
 import java.util.regex.Pattern;
 
+import static io.jbock.util.Either.left;
+import static io.jbock.util.Either.right;
+
 public final class TokenParser {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+    private static final Either<String, Permutation> IDENTITY = right(Permutation.identity());
 
-    public static Either<String, Permutation> parseToken(String token) {
-        return parseTrimmed(token.trim());
+    static Either<String, Permutation> parseContent(String content) {
+        return parseTrimmed(content.trim());
     }
 
-    private static Either<String, Permutation> parseTrimmed(String token) {
-        if (!token.startsWith("(")) {
-            return Either.left("Opening parenthesis not found.");
+    private static Either<String, Permutation> parseTrimmed(String content) {
+        if (content.isEmpty()) {
+            return IDENTITY;
         }
-        if (!token.endsWith(")")) {
-            return Either.left("Closing parenthesis not found.");
-        }
-        return parseContent(token.substring(1, token.length() - 1).trim());
-    }
-
-    private static Either<String, Permutation> parseContent(String content) {
         String[] tokens = WHITESPACE.split(content);
         int[] input = new int[tokens.length];
         if (tokens.length == 0) {
-            return Either.right(Permutation.identity());
+            return IDENTITY;
         }
         if (tokens[0].startsWith("(")) {
-                return Either.left("Nesting parentheses is not allowed");
+            return left("Nesting parentheses is not allowed");
         }
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
@@ -53,16 +50,16 @@ public final class TokenParser {
                 case "7":
                 case "8":
                 case "9":
-                    return Either.left("Max index is 3 but found: " + token);
+                    return left("Max index is 3 but found: " + token);
                 case "(":
-                    return Either.left("Nesting parentheses is not allowed");
+                    return left("Nesting parentheses is not allowed");
                 case ")":
-                    return Either.left("Found extra closing parenthesis");
+                    return left("Found extra closing parenthesis");
                 default:
-                    return Either.left("Unknown token: " + token);
+                    return left("Unknown token: " + token);
             }
         }
-        return Either.right(Permutation.create(input));
+        return right(Permutation.create(input));
     }
 
     private TokenParser() {
