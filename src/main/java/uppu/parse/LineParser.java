@@ -1,7 +1,6 @@
 package uppu.parse;
 
 import io.jbock.util.Either;
-import io.jbock.util.Eithers;
 import io.parmigiano.Permutation;
 
 import java.util.ArrayList;
@@ -9,24 +8,30 @@ import java.util.List;
 
 import static io.jbock.util.Either.left;
 import static io.jbock.util.Either.right;
+import static io.jbock.util.Eithers.firstFailure;
 import static java.lang.Character.isWhitespace;
 import static uppu.parse.DotExpression.dot;
-import static uppu.parse.ParenExpression.paren;
+import static uppu.parse.ExplicitRow.explicitRow;
+import static uppu.parse.HomeRow.homeRow;
+import static uppu.parse.ParenExpression.parenExpression;
 
 public class LineParser {
 
-    public static Either<String, List<Permutation>> parse(String line) {
+    public static Either<String, Row> parse(String line) {
         return parseLine(line)
-                .flatMap(expressions -> expressions.stream().map(Expression::parse).collect(Eithers.firstFailure()))
+                .flatMap(expressions -> expressions.stream().map(Expression::parse).collect(firstFailure()))
                 .flatMap(LineParser::read);
     }
 
-    private static Either<String, List<Permutation>> read(List<Parsed> expressions) {
+    private static Either<String, Row> read(List<Parsed> expressions) {
         if (expressions.isEmpty()) {
-            return right(List.of());
+            return right(explicitRow(List.of()));
         }
         if (expressions.get(0).isDot()) {
             return left("Found dot at beginning of line");
+        }
+        if (expressions.get(0).isHome()) {
+            return right(homeRow());
         }
         List<Permutation> result = new ArrayList<>();
         Permutation current = Permutation.identity();
@@ -49,10 +54,13 @@ public class LineParser {
             dot = false;
         }
         result.add(current);
-        return right(result);
+        return right(explicitRow(result));
     }
 
     static Either<String, List<Expression>> parseLine(String line) {
+        if (line.trim().equals("~")) {
+            return right(List.of(HomeExpression.homeExpression()));
+        }
         List<Expression> result = new ArrayList<>();
         int parenCount = 0;
         StringBuilder tokenBuilder = new StringBuilder();
@@ -65,7 +73,7 @@ public class LineParser {
             if (c == ')') {
                 parenCount--;
                 if (parenCount == 0) {
-                    result.add(paren(tokenBuilder.toString()));
+                    result.add(parenExpression(tokenBuilder.toString()));
                     tokenBuilder.setLength(0);
                 }
                 if (parenCount < 0) {

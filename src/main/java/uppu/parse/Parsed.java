@@ -1,6 +1,8 @@
 package uppu.parse;
 
-sealed interface Parsed permits ParsedDot, ParsedToken {
+sealed interface Parsed permits ParsedDot, ParsedHome, ParsedToken {
 
     boolean isDot();
+
+    boolean isHome();
 }

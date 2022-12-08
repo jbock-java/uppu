@@ -1,18 +1,20 @@
 package uppu.view;
 
 import io.jbock.util.Either;
-import io.jbock.util.Eithers;
+import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
 import uppu.model.Slot;
 import uppu.parse.LineParser;
+import uppu.parse.Row;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -65,8 +67,18 @@ class S4Checker {
     }
     
     private static Either<String, List<BiCommand>> readLines(List<String> lines) {
-        return lines.stream()
-                .map(line -> LineParser.parse(line).map(Input::singleCommand))
-                .collect(Eithers.firstFailure());
+        Permutation current = Permutation.identity();
+        List<BiCommand> result = new ArrayList<>(lines.size());
+        for (String line : lines) {
+            Either<String, Row> parsed = LineParser.parse(line);
+            if (parsed.isLeft()) {
+                return parsed.map(x -> List.of());
+            }
+            Row row = parsed.getRight().orElseThrow();
+            BiCommand command = Input.singleCommand(row, current);
+            result.add(command);
+            current = command.permutation().compose(current);
+        }
+        return Either.right(result);
     }
 }

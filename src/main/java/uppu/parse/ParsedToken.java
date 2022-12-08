@@ -13,4 +13,9 @@ record ParsedToken(Permutation permutation) implements Parsed {
     public boolean isDot() {
         return false;
     }
+    
+    @Override
+    public boolean isHome() {
+        return false;
+    }
 }

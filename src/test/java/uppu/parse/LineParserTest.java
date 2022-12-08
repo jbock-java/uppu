@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uppu.parse.DotExpression.dot;
 import static uppu.parse.LineParser.parse;
 import static uppu.parse.LineParser.parseLine;
-import static uppu.parse.ParenExpression.paren;
+import static uppu.parse.ParenExpression.parenExpression;
 
 class LineParserTest {
 
@@ -21,22 +21,22 @@ class LineParserTest {
                 right(List.of()),
                 parseLine(""));
         assertEquals(
-                right(List.of(paren("1 2"))),
+                right(List.of(parenExpression("1 2"))),
                 parseLine("(1 2)"));
         assertEquals(
                 right(List.of(dot(), dot(), dot())),
                 parseLine(". . ."));
         assertEquals(
-                right(List.of(paren(""))),
+                right(List.of(parenExpression(""))),
                 parseLine("()"));
         assertEquals(
-                right(List.of(paren(" "))),
+                right(List.of(parenExpression(" "))),
                 parseLine(" ( ) "));
         assertEquals(
-                right(List.of(paren("1 2"), dot(), paren("3"))),
+                right(List.of(parenExpression("1 2"), dot(), parenExpression("3"))),
                 parseLine("(1 2) . (3)"));
         assertEquals(
-                right(List.of(paren("1 2"), paren(" 3 "))),
+                right(List.of(parenExpression("1 2"), parenExpression(" 3 "))),
                 parseLine("(1 2) ( 3 )"));
         assertEquals(
                 left("Found unexpected character: 1"),

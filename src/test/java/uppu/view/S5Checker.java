@@ -5,6 +5,7 @@ import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiCommand;
 import uppu.model.Slot;
+import uppu.parse.ExplicitRow;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -42,6 +43,6 @@ class S5Checker {
 
     private BiCommand commands(
             Permutation a) {
-        return Input.singleCommand(List.of(a.invert(), a));
+        return Input.singleCommand(ExplicitRow.explicitRow(List.of(a.invert(), a)), Permutation.identity());
     }
 }

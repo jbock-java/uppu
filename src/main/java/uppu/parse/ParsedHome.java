@@ -1,13 +1,13 @@
 package uppu.parse;
 
-final class ParsedDot implements Parsed {
+final class ParsedHome implements Parsed {
 
-    private static final ParsedDot INSTANCE = new ParsedDot();
+    private static final ParsedHome INSTANCE = new ParsedHome();
 
-    private ParsedDot() {
+    private ParsedHome() {
     }
 
-    static ParsedDot parsedDot() {
+    static ParsedHome parsedHome() {
         return INSTANCE;
     }
 
@@ -18,11 +18,11 @@ final class ParsedDot implements Parsed {
 
     @Override
     public boolean isDot() {
-        return true;
+        return false;
     }
-
+    
     @Override
     public boolean isHome() {
-        return false;
+        return true;
     }
 }

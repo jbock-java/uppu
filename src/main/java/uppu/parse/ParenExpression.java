@@ -6,7 +6,7 @@ import static uppu.parse.TokenParser.parseContent;
 
 record ParenExpression(String token) implements Expression {
 
-    static ParenExpression paren(String token) {
+    static ParenExpression parenExpression(String token) {
         return new ParenExpression(token);
     }
 
