@@ -1,7 +1,7 @@
 package uppu.view;
 
+import io.jbock.util.Either;
 import io.jbock.util.Eithers;
-import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiAction;
@@ -10,7 +10,9 @@ import uppu.model.Slot;
 import uppu.parse.LineParser;
 
 import javax.swing.JOptionPane;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -18,24 +20,21 @@ import static javax.swing.JOptionPane.showMessageDialog;
 class S4Checker {
 
     private final PermutationView view = PermutationView.create();
+    private final List<BiCommand> commands;
 
-    public static void main(String[] args) {
-        new S4Checker().run();
+    S4Checker(List<BiCommand> commands) {
+        this.commands = commands;
+    }
+
+    public static void main(String[] args) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("input").resolve("tricks.txt"));
+        readLines(lines).ifLeftOrElse(
+                error -> showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE),
+                commands -> new S4Checker(commands).run());
     }
 
     private void run() {
         view.setLocationRelativeTo(null);
-        List<Product> products = new ArrayList<>();
-        products.addAll(evenTimesSelf());
-        products.addAll(evenTimesEven());
-        products.addAll(oddTimesEven());
-        products.addAll(oddTimesSelf());
-        products.addAll(oddTimesOdd());
-
-        List<BiCommand> commands = new ArrayList<>();
-        for (Product p : products) {
-            commands.addAll(p.commands());
-        }
         Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);
@@ -48,16 +47,13 @@ class S4Checker {
             InputView inputView = InputView.create(view);
             inputView.setContent(animation.getActions());
             inputView.setOnSave(lines -> {
-                lines.stream()
-                        .map(line -> LineParser.parse(line).map(Input::singleCommand))
-                        .collect(Eithers.firstFailure())
-                        .ifLeftOrElse(
-                                error -> showMessageDialog(view, error, "Error", JOptionPane.ERROR_MESSAGE),
-                                newCommands -> {
-                                    List<BiAction> newActions = animation.startAnimation(newCommands);
-                                    view.setActions(newActions);
-                                    newActions.stream().findFirst().ifPresent(view::setSelectedAction);
-                                });
+                readLines(lines).ifLeftOrElse(
+                        error -> showMessageDialog(view, error, "Error", JOptionPane.ERROR_MESSAGE),
+                        newCommands -> {
+                            List<BiAction> newActions = animation.startAnimation(newCommands);
+                            view.setActions(newActions);
+                            newActions.stream().findFirst().ifPresent(view::setSelectedAction);
+                        });
                 inputView.dispose();
             });
         });
@@ -67,91 +63,10 @@ class S4Checker {
         view.setRunning(animation.togglePause());
         view.validate();
     }
-
-    static List<Product> oddTimesSelf() {
-        List<Product> products = new ArrayList<>();
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 2, 1, 3)));
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 1, 2)));
-        return products;
+    
+    private static Either<String, List<BiCommand>> readLines(List<String> lines) {
+        return lines.stream()
+                .map(line -> LineParser.parse(line).map(Input::singleCommand))
+                .collect(Eithers.firstFailure());
     }
-
-    static List<Product> oddTimesOdd() {
-        List<Product> products = new ArrayList<>();
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 1, 2, 3)));
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 3, 2, 1)));
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 1, 3, 2)));
-        products.add(product(Permutation.create(0, 1), Permutation.create(0, 2, 3, 1)));
-        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 1, 2, 3)));
-        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 3, 2, 1)));
-        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 1, 3, 2)));
-        products.add(product(Permutation.create(0, 2, 1, 3), Permutation.create(0, 2, 3, 1)));
-        return products;
-    }
-
-    static List<Product> oddTimesEven() {
-        List<Product> products = new ArrayList<>();
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 3, 1)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2, 1)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 2, 1, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(2, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 1, 2)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 2, 3)));
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3, 2)));
-        return products;
-    }
-
-    static List<Product> evenTimesSelf() {
-        List<Product> products = new ArrayList<>();
-
-        // T
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 1, 3)));
-        products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 2, 1)));
-
-        // R
-        products.add(product(Permutation.create(0, 3, 1), Permutation.create(1, 2, 3)));
-        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 1, 3)));
-
-        // B
-        products.add(product(Permutation.create(0, 2, 3), Permutation.create(1, 2, 3)));
-        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 3, 2)));
-
-        // L
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(0, 3, 2)));
-        products.add(product(Permutation.create(0, 2, 3), Permutation.create(0, 2, 1)));
-
-        // /
-        products.add(product(Permutation.create(0, 1, 2), Permutation.create(1, 2, 3)));
-        products.add(product(Permutation.create(1, 3, 2), Permutation.create(0, 2, 1)));
-
-        // \
-        products.add(product(Permutation.create(0, 2, 3), Permutation.create(0, 1, 3)));
-        products.add(product(Permutation.create(0, 3, 1), Permutation.create(0, 3, 2)));
-
-        return products;
-    }
-
-    private static List<Product> evenTimesEven() {
-        return evenTimesSelf().stream().map(Product::halfInvert).toList();
-    }
-
-    private record Product(Permutation a, Permutation b) {
-
-        Product halfInvert() {
-            return new Product(a, b.invert());
-        }
-
-        List<BiCommand> commands() {
-            return Input.commands(a.invert(), b.invert(), a, b);
-        }
-    }
-
-    static Product product(Permutation a, Permutation b) {
-        return new Product(a, b);
-    }
-
 }
