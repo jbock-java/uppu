@@ -1,14 +1,19 @@
 package uppu.view;
 
+import io.jbock.util.Eithers;
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
 import uppu.model.Slot;
+import uppu.parse.LineParser;
 
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 class S4Checker {
 
@@ -41,9 +46,18 @@ class S4Checker {
                 view.setRunning(animation.togglePause());
             }
             InputView inputView = InputView.create(view);
-            inputView.setContent(actions);
+            inputView.setContent(animation.getActions());
             inputView.setOnSave(lines -> {
-                System.out.println(lines);
+                lines.stream()
+                        .map(line -> LineParser.parse(line).map(Input::singleCommand))
+                        .collect(Eithers.firstFailure())
+                        .ifLeftOrElse(
+                                error -> showMessageDialog(view, error, "Error", JOptionPane.ERROR_MESSAGE),
+                                newCommands -> {
+                                    List<BiAction> newActions = animation.startAnimation(newCommands);
+                                    view.setActions(newActions);
+                                    newActions.stream().findFirst().ifPresent(view::setSelectedAction);
+                                });
                 inputView.dispose();
             });
         });

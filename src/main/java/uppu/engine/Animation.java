@@ -40,6 +40,7 @@ public final class Animation {
 
     public List<BiAction> startAnimation(List<BiCommand> commands) {
         List<BiAction> actions = leftState.getActions(commands);
+        q.clear();
         q.addAll(actions);
         actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
         timer = new Timer(25, __ -> {
@@ -151,5 +152,9 @@ public final class Animation {
 
     public void setOnNext(Consumer<BiAction> onNext) {
         this.onNext = onNext;
+    }
+
+    public List<BiAction> getActions() {
+        return q;
     }
 }

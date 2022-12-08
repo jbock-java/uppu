@@ -40,6 +40,21 @@ public class Input {
                         undoCommands));
     }
 
+    public static BiCommand singleCommand(List<Permutation> input) {
+        List<Command> abCommands = new ArrayList<>(input.size() * 2 + 1);
+        abCommands.add(Command.showState());
+        abCommands.add(Command.wait(80));
+        for (int i = input.size() - 1; i >= 0; i--) {
+            abCommands.add(command(input.get(i)));
+            if (i > 0) {
+                abCommands.add(Command.wait(15));
+            }
+        }
+        return new BiCommand(
+                        input.stream().map(Permutation::toString).collect(Collectors.joining(".")),
+                        abCommands);
+    }
+
     private static Permutation product(List<Permutation> permutations) {
         Permutation result = Permutation.identity();
         for (Permutation p : permutations) {

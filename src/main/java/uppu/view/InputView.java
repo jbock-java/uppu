@@ -49,6 +49,7 @@ public class InputView extends JFrame {
         textArea.setBackground(Color.DARK_GRAY);
         textArea.setForeground(Color.WHITE);
         textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
+        textArea.setCaretColor(Color.WHITE);
         setSize(PermutationView.WIDTH_PANEL * 2, HEIGHT_TEXTAREA + 12);
         getContentPane().setBackground(Color.DARK_GRAY);
         JPanel buttonPanel = new JPanel();

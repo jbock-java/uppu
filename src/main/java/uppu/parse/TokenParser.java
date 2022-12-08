@@ -27,7 +27,7 @@ public final class TokenParser {
             return IDENTITY;
         }
         if (tokens[0].startsWith("(")) {
-            return left("Nesting parentheses is not allowed");
+            return left("Found nesting");
         }
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
@@ -51,10 +51,6 @@ public final class TokenParser {
                 case "8":
                 case "9":
                     return left("Max index is 3 but found: " + token);
-                case "(":
-                    return left("Nesting parentheses is not allowed");
-                case ")":
-                    return left("Found extra closing parenthesis");
                 default:
                     return left("Unknown token: " + token);
             }
