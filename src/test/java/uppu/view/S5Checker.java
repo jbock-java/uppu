@@ -2,8 +2,8 @@ package uppu.view;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
+import uppu.input.Input;
 import uppu.model.BiCommand;
-import uppu.model.Command;
 import uppu.model.Slot;
 
 import java.util.ArrayList;
@@ -11,8 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static uppu.model.Command.command;
 
 class S5Checker {
 
@@ -29,8 +27,6 @@ class S5Checker {
                 .toList();
         Map<Set<Permutation>, Permutation> m = new LinkedHashMap<>();
         List<BiCommand> commands = new ArrayList<>();
-        commands.add(new BiCommand("", List.of(Command.showState())));
-        commands.add(new BiCommand("", List.of(Command.wait(20))));
         for (Permutation p : permutations) {
             m.putIfAbsent(Set.of(p, p.invert()), p);
         }
@@ -38,15 +34,14 @@ class S5Checker {
         for (Permutation p : values) {
             commands.add(commands(p));
         }
-        Animation.create(view, 5, (int) (25 * Slot.SCALE)).startAnimation(commands);
+        Animation animation = Animation.create(view, 5, (int) (25 * Slot.SCALE));
+        animation.startAnimation(commands);
+        view.setRunning(animation.togglePause());
+        view.validate();
     }
 
     private BiCommand commands(
             Permutation a) {
-        List<Command> commands = List.of(
-                Command.showState(),
-                Command.wait(20),
-                command(a));
-        return new BiCommand(a.toString(), commands);
+        return Input.singleCommand(List.of(a.invert(), a));
     }
 }

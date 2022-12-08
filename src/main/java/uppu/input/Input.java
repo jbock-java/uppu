@@ -13,36 +13,27 @@ import static uppu.model.Command.command;
 public class Input {
 
     public static List<BiCommand> commands(Permutation... permutations) {
-        return commands(List.of(permutations));
-    }
-
-    public static List<BiCommand> commands(List<Permutation> input) {
-        Permutation undo = product(input).invert().normalize();
-        return List.of(
-                singleCommand(input),
-                singleCommand(List.of(undo)));
+        BiCommand command = singleCommand(List.of(permutations));
+        return List.of(command, singleCommand(List.of(command.permutation().invert())));
     }
 
     public static BiCommand singleCommand(List<Permutation> input) {
         List<Command> abCommands = new ArrayList<>(input.size() * 2 + 1);
         abCommands.add(Command.showState());
         abCommands.add(Command.wait(80));
+        Permutation product = Permutation.identity();
         for (int i = input.size() - 1; i >= 0; i--) {
-            abCommands.add(command(input.get(i)));
+            Permutation p = input.get(i);
+            Command command = command(p);
+            product = p.compose(product);
+            abCommands.add(command);
             if (i > 0) {
                 abCommands.add(Command.wait(15));
             }
         }
         return new BiCommand(
-                        input.stream().map(Permutation::toString).collect(Collectors.joining(" . ")),
-                        abCommands);
-    }
-
-    private static Permutation product(List<Permutation> permutations) {
-        Permutation result = Permutation.identity();
-        for (Permutation p : permutations) {
-            result = result.compose(p);
-        }
-        return result;
+                product,
+                input.stream().map(Permutation::toString).collect(Collectors.joining(" . ")),
+                abCommands);
     }
 }
