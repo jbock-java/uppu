@@ -32,7 +32,7 @@ public class PermutationView extends JFrame {
 
     private static final int WIDTH_CANVAS = (int) (280 * Slot.SCALE);
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
-    public static final int WIDTH_PANEL = 440;
+    public static final int WIDTH_PANEL = 480;
     public static final int HEIGHT_SLIDER = 12;
 
     private final Canvas canvas = new Canvas() {

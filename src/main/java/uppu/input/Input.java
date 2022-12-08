@@ -18,26 +18,9 @@ public class Input {
 
     public static List<BiCommand> commands(List<Permutation> input) {
         Permutation undo = product(input).invert().normalize();
-        List<Command> abCommands = new ArrayList<>(input.size() * 2 + 1);
-        abCommands.add(Command.showState());
-        abCommands.add(Command.wait(80));
-        for (int i = input.size() - 1; i >= 0; i--) {
-            abCommands.add(command(input.get(i)));
-            if (i > 0) {
-                abCommands.add(Command.wait(15));
-            }
-        }
-        List<Command> undoCommands = List.of(
-                Command.showState(),
-                Command.wait(80),
-                command(undo));
         return List.of(
-                new BiCommand(
-                        input.stream().map(Permutation::toString).collect(Collectors.joining(".")),
-                        abCommands),
-                new BiCommand(
-                        undo.toString(),
-                        undoCommands));
+                singleCommand(input),
+                singleCommand(List.of(undo)));
     }
 
     public static BiCommand singleCommand(List<Permutation> input) {
@@ -51,7 +34,7 @@ public class Input {
             }
         }
         return new BiCommand(
-                        input.stream().map(Permutation::toString).collect(Collectors.joining(".")),
+                        input.stream().map(Permutation::toString).collect(Collectors.joining(" . ")),
                         abCommands);
     }
 
