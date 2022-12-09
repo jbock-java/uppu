@@ -34,6 +34,7 @@ public class PermutationView extends JFrame {
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
     public static final int WIDTH_PANEL = 480;
     public static final int HEIGHT_SLIDER = 12;
+    public static final int INITIAL_SPEED = 16;
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -42,7 +43,7 @@ public class PermutationView extends JFrame {
     };
 
     private final JList<BiAction> actions = new JList<>();
-    private final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 32, 12);
+    private final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 32, INITIAL_SPEED);
     private final JButton pauseButton = new JButton("Pause");
     private final JButton editButton = new JButton("Edit");
 

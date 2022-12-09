@@ -4,7 +4,7 @@ import java.util.List;
 
 public final class Slot {
 
-    public static final float SCALE = 2.2f;
+    public static final float SCALE = 2.0f;
     public static final int MAX = (int) (200 * SCALE);
 
     private final List<Point> slots;
@@ -20,7 +20,7 @@ public final class Slot {
     public record Point(float x, float y) {
         Point scale() {
             return new Point(x * SCALE, y * SCALE);
-        };
+        }
     }
 
     static Slot slots(int n) {
@@ -31,10 +31,10 @@ public final class Slot {
         switch (n) {
             case 4:
                 return List.of(
-                        new Point(0f, 0f),
-                        new Point(126f, 0f),
-                        new Point(0f, 126f),
-                        new Point(126f, 126f));
+                        new Point(104.0f, 0.0f),
+                        new Point(194.06664199358164f, 156.0f),
+                        new Point(13.933358006418416f, 156.0f),
+                        new Point(104.0f, 104.0f));
             case 5:
                 return List.of(
                         new Point(100.0f, 0.0f),

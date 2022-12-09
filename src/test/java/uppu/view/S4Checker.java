@@ -37,7 +37,7 @@ class S4Checker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Animation animation = Animation.create(view, 4, (int) (50 * Slot.SCALE));
+        Animation animation = Animation.create(view, 4, (int) (15 * Slot.SCALE));
         List<BiAction> actions = animation.startAnimation(commands);
         view.setActions(actions);
         view.setOnActionSelected(animation::select);
