@@ -16,7 +16,12 @@ import java.util.function.Consumer;
 
 public final class Animation {
 
-    private Timer timer;
+    private Timer timer = new Timer(25, __ -> {
+        if (onTimerTick()) {
+            showState();
+        }
+    });
+    
     private final PermutationView view;
     private final State leftState;
     private final List<BiAction> q = new ArrayList<>();
@@ -34,8 +39,9 @@ public final class Animation {
     public static Animation create(
             PermutationView view,
             int n,
-            int offset) {
-        return new Animation(view, State.create(n).offset(offset, offset));
+            float offsetX,
+            float offsetY) {
+        return new Animation(view, State.create(n).offset((int) offsetX, (int) offsetY));
     }
 
     public List<BiAction> startAnimation(List<BiCommand> commands) {
@@ -43,11 +49,6 @@ public final class Animation {
         q.clear();
         q.addAll(actions);
         actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
-        timer = new Timer(25, __ -> {
-            if (onTimerTick()) {
-                showState();
-            }
-        });
         return actions;
     }
 

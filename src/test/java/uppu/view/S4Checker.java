@@ -11,6 +11,7 @@ import uppu.parse.LineParser;
 import uppu.parse.Row;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,9 +38,8 @@ class S4Checker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Animation animation = Animation.create(view, 4, (int) (15 * Slot.SCALE));
+        Animation animation = Animation.create(view, 4, 25 * Slot.SCALE, 20 * Slot.SCALE);
         List<BiAction> actions = animation.startAnimation(commands);
-        view.setActions(actions);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         view.setOnEditButtonClicked(() -> {
@@ -60,10 +60,14 @@ class S4Checker {
             });
         });
         view.setOnPauseButtonClicked(() -> view.setRunning(animation.togglePause()));
-        actions.stream().findFirst().ifPresent(view::setSelectedAction);
         animation.setOnNext(view::setSelectedAction);
         view.setRunning(animation.togglePause());
-        view.validate();
+        view.revalidate();
+        view.repaint();
+        SwingUtilities.invokeLater(() -> {
+            view.setActions(actions);
+            actions.stream().findFirst().ifPresent(view::setSelectedAction);
+        });
     }
     
     private static Either<String, List<BiCommand>> readLines(List<String> lines) {

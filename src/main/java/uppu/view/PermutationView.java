@@ -3,7 +3,6 @@ package uppu.view;
 import uppu.model.BiAction;
 import uppu.model.Slot;
 
-import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -11,8 +10,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
@@ -32,9 +31,10 @@ public class PermutationView extends JFrame {
 
     private static final int WIDTH_CANVAS = (int) (280 * Slot.SCALE);
     private static final int HEIGHT = (int) (300 * Slot.SCALE);
-    public static final int WIDTH_PANEL = 480;
+    public static final int WIDTH_PANEL = 500;
     public static final int HEIGHT_SLIDER = 12;
     public static final int INITIAL_SPEED = 16;
+    public static final int HEIGHT_BUTTON_PANE = 20;
 
     private final Canvas canvas = new Canvas() {
         @Override
@@ -43,6 +43,10 @@ public class PermutationView extends JFrame {
     };
 
     private final JList<BiAction> actions = new JList<>();
+    private final JPanel sidePanel = new JPanel();
+    private final JPanel buttonPanel = new JPanel();
+    private final JSplitPane splitPane = new JSplitPane();
+    private final JScrollPane scrollPanel = new JScrollPane(actions);
     private final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 32, INITIAL_SPEED);
     private final JButton pauseButton = new JButton("Pause");
     private final JButton editButton = new JButton("Edit");
@@ -75,47 +79,37 @@ public class PermutationView extends JFrame {
         canvas.setFocusable(false);
         canvas.setBackground(Color.DARK_GRAY);
         slider.setBackground(Color.DARK_GRAY);
-        getContentPane().setBackground(Color.DARK_GRAY);
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(slider, BorderLayout.SOUTH);
-        getContentPane().add(canvas, BorderLayout.WEST);
+        getContentPane().add(splitPane, BorderLayout.CENTER);
+        splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setLeftComponent(canvas);
+        splitPane.setRightComponent(sidePanel);
+        splitPane.setEnabled(false);
         actions.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
-        actions.setBackground(Color.DARK_GRAY);
-        actions.setForeground(Color.WHITE);
-        actions.setModel(createListModel(List.of()));
         actions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPanel = new JScrollPane(actions);
-        int heightButtonPane = 20;
-        scrollPanel.setSize(WIDTH_PANEL, HEIGHT - heightButtonPane);
-        JPanel sidePanel = new JPanel();
+        scrollPanel.setSize(WIDTH_PANEL, HEIGHT - HEIGHT_BUTTON_PANE);
+        sidePanel.setSize(WIDTH_PANEL, HEIGHT);
         sidePanel.setLayout(new BorderLayout());
         sidePanel.add(scrollPanel, BorderLayout.CENTER);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setSize(WIDTH_PANEL, heightButtonPane);
-        buttonPanel.setBackground(Color.DARK_GRAY);
+        buttonPanel.setSize(WIDTH_PANEL, HEIGHT_BUTTON_PANE);
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(pauseButton);
         buttonPanel.add(editButton);
         sidePanel.add(buttonPanel, BorderLayout.SOUTH);
-        sidePanel.setSize(WIDTH_PANEL, HEIGHT);
+        
+        // Color
+        getContentPane().setBackground(Color.DARK_GRAY);
+        actions.setForeground(Color.WHITE);
+        buttonPanel.setBackground(Color.DARK_GRAY);
+        actions.setBackground(Color.DARK_GRAY);
         sidePanel.setBackground(Color.DARK_GRAY);
-        getContentPane().add(sidePanel, BorderLayout.EAST);
-    }
-
-    private static ListModel<BiAction> createListModel(List<BiAction> actions) {
-        return new AbstractListModel<>() {
-            public int getSize() {
-                return actions.size();
-            }
-
-            public BiAction getElementAt(int i) {
-                return actions.get(i);
-            }
-        };
     }
 
     public void setActions(List<BiAction> actions) {
-        this.actions.setModel(createListModel(actions));
+        this.actions.setListData(actions.toArray(new BiAction[0]));
+        this.actions.revalidate();
+        this.actions.repaint();
     }
 
     public void setOnActionSelected(Consumer<BiAction> consumer) {

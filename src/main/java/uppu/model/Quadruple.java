@@ -5,6 +5,16 @@ import java.util.Arrays;
 
 public final class Quadruple {
 
+    private static final int X0 = 0;
+    private static final int Y0 = 1;
+    private static final int X1 = 3;
+    private static final int Y1 = 4;
+    private static final int X2 = 6;
+    private static final int Y2 = 7;
+    private static final int X3 = 9;
+    private static final int Y3 = 10;
+    private static final int X4 = 12;
+    private static final int Y4 = 13;
     private final int offsetX;
     private final int offsetY;
     private final float[] state;
@@ -32,7 +42,7 @@ public final class Quadruple {
 
     public static Quadruple create(int n) {
         Color[] colors = Arrays.stream(Color.values()).limit(n).toArray(Color[]::new);
-        return new Quadruple(0, 0, new float[2 * n], colors);
+        return new Quadruple(0, 0, new float[3 * n], colors);
     }
 
     public Quadruple offset(int x, int y) {
@@ -42,65 +52,65 @@ public final class Quadruple {
     public void set(Color c, float x, float y) {
         switch (c) {
             case RED -> {
-                state[0] = x;
-                state[1] = y;
+                state[X0] = x;
+                state[Y0] = y;
             }
             case GREEN -> {
-                state[2] = x;
-                state[3] = y;
+                state[X1] = x;
+                state[Y1] = y;
             }
             case BLUE -> {
-                state[4] = x;
-                state[5] = y;
+                state[X2] = x;
+                state[Y2] = y;
             }
             case YELLOW -> {
-                state[6] = x;
-                state[7] = y;
+                state[X3] = x;
+                state[Y3] = y;
             }
             case WHITE -> {
-                state[8] = x;
-                state[9] = y;
+                state[X4] = x;
+                state[Y4] = y;
             }
         }
     }
 
     public void setX(Color c, float x) {
         switch (c) {
-            case RED -> state[0] = x;
-            case GREEN -> state[2] = x;
-            case BLUE -> state[4] = x;
-            case YELLOW -> state[6] = x;
-            case WHITE -> state[8] = x;
+            case RED -> state[X0] = x;
+            case GREEN -> state[X1] = x;
+            case BLUE -> state[X2] = x;
+            case YELLOW -> state[X3] = x;
+            case WHITE -> state[X4] = x;
         }
     }
 
     public void setY(Color c, float y) {
         switch (c) {
-            case RED -> state[1] = y;
-            case GREEN -> state[3] = y;
-            case BLUE -> state[5] = y;
-            case YELLOW -> state[7] = y;
-            case WHITE -> state[9] = y;
+            case RED -> state[Y0] = y;
+            case GREEN -> state[Y1] = y;
+            case BLUE -> state[Y2] = y;
+            case YELLOW -> state[Y3] = y;
+            case WHITE -> state[Y4] = y;
         }
     }
 
     public float getX(Color c) {
         return switch (c) {
-            case RED -> state[0];
-            case GREEN -> state[2];
-            case BLUE -> state[4];
-            case YELLOW -> state[6];
-            case WHITE -> state[8];
+            case RED -> state[X0];
+            case GREEN -> state[X1];
+            case BLUE -> state[X2];
+            case YELLOW -> state[X3];
+            case WHITE -> state[X4];
         };
     }
 
     public float getY(Color c) {
         return switch (c) {
-            case RED -> state[1];
-            case GREEN -> state[3];
-            case BLUE -> state[5];
-            case YELLOW -> state[7];
-            case WHITE -> state[9];
+            case RED -> state[Y0];
+            case GREEN -> state[Y1];
+            case BLUE -> state[Y2];
+            case YELLOW -> state[Y3];
+            case WHITE -> state[Y4];
         };
     }
 

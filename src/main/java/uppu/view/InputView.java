@@ -2,6 +2,7 @@ package uppu.view;
 
 import uppu.model.BiAction;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -9,11 +10,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.text.Document;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -57,6 +64,41 @@ public class InputView extends JFrame {
         buttonPanel.add(saveButton);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        initUndoManager();
+    }
+
+    // https://stackoverflow.com/questions/24433089/jtextarea-settext-undomanager
+    private void initUndoManager() {
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        UndoManager undoManager = new UndoManager();
+        Document doc = textArea.getDocument();
+        doc.addUndoableEditListener(e -> undoManager.addEdit(e.getEdit()));
+        textArea.getActionMap().put("Undo", new AbstractAction("Undo") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                try {
+                    if (undoManager.canUndo()) {
+                        undoManager.undo();
+                    }
+                } catch (CannotUndoException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        textArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, mask), "Undo");
+        textArea.getActionMap().put("Redo", new AbstractAction("Redo") {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                try {
+                    if (undoManager.canRedo()) {
+                        undoManager.redo();
+                    }
+                } catch (CannotRedoException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        textArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, mask), "Redo");
     }
 
     public void setContent(List<BiAction> actions) {

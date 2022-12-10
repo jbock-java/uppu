@@ -35,7 +35,7 @@ class S5Checker {
         for (Permutation p : values) {
             commands.add(commands(p));
         }
-        Animation animation = Animation.create(view, 5, (int) (25 * Slot.SCALE));
+        Animation animation = Animation.create(view, 5, 25 * Slot.SCALE, 25 * Slot.SCALE);
         animation.startAnimation(commands);
         view.setRunning(animation.togglePause());
         view.validate();

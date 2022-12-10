@@ -17,9 +17,9 @@ public final class Slot {
         return slots.get(i);
     }
 
-    public record Point(float x, float y) {
+    public record Point(float x, float y, float z) {
         Point scale() {
-            return new Point(x * SCALE, y * SCALE);
+            return new Point(x * SCALE, y * SCALE, z * SCALE);
         }
     }
 
@@ -31,22 +31,28 @@ public final class Slot {
         switch (n) {
             case 4:
                 return List.of(
-                        new Point(104.0f, 0.0f),
-                        new Point(194.06664199358164f, 156.0f),
-                        new Point(13.933358006418416f, 156.0f),
-                        new Point(104.0f, 104.0f));
+                        new Point(90.06664f, 0.0f, 0.0f),
+                        new Point(180.13327f, 156.0f, 0.0f),
+                        new Point(0f, 156.0f, 0.0f),
+                        new Point(90.06664f, 104.0f, 0.0f));
             case 5:
                 return List.of(
-                        new Point(100.0f, 0.0f),
-                        new Point(195.10565162951536f, 69.09830056250524f),
-                        new Point(158.77852522924732f, 180.90169943749473f),
-                        new Point(41.2214747707527f, 180.90169943749476f),
-                        new Point(4.894348370484636f, 69.09830056250527f));
+                        new Point(100.0f, 0.0f, 0.0f),
+                        new Point(195.10565162951536f, 69.09830056250524f, 0.0f),
+                        new Point(158.77852522924732f, 180.90169943749473f, 0.0f),
+                        new Point(41.2214747707527f, 180.90169943749476f, 0.0f),
+                        new Point(4.894348370484636f, 69.09830056250527f, 0.0f));
         }
         throw new IllegalArgumentException("" + n);
     }
 
     public int getNumSlots() {
         return slots.size();
+    }
+
+    public static void main(String[] args) {
+        for (Point p : getSlots(4)) {
+            System.out.println(p.x - 13.933358006418416f);
+        }
     }
 }
