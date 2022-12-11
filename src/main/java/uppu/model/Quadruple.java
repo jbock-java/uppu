@@ -7,14 +7,19 @@ public final class Quadruple {
 
     private static final int X0 = 0;
     private static final int Y0 = 1;
+    private static final int Z0 = 2;
     private static final int X1 = 3;
     private static final int Y1 = 4;
+    private static final int Z1 = 5;
     private static final int X2 = 6;
     private static final int Y2 = 7;
+    private static final int Z2 = 8;
     private static final int X3 = 9;
     private static final int Y3 = 10;
+    private static final int Z3 = 11;
     private static final int X4 = 12;
     private static final int Y4 = 13;
+    private static final int Z4 = 14;
     private final int offsetX;
     private final int offsetY;
     private final float[] state;
@@ -49,32 +54,13 @@ public final class Quadruple {
         return new Quadruple(x, y, state, colors);
     }
 
-    public void set(Color c, float x, float y) {
-        switch (c) {
-            case RED -> {
-                state[X0] = x;
-                state[Y0] = y;
-            }
-            case GREEN -> {
-                state[X1] = x;
-                state[Y1] = y;
-            }
-            case BLUE -> {
-                state[X2] = x;
-                state[Y2] = y;
-            }
-            case YELLOW -> {
-                state[X3] = x;
-                state[Y3] = y;
-            }
-            case WHITE -> {
-                state[X4] = x;
-                state[Y4] = y;
-            }
-        }
+    public void set(Color c, float x, float y, float z) {
+        setX(c, x);
+        setY(c, y);
+        setZ(c, z);
     }
 
-    public void setX(Color c, float x) {
+    private void setX(Color c, float x) {
         switch (c) {
             case RED -> state[X0] = x;
             case GREEN -> state[X1] = x;
@@ -84,13 +70,23 @@ public final class Quadruple {
         }
     }
 
-    public void setY(Color c, float y) {
+    private void setY(Color c, float y) {
         switch (c) {
             case RED -> state[Y0] = y;
             case GREEN -> state[Y1] = y;
             case BLUE -> state[Y2] = y;
             case YELLOW -> state[Y3] = y;
             case WHITE -> state[Y4] = y;
+        }
+    }
+
+    private void setZ(Color c, float z) {
+        switch (c) {
+            case RED -> state[Z0] = z;
+            case GREEN -> state[Z1] = z;
+            case BLUE -> state[Z2] = z;
+            case YELLOW -> state[Z3] = z;
+            case WHITE -> state[Z4] = z;
         }
     }
 
@@ -111,6 +107,16 @@ public final class Quadruple {
             case BLUE -> state[Y2];
             case YELLOW -> state[Y3];
             case WHITE -> state[Y4];
+        };
+    }
+
+    public float getZ(Color c) {
+        return switch (c) {
+            case RED -> state[Z0];
+            case GREEN -> state[Z1];
+            case BLUE -> state[Z2];
+            case YELLOW -> state[Z3];
+            case WHITE -> state[Z4];
         };
     }
 

@@ -31,10 +31,10 @@ public final class Slot {
         switch (n) {
             case 4:
                 return List.of(
-                        new Point(90.06664f, 0.0f, 0.0f),
-                        new Point(180.13327f, 156.0f, 0.0f),
-                        new Point(0f, 156.0f, 0.0f),
-                        new Point(90.06664f, 104.0f, 0.0f));
+                        new Point(90.06664f, 0.0f, 1.0f),
+                        new Point(180.13327f, 156.0f, 1.0f),
+                        new Point(0f, 156.0f, 1.0f),
+                        new Point(90.06664f, 104.0f, 1.6f));
             case 5:
                 return List.of(
                         new Point(100.0f, 0.0f, 0.0f),

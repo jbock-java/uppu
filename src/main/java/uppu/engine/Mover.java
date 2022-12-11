@@ -48,8 +48,7 @@ public class Mover {
 
     public boolean move() {
         if (!started) {
-            setX(source.x());
-            setY(source.y());
+            set(source);
             started = true;
             return true;
         }
@@ -62,8 +61,7 @@ public class Mover {
         if (dist2 >= dist1) {
             return false;
         }
-        setX(x2);
-        setY(y2);
+        set(x2, y2, 0);
         return true;
     }
 
@@ -81,17 +79,16 @@ public class Mover {
         return quadruple.getY(color);
     }
 
-    private void setX(float x) {
-        quadruple.setX(color, x);
+    private void set(float x, float y, float z) {
+        quadruple.set(color, x, y, z);
     }
 
-    private void setY(float y) {
-        quadruple.setY(color, y);
+    private void set(Slot.Point p) {
+        quadruple.set(color, p.x(), p.y(), p.z());
     }
 
     public void init() {
-        setX(source.x());
-        setY(source.y());
+        set(source);
         started = false;
     }
 }

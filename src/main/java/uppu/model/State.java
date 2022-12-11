@@ -27,7 +27,8 @@ public final class State {
     public List<BiAction> getActions(List<BiCommand> biCommands) {
         List<Color> state = Color.colors(slot.getNumSlots());
         for (int i = 0; i < state.size(); i++) {
-            quadruple.set(state.get(i), slot.forIndex(i).x(), slot.forIndex(i).y());
+            Slot.Point p = slot.forIndex(i);
+            quadruple.set(state.get(i), p.x(), p.y(), p.z());
         }
         List<BiAction> biActions = new ArrayList<>();
         for (BiCommand biCommand : biCommands) {
