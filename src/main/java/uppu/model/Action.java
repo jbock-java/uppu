@@ -7,13 +7,9 @@ public abstract class Action {
 
     public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
     public static final int GLOW_SIZE = 3;
-    private static final int HOME_SIZE = 12;
 
     private static final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
     private static final Ellipse2D.Float glow = new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE);
-    private static final Ellipse2D.Float home = new Ellipse2D.Float(0, 0, HOME_SIZE, 12);
-
-    private static final int HOME_RADIUS = 12;
 
     public abstract boolean move();
 
@@ -38,21 +34,8 @@ public abstract class Action {
         for (int i = 0; i < colors.length; i++) {
             Color color = colors[i];
             g.setPaint(color.awtColor());
-            Slot.Point slot = state.slot().forIndex(i);
-            float centerX = slot.x() + quadruple.getOffsetX() + ((BALL_SIZE - HOME_SIZE) / 2f);
-            float centerY = slot.y() + quadruple.getOffsetY() + ((BALL_SIZE - HOME_SIZE) / 2f);
-            home.x = centerX - HOME_RADIUS;
-            home.y = centerY - HOME_RADIUS;
-            g.fill(home);
-            home.x = centerX - HOME_RADIUS;
-            home.y = centerY + HOME_RADIUS;
-            g.fill(home);
-            home.x = centerX + HOME_RADIUS;
-            home.y = centerY - HOME_RADIUS;
-            g.fill(home);
-            home.x = centerX + HOME_RADIUS;
-            home.y = centerY + HOME_RADIUS;
-            g.fill(home);
+            Point slot = state.slot().forIndex(i);
+            slot.paintHome(g, quadruple);
         }
     }
 

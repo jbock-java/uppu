@@ -17,12 +17,6 @@ public final class Slot {
         return slots.get(i);
     }
 
-    public record Point(float x, float y, float z) {
-        Point scale() {
-            return new Point(x * SCALE, y * SCALE, z * SCALE);
-        }
-    }
-
     static Slot slots(int n) {
         return new Slot(getSlots(n).stream().map(Point::scale).toList());
     }
@@ -34,7 +28,7 @@ public final class Slot {
                         new Point(90.06664f, 0.0f, 1.0f),
                         new Point(180.13327f, 156.0f, 1.0f),
                         new Point(0f, 156.0f, 1.0f),
-                        new Point(90.06664f, 104.0f, 1.6f));
+                        new Point(90.06664f, 104.0f, 1.5f));
             case 5:
                 return List.of(
                         new Point(100.0f, 0.0f, 0.0f),
@@ -52,7 +46,7 @@ public final class Slot {
 
     public static void main(String[] args) {
         for (Point p : getSlots(4)) {
-            System.out.println(p.x - 13.933358006418416f);
+            System.out.println(p.x() - 13.933358006418416f);
         }
     }
 }

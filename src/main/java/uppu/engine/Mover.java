@@ -1,15 +1,15 @@
 package uppu.engine;
 
 import uppu.model.Color;
+import uppu.model.Point;
 import uppu.model.Quadruple;
-import uppu.model.Slot;
 
 public class Mover {
 
     private final Color color;
     private final Quadruple quadruple;
-    private final Slot.Point source;
-    private final Slot.Point target;
+    private final Point source;
+    private final Point target;
     private final float dx;
     private final float dy;
     
@@ -18,8 +18,8 @@ public class Mover {
     private Mover(
             Color color,
             Quadruple quadruple,
-            Slot.Point source, 
-            Slot.Point target, 
+            Point source, 
+            Point target, 
             float dx,
             float dy) {
         this.color = color;
@@ -33,8 +33,8 @@ public class Mover {
     public static Mover create(
             Color color, 
             Quadruple quadruple, 
-            Slot.Point sourceSlot,
-            Slot.Point targetSlot) {
+            Point sourceSlot,
+            Point targetSlot) {
         float start_x = sourceSlot.x();
         float start_y = sourceSlot.y();
         float target_x = targetSlot.x();
@@ -65,7 +65,7 @@ public class Mover {
         return true;
     }
 
-    static double dist(float x1, float y1, Slot.Point slot) {
+    static double dist(float x1, float y1, Point slot) {
         double delta_x = x1 - slot.x();
         double delta_y = y1 - slot.y();
         return Math.sqrt(delta_x * delta_x + delta_y * delta_y);
@@ -83,7 +83,7 @@ public class Mover {
         quadruple.set(color, x, y, z);
     }
 
-    private void set(Slot.Point p) {
+    private void set(Point p) {
         quadruple.set(color, p.x(), p.y(), p.z());
     }
 
