@@ -8,8 +8,15 @@ public abstract class Action {
     public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
     public static final int GLOW_SIZE = 3;
 
-    private static final Ellipse2D.Float ellipse = new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE);
-    private static final Ellipse2D.Float glow = new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE);
+    private static final OffsetEllipse LARGE_ELLIPSE = new OffsetEllipse(
+            new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE),
+            new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE),
+            0);
+
+    private static final OffsetEllipse SMALL_ELLIPSE = new OffsetEllipse(
+            new Ellipse2D.Float(0, 0, BALL_SIZE / 1.5f, BALL_SIZE / 1.5f),
+            new Ellipse2D.Float(0, 0, (BALL_SIZE / 1.5f) + 2 * GLOW_SIZE, (BALL_SIZE / 1.5f) + 2 * GLOW_SIZE),
+            BALL_SIZE / 6.0f);
 
     public abstract boolean move();
 
@@ -22,8 +29,11 @@ public abstract class Action {
         quadruple.clearRect(g);
         uppu.model.Color[] colors = quadruple.colors();
         for (uppu.model.Color color : colors) {
-            ellipse.x = quadruple.getX(color) + quadruple.getOffsetX();
-            ellipse.y = quadruple.getY(color) + quadruple.getOffsetY();
+            OffsetEllipse offsetEllipse = ellipse(quadruple.getZ(color));
+            Ellipse2D.Float ellipse = offsetEllipse.ellipse;
+            Ellipse2D.Float glow = offsetEllipse.glow;
+            ellipse.x = quadruple.getX(color) + quadruple.getOffsetX() + offsetEllipse.offset;
+            ellipse.y = quadruple.getY(color) + quadruple.getOffsetY() + offsetEllipse.offset;
             glow.x = ellipse.x - GLOW_SIZE;
             glow.y = ellipse.y - GLOW_SIZE;
             g.setPaint(color.glowColor());
@@ -32,11 +42,23 @@ public abstract class Action {
             g.fill(ellipse);
         }
         for (int i = 0; i < colors.length; i++) {
-            Color color = colors[i];
-            g.setPaint(color.awtColor());
+            g.setPaint(colors[i].awtColor());
             Point slot = state.slot().forIndex(i);
             slot.paintHome(g, quadruple);
         }
+    }
+
+    record OffsetEllipse(
+            Ellipse2D.Float ellipse,
+            Ellipse2D.Float glow,
+            float offset) {
+    }
+
+    private static OffsetEllipse ellipse(float z) {
+        if (z < 1.3f) {
+            return LARGE_ELLIPSE;
+        }
+        return SMALL_ELLIPSE;
     }
 
     public abstract void init();

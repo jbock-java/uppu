@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public final class Point {
 
-    private static final float HOME_RADIUS_100 = 16;
+    private static final float HOME_RADIUS_100 = 12;
     private final float x;
     private final float y;
     private final float z;
@@ -23,7 +23,7 @@ public final class Point {
     private final Ellipse2D.Float home;
 
     Point scale() {
-        return new Point(x * Slot.SCALE, y * Slot.SCALE, z * Slot.SCALE);
+        return new Point(x * Slot.SCALE, y * Slot.SCALE, z);
     }
 
     public void paintHome(Graphics2D g, Quadruple quadruple) {

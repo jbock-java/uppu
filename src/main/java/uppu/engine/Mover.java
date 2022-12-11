@@ -12,6 +12,7 @@ public class Mover {
     private final Point target;
     private final float dx;
     private final float dy;
+    private final float dz;
     
     private boolean started;
 
@@ -21,13 +22,15 @@ public class Mover {
             Point source, 
             Point target, 
             float dx,
-            float dy) {
+            float dy,
+            float dz) {
         this.color = color;
         this.quadruple = quadruple;
         this.source = source;
         this.target = target;
         this.dx = dx;
         this.dy = dy;
+        this.dz = dz;
     }
 
     public static Mover create(
@@ -37,13 +40,17 @@ public class Mover {
             Point targetSlot) {
         float start_x = sourceSlot.x();
         float start_y = sourceSlot.y();
+        float start_z = sourceSlot.z();
         float target_x = targetSlot.x();
         float target_y = targetSlot.y();
-        double delta_x = target_x - start_x;
-        double delta_y = target_y - start_y;
-        double dx = delta_x / 66;
-        double dy = delta_y / 66;
-        return new Mover(color, quadruple, sourceSlot, targetSlot, (float) dx, (float) dy);
+        float target_z = targetSlot.z();
+        float delta_x = target_x - start_x;
+        float delta_y = target_y - start_y;
+        float delta_z = target_z - start_z;
+        float dx = delta_x / 66f;
+        float dy = delta_y / 66f;
+        float dz = delta_z / 66f;
+        return new Mover(color, quadruple, sourceSlot, targetSlot, dx, dy, dz);
     }
 
     public boolean move() {
@@ -54,14 +61,16 @@ public class Mover {
         }
         float x = getX();
         float y = getY();
+        float z = getZ();
         double dist1 = dist(x, y, target);
         float x2 = x + dx;
         float y2 = y + dy;
+        float z2 = z + dz;
         double dist2 = dist(x2, y2, target);
         if (dist2 >= dist1) {
             return false;
         }
-        set(x2, y2, 0);
+        set(x2, y2, z2);
         return true;
     }
 
@@ -77,6 +86,10 @@ public class Mover {
 
     private float getY() {
         return quadruple.getY(color);
+    }
+
+    private float getZ() {
+        return quadruple.getZ(color);
     }
 
     private void set(float x, float y, float z) {
