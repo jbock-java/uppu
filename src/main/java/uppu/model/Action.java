@@ -8,16 +8,20 @@ public abstract class Action {
     public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
     public static final int GLOW_SIZE = 3;
 
-    private static final OffsetEllipse LARGE_ELLIPSE = new OffsetEllipse(
-            new Ellipse2D.Float(0, 0, BALL_SIZE, BALL_SIZE),
-            new Ellipse2D.Float(0, 0, BALL_SIZE + 2 * GLOW_SIZE, BALL_SIZE + 2 * GLOW_SIZE),
-            0);
-
-    private static final OffsetEllipse SMALL_ELLIPSE = new OffsetEllipse(
-            new Ellipse2D.Float(0, 0, BALL_SIZE / 1.5f, BALL_SIZE / 1.5f),
-            new Ellipse2D.Float(0, 0, (BALL_SIZE / 1.5f) + 2 * GLOW_SIZE, (BALL_SIZE / 1.5f) + 2 * GLOW_SIZE),
-            BALL_SIZE / 6.0f);
-
+    private static final OffsetEllipse[] ELLIPSES = new OffsetEllipse[120];
+    
+    static {
+        float v = (BALL_SIZE - BALL_SIZE / 1.5f) / 60f;
+        float vglow = BALL_SIZE / 360.0f;
+        for (int i = 0; i < ELLIPSES.length; i++) {
+            float ballSize = BALL_SIZE - (i * v);
+            ELLIPSES[i] = new OffsetEllipse(
+                    new Ellipse2D.Float(0, 0, ballSize, ballSize),
+                    new Ellipse2D.Float(0, 0, ballSize + 2 * GLOW_SIZE, ballSize + 2 * GLOW_SIZE),
+                    vglow * i);
+        }
+    }
+    
     public abstract boolean move();
 
     public abstract void show(Graphics2D g);
@@ -54,11 +58,12 @@ public abstract class Action {
             float offset) {
     }
 
-    private static OffsetEllipse ellipse(float z) {
-        if (z < 1.3f) {
-            return LARGE_ELLIPSE;
+    static OffsetEllipse ellipse(float z) {
+        int bucket = Math.round((z - 1f) * 120);
+        if (bucket >= 60) {
+            bucket = 59;
         }
-        return SMALL_ELLIPSE;
+        return ELLIPSES[bucket];
     }
 
     public abstract void init();
