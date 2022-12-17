@@ -2,8 +2,6 @@ package uppu.engine;
 
 import uppu.model.Action;
 import uppu.model.BiAction;
-import uppu.model.BiCommand;
-import uppu.model.State;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
@@ -23,33 +21,17 @@ public final class Animation {
     });
     
     private final PermutationView view;
-    private final State state;
     private final List<BiAction> q = new ArrayList<>();
     private Consumer<BiAction> onNext = action -> {
     };
     private int current;
 
-    private Animation(
-            PermutationView view,
-            State state) {
+    private Animation(PermutationView view) {
         this.view = view;
-        this.state = state;
     }
 
-    public static Animation create(
-            PermutationView view,
-            int n,
-            float offsetX,
-            float offsetY) {
-        return new Animation(view, State.create(n).offset((int) offsetX, (int) offsetY));
-    }
-
-    public List<BiAction> startAnimation(List<BiCommand> commands) {
-        List<BiAction> actions = state.getActions(commands);
-        q.clear();
-        q.addAll(actions);
-        actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
-        return actions;
+    public static Animation create(PermutationView view) {
+        return new Animation(view);
     }
 
     private boolean onTimerTick() {
@@ -157,5 +139,11 @@ public final class Animation {
 
     public List<BiAction> getActions() {
         return q;
+    }
+
+    public void setActions(List<BiAction> actions) {
+        q.clear();
+        q.addAll(actions);
+        actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
     }
 }

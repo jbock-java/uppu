@@ -7,10 +7,12 @@ import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
 import uppu.model.HomePoint;
+import uppu.model.State;
 import uppu.parse.LineParser;
 import uppu.parse.Row;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,8 +39,9 @@ class S4Checker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Animation animation = Animation.create(view, 4, 25 * HomePoint.SCALE, 20 * HomePoint.SCALE);
-        List<BiAction> actions = animation.startAnimation(commands);
+        Animation animation = Animation.create(view);
+        State state = State.create(4).offset((int) (25 * HomePoint.SCALE), (int) (20 * HomePoint.SCALE));
+        List<BiAction> actions = state.getActions(commands);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         view.setOnEditButtonClicked(() -> {
@@ -51,7 +54,8 @@ class S4Checker {
                 readLines(lines).ifLeftOrElse(
                         error -> showMessageDialog(view, error, "Error", JOptionPane.ERROR_MESSAGE),
                         newCommands -> {
-                            List<BiAction> newActions = animation.startAnimation(newCommands);
+                            List<BiAction> newActions = state.getActions(newCommands);
+                            animation.setActions(newActions);
                             view.setActions(newActions);
                             newActions.stream().findFirst().ifPresent(view::setSelectedAction);
                         });
@@ -61,9 +65,11 @@ class S4Checker {
         view.setOnPauseButtonClicked(() -> view.setRunning(animation.togglePause()));
         animation.setOnNext(view::setSelectedAction);
         view.setRunning(animation.togglePause());
-        view.revalidate();
-        view.setActions(actions);
-        actions.stream().findFirst().ifPresent(view::setSelectedAction);
+        SwingUtilities.invokeLater(() -> {
+            animation.setActions(actions);
+            view.setActions(actions);
+            actions.stream().findFirst().ifPresent(view::setSelectedAction);
+        });
     }
 
     private static Either<String, List<BiCommand>> readLines(List<String> lines) {
