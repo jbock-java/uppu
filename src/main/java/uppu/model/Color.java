@@ -7,18 +7,18 @@ public enum Color {
 
     // WILD_WATERMELON
     RED(new java.awt.Color(252, 108, 133).brighter()),
-    
+
     // PANTONE_GREEN
     GREEN(new java.awt.Color(152, 251, 152)),
-    
+
     // NCS_YELLOW
-    BLUE(new java.awt.Color(255, 211, 0)),
-    
+//    YELLOW(new java.awt.Color(255, 211, 0)),
+
     // ROBIN_EGG_BLUE
-    YELLOW(new java.awt.Color(0, 204, 204).brighter()),
-    
-    // ASH_GRAY
-    WHITE(new java.awt.Color(178, 190, 181).brighter());
+    BLUE(new java.awt.Color(0, 204, 204).brighter()),
+
+    SILVER(new java.awt.Color(220, 220, 220)),
+    ;
 
     private final java.awt.Color awtColor;
     private final java.awt.Color glowColor;

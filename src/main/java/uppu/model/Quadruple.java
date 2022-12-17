@@ -1,7 +1,6 @@
 package uppu.model;
 
 import java.awt.Graphics2D;
-import java.util.Arrays;
 
 public final class Quadruple {
 
@@ -17,9 +16,6 @@ public final class Quadruple {
     private static final int X3 = 9;
     private static final int Y3 = 10;
     private static final int Z3 = 11;
-    private static final int X4 = 12;
-    private static final int Y4 = 13;
-    private static final int Z4 = 14;
     private final int offsetX;
     private final int offsetY;
     private final float[] state;
@@ -45,9 +41,9 @@ public final class Quadruple {
          clear_height = getHeight() + 2 * Action.GLOW_SIZE;
     }
 
-    public static Quadruple create(int n) {
-        Color[] colors = Arrays.stream(Color.values()).limit(n).toArray(Color[]::new);
-        return new Quadruple(0, 0, new float[3 * n], colors);
+    public static Quadruple create() {
+        Color[] colors = Color.values();
+        return new Quadruple(0, 0, new float[12], colors);
     }
 
     public Quadruple offset(int x, int y) {
@@ -65,8 +61,7 @@ public final class Quadruple {
             case RED -> state[X0] = x;
             case GREEN -> state[X1] = x;
             case BLUE -> state[X2] = x;
-            case YELLOW -> state[X3] = x;
-            case WHITE -> state[X4] = x;
+            case SILVER -> state[X3] = x;
         }
     }
 
@@ -75,8 +70,7 @@ public final class Quadruple {
             case RED -> state[Y0] = y;
             case GREEN -> state[Y1] = y;
             case BLUE -> state[Y2] = y;
-            case YELLOW -> state[Y3] = y;
-            case WHITE -> state[Y4] = y;
+            case SILVER -> state[Y3] = y;
         }
     }
 
@@ -85,8 +79,7 @@ public final class Quadruple {
             case RED -> state[Z0] = z;
             case GREEN -> state[Z1] = z;
             case BLUE -> state[Z2] = z;
-            case YELLOW -> state[Z3] = z;
-            case WHITE -> state[Z4] = z;
+            case SILVER -> state[Z3] = z;
         }
     }
 
@@ -95,8 +88,7 @@ public final class Quadruple {
             case RED -> state[X0];
             case GREEN -> state[X1];
             case BLUE -> state[X2];
-            case YELLOW -> state[X3];
-            case WHITE -> state[X4];
+            case SILVER -> state[X3];
         };
     }
 
@@ -105,8 +97,7 @@ public final class Quadruple {
             case RED -> state[Y0];
             case GREEN -> state[Y1];
             case BLUE -> state[Y2];
-            case YELLOW -> state[Y3];
-            case WHITE -> state[Y4];
+            case SILVER -> state[Y3];
         };
     }
 
@@ -115,8 +106,7 @@ public final class Quadruple {
             case RED -> state[Z0];
             case GREEN -> state[Z1];
             case BLUE -> state[Z2];
-            case YELLOW -> state[Z3];
-            case WHITE -> state[Z4];
+            case SILVER -> state[Z3];
         };
     }
 

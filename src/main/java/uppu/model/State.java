@@ -17,7 +17,7 @@ public final class State {
     }
 
     public static State create(int n) {
-        return new State(Quadruple.create(n), HomePoint.homePoints(n));
+        return new State(Quadruple.create(), HomePoint.homePoints(n));
     }
 
     public State offset(int x, int y) {
