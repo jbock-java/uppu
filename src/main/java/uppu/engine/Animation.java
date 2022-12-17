@@ -23,7 +23,7 @@ public final class Animation {
     });
     
     private final PermutationView view;
-    private final State leftState;
+    private final State state;
     private final List<BiAction> q = new ArrayList<>();
     private Consumer<BiAction> onNext = action -> {
     };
@@ -31,9 +31,9 @@ public final class Animation {
 
     private Animation(
             PermutationView view,
-            State leftState) {
+            State state) {
         this.view = view;
-        this.leftState = leftState;
+        this.state = state;
     }
 
     public static Animation create(
@@ -45,7 +45,7 @@ public final class Animation {
     }
 
     public List<BiAction> startAnimation(List<BiCommand> commands) {
-        List<BiAction> actions = leftState.getActions(commands);
+        List<BiAction> actions = state.getActions(commands);
         q.clear();
         q.addAll(actions);
         actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);

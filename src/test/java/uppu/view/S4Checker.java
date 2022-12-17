@@ -11,7 +11,6 @@ import uppu.parse.LineParser;
 import uppu.parse.Row;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -63,13 +62,10 @@ class S4Checker {
         animation.setOnNext(view::setSelectedAction);
         view.setRunning(animation.togglePause());
         view.revalidate();
-        view.repaint();
-        SwingUtilities.invokeLater(() -> {
-            view.setActions(actions);
-            actions.stream().findFirst().ifPresent(view::setSelectedAction);
-        });
+        view.setActions(actions);
+        actions.stream().findFirst().ifPresent(view::setSelectedAction);
     }
-    
+
     private static Either<String, List<BiCommand>> readLines(List<String> lines) {
         Permutation current = Permutation.identity();
         List<BiCommand> result = new ArrayList<>(lines.size());

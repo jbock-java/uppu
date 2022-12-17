@@ -8,19 +8,19 @@ public class BiCommand {
 
     private final Permutation permutation;
     private final String title;
-    private final List<Command> left;
+    private final List<Command> commands;
 
     public BiCommand(
             Permutation permutation,
             String title,
-            List<Command> left) {
+            List<Command> commands) {
         this.permutation = permutation;
         this.title = title;
-        this.left = left;
+        this.commands = commands;
     }
 
-    public List<Command> left() {
-        return left;
+    public List<Command> commands() {
+        return commands;
     }
 
     public String title() {

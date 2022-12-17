@@ -32,8 +32,8 @@ public final class State {
         }
         List<BiAction> biActions = new ArrayList<>();
         for (BiCommand biCommand : biCommands) {
-            List<Action> result = new ArrayList<>(biCommand.left().size());
-            for (Command command : biCommand.left()) {
+            List<Action> result = new ArrayList<>(biCommand.commands().size());
+            for (Command command : biCommand.commands()) {
                 ActionWithState action = getAction(state, command);
                 result.add(action.action);
                 state = action.finalState;
