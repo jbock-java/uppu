@@ -9,25 +9,25 @@ import java.util.List;
 public final class State {
 
     private final Quadruple quadruple;
-    private final Slot slot;
+    private final List<Point> homePoints;
 
-    private State(Quadruple quadruple, Slot slot) {
+    private State(Quadruple quadruple, List<Point> homePoints) {
         this.quadruple = quadruple;
-        this.slot = slot;
+        this.homePoints = homePoints;
     }
 
     public static State create(int n) {
-        return new State(Quadruple.create(n), Slot.slots(n));
+        return new State(Quadruple.create(n), HomePoint.homePoints(n));
     }
 
     public State offset(int x, int y) {
-        return new State(quadruple.offset(x, y), slot);
+        return new State(quadruple.offset(x, y), homePoints);
     }
 
     public List<BiAction> getActions(List<BiCommand> biCommands) {
-        List<Color> state = Color.colors(slot.getNumSlots());
+        List<Color> state = Color.colors(homePoints.size());
         for (int i = 0; i < state.size(); i++) {
-            Point p = slot.forIndex(i);
+            Point p = homePoints.get(i);
             quadruple.set(state.get(i), p.x(), p.y(), p.z());
         }
         List<BiAction> biActions = new ArrayList<>();
@@ -68,8 +68,8 @@ public final class State {
         for (int i = 0; i < state.size(); i++) {
             Color color = state.get(i);
             int j = p.apply(i);
-            Point sourceSlot = slot.forIndex(i);
-            Point targetSlot = slot.forIndex(j);
+            Point sourceSlot = homePoints.get(i);
+            Point targetSlot = homePoints.get(j);
             movers.add(Mover.create(color, quadruple, sourceSlot, targetSlot));
             newColors[j] = color;
         }
@@ -80,7 +80,7 @@ public final class State {
         return quadruple;
     }
 
-    public Slot slot() {
-        return slot;
+    public List<Point> homePoints() {
+        return homePoints;
     }
 }

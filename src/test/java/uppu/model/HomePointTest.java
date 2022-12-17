@@ -2,15 +2,17 @@ package uppu.model;
 
 import org.junit.jupiter.api.Test;
 
-class SlotTest {
+import java.util.List;
+
+class HomePointTest {
 
     @Test
     void testSlot() {
-        Slot slots = Slot.slots(4);
-        Point center = slots.forIndex(3);
-        Point p0 = slots.forIndex(0);
-        Point p1 = slots.forIndex(1);
-        Point p2 = slots.forIndex(2);
+        List<Point> slots = HomePoint.homePoints(4);
+        Point center = slots.get(3);
+        Point p0 = slots.get(0);
+        Point p1 = slots.get(1);
+        Point p2 = slots.get(2);
         System.out.println(dist(center, p0));
         System.out.println(dist(center, p1));
         System.out.println(dist(center, p2));

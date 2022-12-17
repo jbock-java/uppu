@@ -22,8 +22,8 @@ public final class Point {
 
     private final Ellipse2D.Float home;
 
-    Point scale() {
-        return new Point(x * Slot.SCALE, y * Slot.SCALE, z);
+    Point scale(float scale) {
+        return new Point(x * scale, y * scale, z);
     }
 
     public void paintHome(Graphics2D g, Quadruple quadruple) {

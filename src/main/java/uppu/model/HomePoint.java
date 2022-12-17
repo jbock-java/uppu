@@ -2,26 +2,16 @@ package uppu.model;
 
 import java.util.List;
 
-public final class Slot {
+public final class HomePoint {
 
     public static final float SCALE = 2.0f;
     public static final int MAX = (int) (200 * SCALE);
 
-    private final List<Point> slots;
-
-    private Slot(List<? extends Point> slots) {
-        this.slots = List.copyOf(slots);
+    static List<Point> homePoints(int n) {
+        return getHomePoints(n).stream().map(p -> p.scale(SCALE)).toList();
     }
 
-    Point forIndex(int i) {
-        return slots.get(i);
-    }
-
-    static Slot slots(int n) {
-        return new Slot(getSlots(n).stream().map(Point::scale).toList());
-    }
-
-    private static List<Point> getSlots(int n) {
+    private static List<Point> getHomePoints(int n) {
         switch (n) {
             case 4:
                 return List.of(
@@ -38,15 +28,5 @@ public final class Slot {
                         new Point(4.894348370484636f, 69.09830056250527f, 0.0f));
         }
         throw new IllegalArgumentException("" + n);
-    }
-
-    public int getNumSlots() {
-        return slots.size();
-    }
-
-    public static void main(String[] args) {
-        for (Point p : getSlots(4)) {
-            System.out.println(p.x() - 13.933358006418416f);
-        }
     }
 }

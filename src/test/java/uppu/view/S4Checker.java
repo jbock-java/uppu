@@ -6,7 +6,7 @@ import uppu.engine.Animation;
 import uppu.input.Input;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
-import uppu.model.Slot;
+import uppu.model.HomePoint;
 import uppu.parse.LineParser;
 import uppu.parse.Row;
 
@@ -37,7 +37,7 @@ class S4Checker {
 
     private void run() {
         view.setLocationRelativeTo(null);
-        Animation animation = Animation.create(view, 4, 25 * Slot.SCALE, 20 * Slot.SCALE);
+        Animation animation = Animation.create(view, 4, 25 * HomePoint.SCALE, 20 * HomePoint.SCALE);
         List<BiAction> actions = animation.startAnimation(commands);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));

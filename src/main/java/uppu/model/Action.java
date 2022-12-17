@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 public abstract class Action {
 
-    public static final int BALL_SIZE = (int) (50 * Slot.SCALE);
+    public static final int BALL_SIZE = (int) (50 * HomePoint.SCALE);
     public static final int GLOW_SIZE = 3;
 
     private static final OffsetEllipse[] ELLIPSES = new OffsetEllipse[120];
@@ -47,8 +47,7 @@ public abstract class Action {
         }
         for (int i = 0; i < colors.length; i++) {
             g.setPaint(colors[i].awtColor());
-            Point slot = state.slot().forIndex(i);
-            slot.paintHome(g, quadruple);
+            state.homePoints().get(i).paintHome(g, quadruple);
         }
     }
 
