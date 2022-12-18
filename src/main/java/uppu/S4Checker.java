@@ -1,4 +1,4 @@
-package uppu.view;
+package uppu;
 
 import io.jbock.util.Either;
 import io.parmigiano.Permutation;
@@ -10,6 +10,8 @@ import uppu.model.HomePoint;
 import uppu.model.State;
 import uppu.parse.LineParser;
 import uppu.parse.Row;
+import uppu.view.InputView;
+import uppu.view.PermutationView;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -21,7 +23,7 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-class S4Checker {
+public class S4Checker {
 
     private final PermutationView view = PermutationView.create();
     private final List<BiCommand> commands;
