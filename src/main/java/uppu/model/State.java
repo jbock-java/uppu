@@ -2,6 +2,8 @@ package uppu.model;
 
 import io.parmigiano.Permutation;
 import uppu.engine.Mover;
+import uppu.model.Command.MoveCommand;
+import uppu.model.Command.WaitCommand;
 
 import java.util.ArrayList;
 import java.util.List;

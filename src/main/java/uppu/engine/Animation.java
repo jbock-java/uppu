@@ -19,7 +19,7 @@ public final class Animation {
             showState();
         }
     });
-    
+
     private final PermutationView view;
     private final List<BiAction> q = new ArrayList<>();
     private Consumer<BiAction> onNext = action -> {
@@ -100,13 +100,13 @@ public final class Animation {
         return q.get(n);
     }
 
-    public boolean togglePause() {
-        if (timer.isRunning()) {
-            timer.stop();
-            return false;
-        } else {
+    public void setRunning(boolean running) {
+        if (running && !timer.isRunning()) {
             timer.start();
-            return true;
+            return;
+        }
+        if (!running && timer.isRunning()) {
+            timer.stop();
         }
     }
 

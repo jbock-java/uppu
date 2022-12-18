@@ -26,9 +26,6 @@ public final class TokenParser {
         if (tokens.length == 0) {
             return IDENTITY;
         }
-        if (tokens[0].startsWith("(")) {
-            return left("Found nesting");
-        }
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
             switch (token) {
@@ -50,7 +47,7 @@ public final class TokenParser {
                 case "7":
                 case "8":
                 case "9":
-                    return left("Max index is 3 but found: " + token);
+                    return left("Only numbers 0, 1, 2 and 3 are allowed! But found: " + token);
                 default:
                     return left("Unknown token: " + token);
             }

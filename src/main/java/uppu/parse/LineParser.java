@@ -70,6 +70,9 @@ public class LineParser {
                 parenCount++;
                 continue;
             }
+            if (parenCount >= 2) {
+                return left("Nesting parentheses is not allowed.");
+            }
             if (c == ')') {
                 parenCount--;
                 if (parenCount == 0) {
