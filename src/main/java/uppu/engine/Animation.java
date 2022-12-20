@@ -1,7 +1,7 @@
 package uppu.engine;
 
 import uppu.model.Action;
-import uppu.model.BiAction;
+import uppu.model.ActionSequence;
 import uppu.view.PermutationView;
 
 import javax.swing.Timer;
@@ -21,8 +21,8 @@ public final class Animation {
     });
 
     private final PermutationView view;
-    private final List<BiAction> q = new ArrayList<>();
-    private Consumer<BiAction> onNext = action -> {
+    private final List<ActionSequence> q = new ArrayList<>();
+    private Consumer<ActionSequence> onNext = action -> {
     };
     private int current;
 
@@ -35,17 +35,17 @@ public final class Animation {
     }
 
     private boolean onTimerTick() {
-        BiAction biAction = peekFirst();
-        if (biAction == null) {
+        ActionSequence actionSequence = peekFirst();
+        if (actionSequence == null) {
             view.setTitle("");
             timer.stop();
             return false;
         }
-        Action action = biAction.peekFirst();
+        Action action = actionSequence.peekFirst();
         if (action == null) {
             current++;
             cleanCurrent();
-            BiAction next = peekFirst();
+            ActionSequence next = peekFirst();
             if (next != null) {
                 onNext.accept(next);
             }
@@ -53,18 +53,18 @@ public final class Animation {
         }
         boolean anyMove = action.move();
         if (!anyMove) {
-            biAction.increment();
+            actionSequence.increment();
             return false;
         }
         return true;
     }
 
     private void showState() {
-        BiAction biAction = peekFirst();
-        if (biAction == null) {
+        ActionSequence actionSequence = peekFirst();
+        if (actionSequence == null) {
             return;
         }
-        Action action = biAction.peekFirst();
+        Action action = actionSequence.peekFirst();
         if (action == null) {
             return;
         }
@@ -77,23 +77,23 @@ public final class Animation {
     }
 
     private void cleanCurrent() {
-        BiAction biAction = peekFirst();
-        if (biAction == null) {
+        ActionSequence actionSequence = peekFirst();
+        if (actionSequence == null) {
             view.setTitle("");
             return;
         }
-        view.setTitle(biAction.title());
+        view.setTitle(actionSequence.title());
         if (current == 0) {
             return;
         }
-        biAction.init();
+        actionSequence.init();
     }
 
-    private BiAction peekFirst() {
+    private ActionSequence peekFirst() {
         return get(current);
     }
 
-    private BiAction get(int n) {
+    private ActionSequence get(int n) {
         if (n >= q.size()) {
             return null;
         }
@@ -123,9 +123,9 @@ public final class Animation {
         timer.start();
     }
 
-    public void select(BiAction action) {
+    public void select(ActionSequence action) {
         for (int i = 0; i < q.size(); i++) {
-            BiAction qs = q.get(i);
+            ActionSequence qs = q.get(i);
             if (action == qs) {
                 current = i;
                 cleanCurrent();
@@ -133,17 +133,17 @@ public final class Animation {
         }
     }
 
-    public void setOnNext(Consumer<BiAction> onNext) {
+    public void setOnNext(Consumer<ActionSequence> onNext) {
         this.onNext = onNext;
     }
 
-    public List<BiAction> getActions() {
+    public List<ActionSequence> getActions() {
         return q;
     }
 
-    public void setActions(List<BiAction> actions) {
+    public void setActions(List<ActionSequence> actions) {
         q.clear();
         q.addAll(actions);
-        actions.stream().findFirst().map(BiAction::title).ifPresent(view::setTitle);
+        actions.stream().findFirst().map(ActionSequence::title).ifPresent(view::setTitle);
     }
 }

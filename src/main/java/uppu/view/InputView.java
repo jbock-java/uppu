@@ -1,6 +1,6 @@
 package uppu.view;
 
-import uppu.model.BiAction;
+import uppu.model.ActionSequence;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -101,8 +101,8 @@ public class InputView extends JFrame {
         textArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, mask), "Redo");
     }
 
-    public void setContent(List<BiAction> actions) {
-        for (BiAction action : actions) {
+    public void setContent(List<ActionSequence> actions) {
+        for (ActionSequence action : actions) {
             textArea.append(action.toString());
             textArea.append(System.lineSeparator());
         }

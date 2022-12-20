@@ -3,8 +3,8 @@ package uppu;
 import io.jbock.util.Either;
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
-import uppu.model.BiAction;
-import uppu.model.Sequence;
+import uppu.model.ActionSequence;
+import uppu.model.CommandSequence;
 import uppu.model.HomePoints;
 import uppu.model.State;
 import uppu.parse.LineParser;
@@ -46,15 +46,15 @@ public class S4Checker {
         List<String> lines = Files.readAllLines(commandLine.input().toPath());
         readLines(lines).ifLeftOrElse(
                 error -> showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE),
-                commands -> {
+                sequences -> {
                     State state = State.create(4).offset((int) (25 * HomePoints.SCALE), (int) (20 * HomePoints.SCALE));
-                    List<BiAction> actions = state.getActions(commands);
+                    List<ActionSequence> actions = state.getActions(sequences);
                     PermutationView view = PermutationView.create();
                     new S4Checker(view, commandLine, state, Animation.create(view)).run(actions);
                 });
     }
 
-    private void run(List<BiAction> actions) {
+    private void run(List<ActionSequence> actions) {
         view.setLocationRelativeTo(null);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
@@ -66,7 +66,7 @@ public class S4Checker {
                 readLines(lines).ifLeftOrElse(
                         error -> showMessageDialog(view, error, "Error", JOptionPane.ERROR_MESSAGE),
                         newCommands -> {
-                            List<BiAction> newActions = state.getActions(newCommands);
+                            List<ActionSequence> newActions = state.getActions(newCommands);
                             animation.setActions(newActions);
                             view.setActions(newActions);
                             writeToFile(newActions);
@@ -91,9 +91,9 @@ public class S4Checker {
         animation.setRunning(running);
     }
 
-    private void writeToFile(List<BiAction> newActions) {
+    private void writeToFile(List<ActionSequence> newActions) {
         try {
-            List<String> lines = newActions.stream().map(BiAction::toString).toList();
+            List<String> lines = newActions.stream().map(ActionSequence::toString).toList();
             Path p = commandLine.input().toPath();
             Files.write(p, lines, StandardOpenOption.TRUNCATE_EXISTING);
             Files.writeString(p, System.lineSeparator(), StandardOpenOption.APPEND);
@@ -102,18 +102,18 @@ public class S4Checker {
         }
     }
 
-    private static Either<String, List<Sequence>> readLines(List<String> lines) {
+    private static Either<String, List<CommandSequence>> readLines(List<String> lines) {
         Permutation current = Permutation.identity();
-        List<Sequence> result = new ArrayList<>(lines.size());
+        List<CommandSequence> result = new ArrayList<>(lines.size());
         for (String line : lines) {
             Either<String, Row> parsed = LineParser.parse(line);
             if (parsed.isLeft()) {
                 return parsed.map(x -> List.of());
             }
             Row row = parsed.getRight().orElseThrow();
-            Sequence command = Sequence.toSequence(row, current);
-            result.add(command);
-            current = command.permutation().compose(current);
+            CommandSequence.Result r = CommandSequence.toSequence(row, current);
+            result.add(r.sequence());
+            current = r.permutation().compose(current);
         }
         return right(result);
     }

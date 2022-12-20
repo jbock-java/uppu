@@ -8,22 +8,22 @@ import java.util.List;
 
 import static uppu.model.Command.command;
 
-public class Sequence {
+public class CommandSequence {
 
-    private final Permutation permutation;
+    public record Result(CommandSequence sequence, Permutation permutation) {
+    }
+
     private final String title;
     private final List<Command> commands;
 
-    private Sequence(
-            Permutation permutation,
+    private CommandSequence(
             String title,
             List<Command> commands) {
-        this.permutation = permutation;
         this.title = title;
         this.commands = commands;
     }
 
-    public static Sequence toSequence(
+    public static Result toSequence(
             Row row,
             Permutation current) {
         List<Permutation> input = row.permutations(current);
@@ -40,10 +40,9 @@ public class Sequence {
                 abCommands.add(Command.wait(15));
             }
         }
-        return new Sequence(
-                product,
+        return new Result(new CommandSequence(
                 row.toString(current),
-                abCommands);
+                abCommands), product);
     }
 
     public List<Command> commands() {
@@ -57,9 +56,5 @@ public class Sequence {
     @Override
     public String toString() {
         return title;
-    }
-
-    public Permutation permutation() {
-        return permutation;
     }
 }

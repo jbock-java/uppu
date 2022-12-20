@@ -2,14 +2,14 @@ package uppu.model;
 
 import java.util.List;
 
-public final class BiAction {
+public final class ActionSequence {
 
     private final List<Action> actions;
     private final String title;
 
     private int current;
 
-    public BiAction(List<Action> actions, String title) {
+    public ActionSequence(List<Action> actions, String title) {
         this.actions = actions;
         this.title = title;
     }

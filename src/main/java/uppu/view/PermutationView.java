@@ -1,6 +1,6 @@
 package uppu.view;
 
-import uppu.model.BiAction;
+import uppu.model.ActionSequence;
 import uppu.model.HomePoints;
 
 import javax.swing.JButton;
@@ -42,7 +42,7 @@ public class PermutationView extends JFrame {
         }
     };
 
-    private final JList<BiAction> actions = new JList<>();
+    private final JList<ActionSequence> actions = new JList<>();
     private final JPanel sidePanel = new JPanel();
     private final JPanel buttonPanel = new JPanel();
     private final JSplitPane splitPane = new JSplitPane();
@@ -106,11 +106,11 @@ public class PermutationView extends JFrame {
         sidePanel.setBackground(Color.DARK_GRAY);
     }
 
-    public void setActions(List<BiAction> actions) {
-        this.actions.setListData(actions.toArray(new BiAction[0]));
+    public void setActions(List<ActionSequence> actions) {
+        this.actions.setListData(actions.toArray(new ActionSequence[0]));
     }
 
-    public void setOnActionSelected(Consumer<BiAction> consumer) {
+    public void setOnActionSelected(Consumer<ActionSequence> consumer) {
         actions.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 return;
@@ -127,7 +127,7 @@ public class PermutationView extends JFrame {
         });
     }
 
-    public void setSelectedAction(BiAction action) {
+    public void setSelectedAction(ActionSequence action) {
         actions.setSelectedValue(action, true);
     }
 

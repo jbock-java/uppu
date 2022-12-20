@@ -26,23 +26,23 @@ public final class State {
         return new State(quadruple.offset(x, y), homePoints);
     }
 
-    public List<BiAction> getActions(List<Sequence> sequences) {
+    public List<ActionSequence> getActions(List<CommandSequence> sequences) {
         List<Color> state = Color.colors(homePoints.size());
         for (int i = 0; i < state.size(); i++) {
             Point p = homePoints.get(i);
             quadruple.set(state.get(i), p.x(), p.y(), p.z());
         }
-        List<BiAction> biActions = new ArrayList<>();
-        for (Sequence sequence : sequences) {
-            List<Action> result = new ArrayList<>(sequence.commands().size());
+        List<ActionSequence> actionSequences = new ArrayList<>();
+        for (CommandSequence sequence : sequences) {
+            List<Action> actions = new ArrayList<>(sequence.commands().size());
             for (Command command : sequence.commands()) {
                 ActionWithState action = getAction(state, command);
-                result.add(action.action);
+                actions.add(action.action);
                 state = action.finalState;
             }
-            biActions.add(new BiAction(result, sequence.title()));
+            actionSequences.add(new ActionSequence(actions, sequence.title()));
         }
-        return biActions;
+        return actionSequences;
     }
 
     private record ActionWithState(
@@ -54,7 +54,7 @@ public final class State {
             List<Color> state,
             Command command) {
         if (command instanceof MoveCommand) {
-            return getMoveAction(state, ((MoveCommand) command).permutation());
+            return getMoveAction(((MoveCommand) command).permutation(), state);
         }
         if (command instanceof WaitCommand) {
             return new ActionWithState(WaitAction.create(((WaitCommand) command).cycles()), state);
@@ -63,8 +63,8 @@ public final class State {
     }
 
     private ActionWithState getMoveAction(
-            List<Color> state,
-            Permutation p) {
+            Permutation p,
+            List<Color> state) {
         List<Mover> movers = new ArrayList<>();
         Color[] newColors = new Color[state.size()];
         for (int i = 0; i < state.size(); i++) {
