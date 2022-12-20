@@ -117,10 +117,14 @@ public class PermutationView extends JFrame {
             if (e.getValueIsAdjusting()) {
                 return;
             }
+            int index;
             if (actions.getSelectionModel().isSelectedIndex(e.getFirstIndex())) {
-                consumer.accept(actions.getModel().getElementAt(e.getFirstIndex()));
+                index = e.getFirstIndex();
             } else {
-                consumer.accept(actions.getModel().getElementAt(e.getLastIndex()));
+                index = e.getLastIndex();
+            }
+            if (index < actions.getModel().getSize()) {
+                consumer.accept(actions.getModel().getElementAt(index));
             }
         });
     }
