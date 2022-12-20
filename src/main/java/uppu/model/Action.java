@@ -1,5 +1,7 @@
 package uppu.model;
 
+import uppu.engine.Mover;
+
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
@@ -8,8 +10,8 @@ public abstract class Action {
     public static final int BALL_SIZE = (int) (50 * HomePoints.SCALE);
     public static final int GLOW_SIZE = 3;
 
-    private static final OffsetEllipse[] ELLIPSES = new OffsetEllipse[120];
-    
+    private static final OffsetEllipse[] ELLIPSES = new OffsetEllipse[Mover.STEPS];
+
     static {
         float v = (BALL_SIZE - BALL_SIZE / 1.5f) / 60f;
         float vglow = BALL_SIZE / 360.0f;
@@ -21,7 +23,7 @@ public abstract class Action {
                     vglow * i);
         }
     }
-    
+
     public abstract boolean move();
 
     public abstract void show(Graphics2D g);

@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,24 +25,31 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class S4Checker {
 
     private final PermutationView view = PermutationView.create();
-    private final List<BiCommand> commands;
+    private final CommandLine commandLine;
+    private final State state;
 
-    private S4Checker(List<BiCommand> commands) {
-        this.commands = commands;
+    private S4Checker(
+            CommandLine commandLine,
+            State state) {
+        this.commandLine = commandLine;
+        this.state = state;
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("input").resolve("tricks.txt"));
+        CommandLine commandLine = new CommandLineParser().parseOrExit(args);
+        List<String> lines = Files.readAllLines(commandLine.input().toPath());
         readLines(lines).ifLeftOrElse(
                 error -> showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE),
-                commands -> new S4Checker(commands).run());
+                commands -> {
+                    State state = State.create(4).offset((int) (25 * HomePoints.SCALE), (int) (20 * HomePoints.SCALE));
+                    List<BiAction> actions = state.getActions(commands);
+                    new S4Checker(commandLine, state).run(actions);
+                });
     }
 
-    private void run() {
+    private void run(List<BiAction> actions) {
         view.setLocationRelativeTo(null);
         Animation animation = Animation.create(view);
-        State state = State.create(4).offset((int) (25 * HomePoints.SCALE), (int) (20 * HomePoints.SCALE));
-        List<BiAction> actions = state.getActions(commands);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         view.setOnEditButtonClicked(() -> {
@@ -59,6 +66,11 @@ public class S4Checker {
                             List<BiAction> newActions = state.getActions(newCommands);
                             animation.setActions(newActions);
                             view.setActions(newActions);
+                            try {
+                                Files.write(commandLine.input().toPath(), newActions.stream().map(BiAction::toString).toList(), StandardOpenOption.TRUNCATE_EXISTING);
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(view, e, "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                             newActions.stream().findFirst().ifPresent(view::setSelectedAction);
                         });
                 inputView.dispose();

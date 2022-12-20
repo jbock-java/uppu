@@ -6,6 +6,8 @@ import uppu.model.Quadruple;
 
 public class Mover {
 
+    public static final int STEPS = 66;
+
     private final Color color;
     private final Quadruple quadruple;
     private final Point source;
@@ -47,9 +49,9 @@ public class Mover {
         float delta_x = target_x - start_x;
         float delta_y = target_y - start_y;
         float delta_z = target_z - start_z;
-        float dx = delta_x / 66f;
-        float dy = delta_y / 66f;
-        float dz = delta_z / 66f;
+        float dx = delta_x / STEPS;
+        float dy = delta_y / STEPS;
+        float dz = delta_z / STEPS;
         return new Mover(color, quadruple, sourceSlot, targetSlot, dx, dy, dz);
     }
 
