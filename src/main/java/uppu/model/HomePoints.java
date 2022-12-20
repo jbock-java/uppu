@@ -2,7 +2,7 @@ package uppu.model;
 
 import java.util.List;
 
-public final class HomePoint {
+public final class HomePoints {
 
     public static final float SCALE = 2.0f;
     public static final int MAX = (int) (200 * SCALE);
@@ -28,5 +28,8 @@ public final class HomePoint {
                         new Point(4.894348370484636f, 69.09830056250527f, 0.0f));
         }
         throw new IllegalArgumentException("" + n);
+    }
+
+    private HomePoints() {
     }
 }

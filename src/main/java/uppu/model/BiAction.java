@@ -3,10 +3,10 @@ package uppu.model;
 import java.util.List;
 
 public final class BiAction {
-    
+
     private final List<Action> actions;
     private final String title;
-    
+
     private int current;
 
     public BiAction(List<Action> actions, String title) {

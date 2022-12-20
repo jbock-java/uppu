@@ -5,7 +5,7 @@ import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiAction;
 import uppu.model.BiCommand;
-import uppu.model.HomePoint;
+import uppu.model.HomePoints;
 import uppu.model.State;
 import uppu.parse.LineParser;
 import uppu.parse.Row;
@@ -41,7 +41,7 @@ public class S4Checker {
     private void run() {
         view.setLocationRelativeTo(null);
         Animation animation = Animation.create(view);
-        State state = State.create(4).offset((int) (25 * HomePoint.SCALE), (int) (20 * HomePoint.SCALE));
+        State state = State.create(4).offset((int) (25 * HomePoints.SCALE), (int) (20 * HomePoints.SCALE));
         List<BiAction> actions = state.getActions(commands);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));

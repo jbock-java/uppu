@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 public abstract class Action {
 
-    public static final int BALL_SIZE = (int) (50 * HomePoint.SCALE);
+    public static final int BALL_SIZE = (int) (50 * HomePoints.SCALE);
     public static final int GLOW_SIZE = 3;
 
     private static final OffsetEllipse[] ELLIPSES = new OffsetEllipse[120];

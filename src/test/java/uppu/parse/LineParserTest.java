@@ -8,11 +8,10 @@ import static io.jbock.util.Either.left;
 import static io.jbock.util.Either.right;
 import static io.parmigiano.Permutation.create;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uppu.parse.DotExpression.dot;
-import static uppu.parse.ExplicitRow.explicitRow;
+import static uppu.parse.Row.ExplicitRow.explicitRow;
 import static uppu.parse.LineParser.parse;
 import static uppu.parse.LineParser.parseLine;
-import static uppu.parse.ParenExpression.parenExpression;
+import static uppu.parse.Expression.ParenExpression.parenExpression;
 
 class LineParserTest {
 
@@ -25,7 +24,7 @@ class LineParserTest {
                 right(List.of(parenExpression("1 2"))),
                 parseLine("(1 2)"));
         assertEquals(
-                right(List.of(dot(), dot(), dot())),
+                right(List.of(Expression.DOT_EXPRESSION, Expression.DOT_EXPRESSION, Expression.DOT_EXPRESSION)),
                 parseLine(". . ."));
         assertEquals(
                 right(List.of(parenExpression(""))),
@@ -34,7 +33,7 @@ class LineParserTest {
                 right(List.of(parenExpression(" "))),
                 parseLine(" ( ) "));
         assertEquals(
-                right(List.of(parenExpression("1 2"), dot(), parenExpression("3"))),
+                right(List.of(parenExpression("1 2"), Expression.DOT_EXPRESSION, parenExpression("3"))),
                 parseLine("(1 2) . (3)"));
         assertEquals(
                 right(List.of(parenExpression("1 2"), parenExpression(" 3 "))),

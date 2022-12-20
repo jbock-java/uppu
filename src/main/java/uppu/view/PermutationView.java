@@ -1,7 +1,7 @@
 package uppu.view;
 
 import uppu.model.BiAction;
-import uppu.model.HomePoint;
+import uppu.model.HomePoints;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,8 +29,8 @@ import java.util.function.IntConsumer;
 
 public class PermutationView extends JFrame {
 
-    private static final int WIDTH_CANVAS = (int) (280 * HomePoint.SCALE);
-    private static final int HEIGHT = (int) (300 * HomePoint.SCALE);
+    private static final int WIDTH_CANVAS = (int) (280 * HomePoints.SCALE);
+    private static final int HEIGHT = (int) (300 * HomePoints.SCALE);
     public static final int WIDTH_PANEL = 500;
     public static final int HEIGHT_SLIDER = 12;
     public static final int INITIAL_SPEED = 16;

@@ -10,10 +10,8 @@ import static io.jbock.util.Either.left;
 import static io.jbock.util.Either.right;
 import static io.jbock.util.Eithers.firstFailure;
 import static java.lang.Character.isWhitespace;
-import static uppu.parse.DotExpression.dot;
-import static uppu.parse.ExplicitRow.explicitRow;
-import static uppu.parse.HomeRow.homeRow;
-import static uppu.parse.ParenExpression.parenExpression;
+import static uppu.parse.Row.ExplicitRow.explicitRow;
+import static uppu.parse.Expression.ParenExpression.parenExpression;
 
 public class LineParser {
 
@@ -31,7 +29,7 @@ public class LineParser {
             return left("Found dot at beginning of line");
         }
         if (expressions.get(0).isHome()) {
-            return right(homeRow());
+            return right(Row.HOME_ROW);
         }
         List<Permutation> result = new ArrayList<>();
         Permutation current = Permutation.identity();
@@ -44,7 +42,7 @@ public class LineParser {
                 dot = true;
                 continue;
             }
-            Permutation permutation = ((ParsedToken) expression).permutation();
+            Permutation permutation = ((Parsed.ParsedToken) expression).permutation();
             if (dot) {
                 result.add(current);
                 current = permutation;
@@ -59,7 +57,7 @@ public class LineParser {
 
     static Either<String, List<Expression>> parseLine(String line) {
         if (line.trim().equals("~")) {
-            return right(List.of(HomeExpression.homeExpression()));
+            return right(List.of(Expression.HOME_EXPRESSION));
         }
         List<Expression> result = new ArrayList<>();
         int parenCount = 0;
@@ -89,7 +87,7 @@ public class LineParser {
                     continue;
                 }
                 if (c == '.') {
-                    result.add(dot());
+                    result.add(Expression.DOT_EXPRESSION);
                     continue;
                 }
                 return left("Found unexpected character: " + c);

@@ -8,7 +8,7 @@ class HomePointTest {
 
     @Test
     void testSlot() {
-        List<Point> slots = HomePoint.homePoints(4);
+        List<Point> slots = HomePoints.homePoints(4);
         Point center = slots.get(3);
         Point p0 = slots.get(0);
         Point p1 = slots.get(1);

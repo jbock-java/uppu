@@ -111,11 +111,11 @@ public final class Quadruple {
     }
 
     public int getWidth() {
-        return HomePoint.MAX + Action.BALL_SIZE;
+        return HomePoints.MAX + Action.BALL_SIZE;
     }
 
     public int getHeight() {
-        return HomePoint.MAX + Action.BALL_SIZE;
+        return HomePoints.MAX + Action.BALL_SIZE;
     }
 
     public int getOffsetX() {
