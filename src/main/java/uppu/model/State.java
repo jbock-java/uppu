@@ -26,21 +26,21 @@ public final class State {
         return new State(quadruple.offset(x, y), homePoints);
     }
 
-    public List<BiAction> getActions(List<BiCommand> biCommands) {
+    public List<BiAction> getActions(List<Sequence> sequences) {
         List<Color> state = Color.colors(homePoints.size());
         for (int i = 0; i < state.size(); i++) {
             Point p = homePoints.get(i);
             quadruple.set(state.get(i), p.x(), p.y(), p.z());
         }
         List<BiAction> biActions = new ArrayList<>();
-        for (BiCommand biCommand : biCommands) {
-            List<Action> result = new ArrayList<>(biCommand.commands().size());
-            for (Command command : biCommand.commands()) {
+        for (Sequence sequence : sequences) {
+            List<Action> result = new ArrayList<>(sequence.commands().size());
+            for (Command command : sequence.commands()) {
                 ActionWithState action = getAction(state, command);
                 result.add(action.action);
                 state = action.finalState;
             }
-            biActions.add(new BiAction(result, biCommand.title()));
+            biActions.add(new BiAction(result, sequence.title()));
         }
         return biActions;
     }

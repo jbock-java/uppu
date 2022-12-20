@@ -108,8 +108,6 @@ public class PermutationView extends JFrame {
 
     public void setActions(List<BiAction> actions) {
         this.actions.setListData(actions.toArray(new BiAction[0]));
-        this.actions.revalidate();
-        this.actions.repaint();
     }
 
     public void setOnActionSelected(Consumer<BiAction> consumer) {

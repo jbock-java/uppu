@@ -8,13 +8,13 @@ import java.util.List;
 
 import static uppu.model.Command.command;
 
-public class BiCommand {
+public class Sequence {
 
     private final Permutation permutation;
     private final String title;
     private final List<Command> commands;
 
-    private BiCommand(
+    private Sequence(
             Permutation permutation,
             String title,
             List<Command> commands) {
@@ -23,7 +23,7 @@ public class BiCommand {
         this.commands = commands;
     }
 
-    public static BiCommand singleCommand(
+    public static Sequence toSequence(
             Row row,
             Permutation current) {
         List<Permutation> input = row.permutations(current);
@@ -40,7 +40,7 @@ public class BiCommand {
                 abCommands.add(Command.wait(15));
             }
         }
-        return new BiCommand(
+        return new Sequence(
                 product,
                 row.toString(current),
                 abCommands);

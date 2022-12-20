@@ -4,7 +4,7 @@ import io.jbock.util.Either;
 import io.parmigiano.Permutation;
 import uppu.engine.Animation;
 import uppu.model.BiAction;
-import uppu.model.BiCommand;
+import uppu.model.Sequence;
 import uppu.model.HomePoints;
 import uppu.model.State;
 import uppu.parse.LineParser;
@@ -16,23 +16,29 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.jbock.util.Either.right;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class S4Checker {
 
-    private final PermutationView view = PermutationView.create();
+    private final PermutationView view;
     private final CommandLine commandLine;
     private final State state;
+    private final Animation animation;
 
     private S4Checker(
-            CommandLine commandLine,
-            State state) {
+            PermutationView view, CommandLine commandLine,
+            State state,
+            Animation animation) {
+        this.view = view;
         this.commandLine = commandLine;
         this.state = state;
+        this.animation = animation;
     }
 
     public static void main(String[] args) throws IOException {
@@ -43,20 +49,17 @@ public class S4Checker {
                 commands -> {
                     State state = State.create(4).offset((int) (25 * HomePoints.SCALE), (int) (20 * HomePoints.SCALE));
                     List<BiAction> actions = state.getActions(commands);
-                    new S4Checker(commandLine, state).run(actions);
+                    PermutationView view = PermutationView.create();
+                    new S4Checker(view, commandLine, state, Animation.create(view)).run(actions);
                 });
     }
 
     private void run(List<BiAction> actions) {
         view.setLocationRelativeTo(null);
-        Animation animation = Animation.create(view);
         view.setOnActionSelected(animation::select);
         view.setOnSliderMoved(value -> animation.setSpeed(value <= 16 ? (0.5f + value / 32f) : value / 16f));
         view.setOnEditButtonClicked(() -> {
-            if (animation.isRunning()) {
-                view.setRunning(false);
-                animation.setRunning(false);
-            }
+            setRunning(false);
             InputView inputView = InputView.create(view);
             inputView.setContent(animation.getActions());
             inputView.setOnSave(lines -> {
@@ -66,43 +69,52 @@ public class S4Checker {
                             List<BiAction> newActions = state.getActions(newCommands);
                             animation.setActions(newActions);
                             view.setActions(newActions);
-                            try {
-                                Files.write(commandLine.input().toPath(), newActions.stream().map(BiAction::toString).toList(), StandardOpenOption.TRUNCATE_EXISTING);
-                            } catch (IOException e) {
-                                JOptionPane.showMessageDialog(view, e, "Error", JOptionPane.ERROR_MESSAGE);
-                            }
+                            writeToFile(newActions);
                             newActions.stream().findFirst().ifPresent(view::setSelectedAction);
+                            setRunning(true);
                         });
                 inputView.dispose();
             });
         });
-        view.setOnPauseButtonClicked(() -> {
-            view.setRunning(!animation.isRunning());
-            animation.setRunning(!animation.isRunning());
-        });
+        view.setOnPauseButtonClicked(() -> setRunning(!animation.isRunning()));
         animation.setOnNext(view::setSelectedAction);
         SwingUtilities.invokeLater(() -> {
-            view.setRunning(true);
-            animation.setRunning(true);
+            setRunning(true);
             animation.setActions(actions);
             view.setActions(actions);
             actions.stream().findFirst().ifPresent(view::setSelectedAction);
         });
     }
 
-    private static Either<String, List<BiCommand>> readLines(List<String> lines) {
+    private void setRunning(boolean running) {
+        view.setRunning(running);
+        animation.setRunning(running);
+    }
+
+    private void writeToFile(List<BiAction> newActions) {
+        try {
+            List<String> lines = newActions.stream().map(BiAction::toString).toList();
+            Path p = commandLine.input().toPath();
+            Files.write(p, lines, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.writeString(p, System.lineSeparator(), StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            showMessageDialog(view, e, "IO Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private static Either<String, List<Sequence>> readLines(List<String> lines) {
         Permutation current = Permutation.identity();
-        List<BiCommand> result = new ArrayList<>(lines.size());
+        List<Sequence> result = new ArrayList<>(lines.size());
         for (String line : lines) {
             Either<String, Row> parsed = LineParser.parse(line);
             if (parsed.isLeft()) {
                 return parsed.map(x -> List.of());
             }
             Row row = parsed.getRight().orElseThrow();
-            BiCommand command = BiCommand.singleCommand(row, current);
+            Sequence command = Sequence.toSequence(row, current);
             result.add(command);
             current = command.permutation().compose(current);
         }
-        return Either.right(result);
+        return right(result);
     }
 }
