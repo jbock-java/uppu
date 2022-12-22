@@ -3,6 +3,7 @@ package uppu.parse;
 import io.jbock.util.Either;
 import io.parmigiano.Permutation;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static io.jbock.util.Either.left;
@@ -52,7 +53,10 @@ public final class TokenParser {
                     return left("Unknown token: " + token);
             }
         }
-        return right(Permutation.create(input));
+        if (input.length <= 1) {
+            return left("Short cycle");
+        }
+        return right(Permutation.cycle(input[0], input[1], Arrays.copyOfRange(input, 2, input.length)));
     }
 
     private TokenParser() {
