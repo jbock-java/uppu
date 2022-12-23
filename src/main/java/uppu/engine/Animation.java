@@ -83,9 +83,6 @@ public final class Animation {
             return;
         }
         view.setTitle(actionSequence.title());
-        if (current == 0) {
-            return;
-        }
         actionSequence.init();
     }
 
