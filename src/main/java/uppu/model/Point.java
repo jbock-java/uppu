@@ -19,6 +19,10 @@ public final class Point {
         this.homeRadius = HOME_RADIUS_100 / z;
         this.home = new Ellipse2D.Float(0, 0, homeRadius, homeRadius);
     }
+    
+    public Point mult(float factor) {
+        return new Point(x * factor, y * factor, z * factor);
+    }
 
     private final Ellipse2D.Float home;
 

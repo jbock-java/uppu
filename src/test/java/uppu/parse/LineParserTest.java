@@ -6,7 +6,7 @@ import java.util.List;
 
 import static io.jbock.util.Either.left;
 import static io.jbock.util.Either.right;
-import static io.parmigiano.Permutation.create;
+import static io.parmigiano.Permutation.cycle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uppu.parse.Row.ExplicitRow.explicitRow;
 import static uppu.parse.LineParser.parse;
@@ -66,13 +66,13 @@ class LineParserTest {
     @Test
     void testParse() {
         assertEquals(
-                right(explicitRow(List.of(create(0, 1), create(0, 2), create(0, 3)))),
+                right(explicitRow(List.of(cycle(0, 1), cycle(0, 2), cycle(0, 3)))),
                 parse("(0 1) . (0 2) . (0 3)"));
         assertEquals(
-                right(explicitRow(List.of(create(0, 1).compose(2, 3)))),
+                right(explicitRow(List.of(cycle(0, 1).compose(2, 3)))),
                 parse("(0 1) (2 3)"));
         assertEquals(
-                right(explicitRow(List.of(create(0, 1).compose(2, 3), create(0, 2).compose(1, 3)))),
+                right(explicitRow(List.of(cycle(0, 1).compose(2, 3), cycle(0, 2).compose(1, 3)))),
                 parse("(0 1) (2 3) . (0 2) (1 3)"));
     }
 }
